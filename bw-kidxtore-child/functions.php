@@ -951,8 +951,8 @@ function render_born_wc_stock_thresholds_page() {
     <?php
 }
 
-add_action( 'pre_get_posts', 'filter_products_by_store_stock_preget', 99 );
 
+// add_action( 'pre_get_posts', 'filter_products_by_store_stock_preget', 99 );
 function filter_products_by_store_stock_preget( $query ) {
 
 

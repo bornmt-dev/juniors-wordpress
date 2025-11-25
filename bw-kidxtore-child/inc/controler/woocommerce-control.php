@@ -1804,8 +1804,8 @@ if(!function_exists('bzotech_product_sticky_addcart')){
                                     ?>
 
                                     <button type="submit" name="add-to-cart" value="<?php echo esc_attr( $product->get_id() ); ?>" class="single_add_to_cart_button button alt" title="<?php echo esc_attr( $product->single_add_to_cart_text() ); ?>"><i class="la-cart-plus la"></i></button>
-
                                     <?php do_action( 'woocommerce_after_add_to_cart_button' ); ?>
+
                                 </form>
                             </div>
 

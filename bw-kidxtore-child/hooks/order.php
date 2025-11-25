@@ -528,3 +528,138 @@ add_action( 'woocommerce_checkout_create_order', function( $order ) {
 		$order->update_meta_data( 'Total Gift Wrapper Quantity', $total_wrap_qty );
 	}
 }, 20, 1 );
+
+
+
+add_action('woocommerce_order_status_processing', 'set_product_to_outofstock', 10, 1);
+
+function set_product_to_outofstock($order_id) {
+
+    if (!$order_id) return;
+
+    $order = wc_get_order($order_id);
+    if (!$order) return;
+
+    foreach ($order->get_items() as $item) {
+
+        $product_id = $item->get_product_id();
+        if (!$product_id) continue;
+
+        // Get all post meta
+        $metas = get_post_meta($product_id);
+
+        foreach ($metas as $meta_key => $meta_values) {
+
+            // Only process meta keys that START with "_stock_at_"
+            if (strpos($meta_key, '_stock_at_') === 0) {
+
+                $value = intval($meta_values[0]);
+
+                if ($value <= 2) {
+                    update_post_meta($product_id, $meta_key, 0);
+                }
+            }
+        }
+    }
+}
+
+
+add_action('woocommerce_add_to_cart', 'check_stock_levels_on_add_to_cart', 10, 6);
+
+function check_stock_levels_on_add_to_cart($cart_item_key, $product_id, $quantity, $variation_id, $variation, $cart_item_data) {
+
+    if (!$product_id) return;
+
+    $metas = get_post_meta($product_id);
+
+    foreach ($metas as $meta_key => $meta_values) {
+
+        if (strpos($meta_key, '_stock_at_') === 0) {
+
+            $value = intval($meta_values[0]);
+
+            if ($value <= 2) {
+                update_post_meta($product_id, $meta_key, 0);
+            }
+        }
+    }
+}
+
+add_filter('woocommerce_add_to_cart_validation', 'prevent_add_to_cart_if_low_stock', 10, 3);
+ 
+
+function prevent_add_to_cart_if_low_stock($passed, $product_id, $quantity) {
+
+    error_log("woocommerce_add_to_cart_validation"); 
+    $metas = get_post_meta($product_id);
+    $is_out_of_stock = true;
+
+    foreach ($metas as $meta_key => $meta_values) {
+        if (strpos($meta_key, '_stock_at_') === 0) {
+            $value = intval($meta_values[0]);
+            if ($value <= 2) {
+                update_post_meta($product_id, $meta_key, 0);
+            } else {
+                $is_out_of_stock = false;
+            }
+        }
+    }
+
+     error_log("is_out_of_stock".$is_out_of_stock); 
+
+    if ($is_out_of_stock) {
+        $sku = get_post_meta($product_id, '_sku', true) ?: $product_id;
+
+        // If AJAX request, show WooCommerce notice
+        if (defined('DOING_AJAX') && DOING_AJAX) {
+            wc_add_notice("This product is out of stock", 'error'); 
+        } 
+        else {
+            // Normal request: redirect to first category
+            $terms = get_the_terms($product_id, 'product_cat');
+            if (!empty($terms) && !is_wp_error($terms)) {
+                $category_slug = $terms[0]->slug;
+                wp_safe_redirect(home_url('/shop/?product_cat=' . $category_slug . "&outofstock=" . $sku));
+                exit;
+            }
+            // Fallback
+            wp_safe_redirect(home_url('/shop/'));
+            exit;
+        }
+
+        return false; // always block add to cart
+    }
+
+    return $passed;
+}
+
+
+
+add_action( 'woocommerce_before_single_product', 'check_store_stock_on_product_page' );
+
+function check_store_stock_on_product_page() {
+    if ( ! is_product() ) {
+        return;
+    }
+
+    global $product;
+    $product_id = $product->get_id();
+    if ( ! $product_id ) {
+        return;
+    }
+
+    // Get all stock_at meta
+    $metas = get_post_meta( $product_id );
+
+    foreach ( $metas as $meta_key => $meta_values ) {
+        // Check keys that start with _stock_at_
+        if ( strpos( $meta_key, '_stock_at_' ) === 0 ) {
+            $value = intval( $meta_values[0] );
+            // Do whatever logic you want
+            if ( $value <= 2 ) {
+                // Example: show a notice on the product page
+                update_post_meta($product_id, $meta_key, 0);
+            }
+        }
+    }
+}

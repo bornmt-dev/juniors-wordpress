@@ -65,7 +65,7 @@ if(!class_exists('Bzotech_SubLego_Filter') && class_exists("woocommerce"))
                     ) );
                 }
 
-                error_log( "BRANDS: ". print_r($brands, true)  );
+                // error_log( "BRANDS: ". print_r($brands, true)  );
                 echo '<ul>';
                 foreach ( $brands as $brand) {
 

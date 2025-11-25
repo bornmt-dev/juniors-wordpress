@@ -100,22 +100,65 @@ function born_redirect_invalid_product_stock() {
         return;
     }
 
-    // Validate stock using your custom function
-    if ( ! bornValidateProductStocks( $product->get_id() ) ) {
+    $product_id = $product->get_id();
+    if ( ! $product_id ) {
+        return;
+    }
+
+    // ----------------------------
+    // 1) normalize low stock values => set to 0
+    // ----------------------------
+    $metas = get_post_meta( $product_id );
+
+    foreach ( $metas as $meta_key => $meta_values ) {
+
+        if ( strpos( $meta_key, '_stock_at_' ) === 0 ) {
+
+            // defensive: ensure we have a value
+            $raw = isset( $meta_values[0] ) ? $meta_values[0] : '';
+            $value = intval( $raw );
+
+            if ( $value <= 2 ) {
+                // Only update if it's not already 0 to avoid extra writes
+                if ( $value !== 0 ) {
+                    update_post_meta( $product_id, $meta_key, 0 );
+
+                }
+            }
+        }
+    }
+
+    // ----------------------------
+    // 2) validate using existing function and redirect if invalid
+    // ----------------------------
+    if ( ! bornValidateProductStocks( $product_id ) ) {
 
         // Get first category
-        $terms = get_the_terms( $product->get_id(), 'product_cat' );
+        $terms = get_the_terms( $product_id, 'product_cat' );
 
         if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
             $category_slug = $terms[0]->slug;
-
-            // Redirect using product_cat query parameter
-            wp_safe_redirect( home_url( '/shop/?product_cat=' . $category_slug ) );
+            $sku = $product->get_sku(); 
+            wp_safe_redirect( home_url( '/shop/?product_cat=' . $category_slug. "&outofstock=".$sku  ) );
             exit;
         }
 
         // Fallback if no category
         wp_safe_redirect( home_url( '/shop/' ) );
         exit;
+    }
+
+    // If valid, just continue loading the product page
+}
+
+
+add_action('woocommerce_before_shop_loop', 'bzotech_outofstock_warning', 5);
+function bzotech_outofstock_warning() {
+    if ( isset($_GET['outofstock']) ) {
+        $sku = $_GET['outofstock'];
+        wc_print_notice( 
+            $sku.' is currently out of stock. You may choose another similar product.', 
+            'notice' 
+        );
     }
 }
