@@ -1,0 +1,14 @@
+/*Begin Elementor Heading*/
+.elbzotech-text-editor-global p:last-child{
+    margin-bottom: 0px;
+}
+.elementor-widget.elementor-widget-bzotech-heading:not(:last-child) {
+    margin-bottom: 0px;
+}
+.elbzotech-heading-global__line{
+    display: block;
+    height: 2px;
+    width: 100%;
+}
+
+

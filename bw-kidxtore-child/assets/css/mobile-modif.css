@@ -1,0 +1,144 @@
+
+/* sidebar filter button */
+.widget_price_filter .price_slider_amount .elbzotech-bt-default{
+    margin-top: 20px;
+    padding: 10px 25px;
+    width: 100%;
+}
+
+/*inner product --> single product*/
+
+@media (max-width: 768px) {
+    
+    .woocommerce div.product form.cart button.single_add_to_cart_button {
+        display: flex !important;
+        align-items: center !important;
+        gap: 5px !important;
+        margin-right: 14px !important;
+        margin-bottom: 10px !important;
+	    margin-bottom: 0px !important; 
+        display: flex !important;
+        align-items: flex-start !important;
+        justify-content: flex-start !important;
+        flex-wrap: wrap !important;
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        z-index: 10000 !important;
+        background-color: #ffffff !important;
+        padding: 25px !important;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1) !important;
+        background: #FF8C22 !important;
+        justify-content: center !important;				
+        border-radius: 0px !important;
+}
+}
+
+/* cart button */
+
+@media (max-width: 768px) {
+    #add_payment_method .wc-proceed-to-checkout a.checkout-button, .woocommerce-cart .wc-proceed-to-checkout a.checkout-button, .woocommerce-checkout .wc-proceed-to-checkout a.checkout-button {
+        display: block !important;
+		background: #FF8C22 !important;
+		color: white !important;
+		border-radius: 0px !important;
+		display: flex !important;
+    	align-items: center !important;
+		margin-bottom: 0px !important;
+        display: flex !important;
+        align-items: flex-start !important;
+        justify-content: flex-start !important;
+        flex-wrap: wrap !important;
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        z-index: 10000 !important;
+        padding: 25px !important;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1) !important;
+        background: #FF8C22 !important;
+        justify-content: center !important;				
+        border-radius: 0px !important;
+		border: 0px !important;
+    }
+}
+
+/* check-out button */
+@media (max-width: 768px) {
+    .woocommerce #payment #place_order, .woocommerce-page #payment #place_order {
+        margin-bottom: 0 !important;
+		display: block !important;
+		background: #FF8C22 !important;
+		color: white !important;
+		border-radius: 0px !important;
+		display: flex !important;
+    	align-items: center !important;
+		margin-bottom: 0px !important;
+        display: flex !important;
+        align-items: flex-start !important;
+        justify-content: flex-start !important;
+        flex-wrap: wrap !important;
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        z-index: 10000 !important;
+        padding: 25px !important;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1) !important;
+        background: #FF8C22 !important;
+        justify-content: center !important;				
+        border-radius: 0px !important;
+		border: 0px !important;
+    }
+}
+
+
+/* hides blue-menu on mobile screens in cart page */
+.page-id-10 .elementor-11393 {
+    display: none;
+}
+
+/* hides blue-menu on mobile screens in single-product pages */
+.single-product .elementor-11393 {
+	display: none;
+}
+
+/*hides blue-menu on mobile screens in checkout page */
+.page-id-9175 .elementor-11393 {
+    display: none;
+}
+
+/* woocommerce text field form width */
+.woocommerce form .form-row input.input-text {
+    height: 48px;
+    border: 1px solid var(--bzo-border-color);
+    background: #fff;
+    border-radius: 5px;
+    width: 100%;
+}
+
+@media (max-width: 991px) {
+    .woocommerce table.shop_table td, .woocommerce table.shop_table th, .woocommerce-cart table.cart td:first-child {
+        padding: 10px 0;
+        text-align: left;
+    }
+}
+
+/* radio button */
+.woocommerce ul#shipping_method li input {
+    vertical-align: middle !important;
+    margin-right: 10px !important;
+    margin-top: 0px !important;
+}
+
+/* changes grey text color to black */
+
+.e-color-body, .cat-count, .dropdown-link, .woocommerce-result-count, .smoke, .widget ul li a, .woocommerce-MyAccount-navigation ul li a, 
+.woocommerce form .form-row, .custom-lava-rewards-fields .subheading, .woocommerce-MyAccount-content, .woocommerce-orders-table, .cart-collaterals,
+.order-custom, .disclaimer, .entry-content   {
+    color: #000 !important;
+}

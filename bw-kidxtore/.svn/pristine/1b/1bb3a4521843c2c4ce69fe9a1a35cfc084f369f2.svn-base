@@ -1,0 +1,163 @@
+
+/*Begin Banner info elementor*/
+.background-overlay{
+    z-index: 1;
+}
+.background-overlay .background-overlay-color{
+    display: block;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    z-index: 0;
+}
+.elbzotech-banner-info-global-wrap{
+    position: relative;
+}
+
+.elbzotech-banner-info-global-wrap .elbzotech-banner-info{
+    z-index: 1;
+}
+
+.elbzotech-info-inner{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+/* hover effect banner default */
+.banners-effect .elbzotech-banner-info-global-elbzotech-bndf .elbzotech-banner-info-global-thumb{
+    border-radius: 15px;
+    position: relative;
+}
+.banners-effect .elbzotech-banner-info-global-elbzotech-bndf .elbzotech-banner-info-global-thumb::before{
+    position: absolute;
+    top: 0;
+    left: -75%;
+    z-index: 2;
+    display: block;
+    content: '';
+    width: 50%;
+    height: 100%;
+    background: -webkit-linear-gradient(left, rgba(255,255,255,0) 0%, rgba(255,255,255,.3) 100%);
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,.3) 100%);
+    -webkit-transform: skewX(-25deg);
+    transform: skewX(-25deg);
+}
+.banners-effect .elbzotech-banner-info-global-elbzotech-bndf .elbzotech-banner-info-global-thumb:hover::before{
+    -webkit-animation: shine .85s;
+    animation: shine .85s;
+}
+
+/* end hover effect banner default */
+.elbzotech-banner-info-global-elbzotech-bndf .elbzotech-banner-info-global-thumb a:hover{
+    cursor: pointer;
+}
+.elbzotech-banner-info-global-elbzotech-bndf .elbzotech-text-item{
+    margin: 0px;
+}
+.elbzotech-banner-info-global-elbzotech-bndf .elbzotech-banner-info{
+    display: flex;
+}
+.elbzotech-banner-info-global-elbzotech-bndf .btwrapinfo-container-flex-e,
+.elbzotech-banner-info-global-elbzotech-bndf .elbzotech-bt-custom
+{
+    display: flex;
+}
+/*
+.elbzotech-banner-info-global-elbzotech-bndf .elbzotech-info-inner.position-info-top{
+    display: flex;
+    display: -ms-flex;
+    display: -webkit-flex;
+    flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    align-items: flex-start;
+    -ms-align-items: flex-start;
+    -webkit-align-items: flex-start;
+}
+.elbzotech-banner-info-global-elbzotech-bndf .elbzotech-info-inner.position-info-mid{
+    display: flex;
+    display: -ms-flex;
+    display: -webkit-flex;
+    flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    align-items: center;
+    -ms-align-items: center;
+    -webkit-align-items: center;
+}
+.elbzotech-banner-info-global-elbzotech-bndf .elbzotech-info-inner.position-info-bottom{
+    display: flex;
+    display: -ms-flex;
+    display: -webkit-flex;
+    flex-wrap: wrap;
+    -ms-flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    align-items: flex-end;
+    -ms-align-items: flex-end;
+    -webkit-align-items: flex-end;
+}*/
+.info-banner2 .link-bg-banner{
+    position: absolute;
+    display: block;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    z-index: -1;
+}
+.inner-left{
+    left: 0;
+}
+.inner-right{
+    right: 0;
+}
+.inner-center{
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+.inner-top{
+    top: 0;
+}
+.inner-bottom{
+    bottom: 0;
+}
+.inner-middle{
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+.elbzotech-banner-info-global-thumb{
+    transition: all 0.3s ease-out 0s;
+    -webkit-transition: all 0.3s ease-out 0s;
+}
+.elbzotech-banner-info-global-thumb img{
+    max-width: 100%;
+    transition: all 0.3s ease-out 0s;
+    -webkit-transition: all 0.3s ease-out 0s;
+}
+.elbzotech-banner-info-global-thumb.elbzotech-hidden img{
+    width: 100%;
+}
+@media(max-width: 767px){
+    .elbzotech-banner-info-global-thumb.elbzotech-hidden img{
+        width: auto;
+    }
+}
+.elbzotech-hidden .adv-thumb-link,
+.elbzotech-banner-info-global-wrap.elbzotech-hidden
+{
+    overflow: hidden;
+}
+.elbzotech-inherit .adv-thumb-link{
+    overflow: inherit;
+}
+
+
+/*---------------style 2--------------------*/
+/*End banner info elementor*/
+

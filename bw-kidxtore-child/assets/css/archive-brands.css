@@ -1,0 +1,167 @@
+
+.brands-grid {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 50px; 
+    padding: 20px;
+    justify-content: space-between; 
+}
+
+.brands-grid-noimage {
+    /* display: flex;
+    flex-wrap: wrap; 
+    gap: 5px; 
+    padding: 0px;
+    justify-content: space-between;  */
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    padding: 20px;
+    justify-items: center;
+}
+
+a.brands-link-noimage  {
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    height: 50px;
+}
+
+
+.brand-item {
+    text-align: center;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 220px;
+}
+
+.brand-item-noimage {
+    text-align: center;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 220px;
+}
+
+
+.brand-item img {
+    width: 200px; 
+    height: 200px!important; 
+    object-fit: contain; 
+    padding: 40px; 
+    margin-bottom: 10px;
+    z-index: 2;
+}
+
+a.brands-link {
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    height: 200px;
+}
+
+a.brands-link-noimage  {
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    height: 30px;
+}
+
+.brand-item h3 {
+    margin-top: 20px;
+    color: #111;
+    text-align: center;
+    font-family: "Poppins", Sans-serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 28px;
+    letter-spacing: 0.035px;
+}
+
+.brand-item-noimage h3 {
+    margin-top: 20px;
+    color: #111;
+    text-align: center;
+    font-family: "Poppins", Sans-serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 28px;
+    letter-spacing: 0.035px;
+}
+
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.pagination .page-number {
+    text-decoration: none;
+    padding: 8px 16px;
+    margin: 0 5px;
+    background-color: #0073e6;
+    color: white;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.pagination .page-number:hover {
+    background-color: #005bb5;
+}
+
+.pagination .current {
+    background-color: #005bb5;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+@media screen and (max-width: 480px) {
+
+    .brands-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .brand-item {
+        text-align: center;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: auto;
+        justify-content: flex-start;
+    }
+
+    a.brands-link {
+        height: 170px;
+    }
+
+    .brand-item img {
+        height: 170px!important;
+        width: 170px;
+    }
+
+    .brands-grid-noimage {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        padding: 20px;
+    }
+
+    a.brands-link-noimage  {
+        height: 50px;
+    }
+
+    .brand-item-noimage {
+        width: auto;
+    }
+
+
+}

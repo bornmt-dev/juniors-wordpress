@@ -1,0 +1,30 @@
+.elbzotech-lang-global-demo-style .language-box-global{
+	line-height: 44px;
+}
+.elbzotech-lang-global-demo-style .language-box-global .elbzotech-dropdown-list{
+	width: auto;
+    min-width: 100px;
+    padding: 10px 15px;
+    right: 0;
+    left: auto;
+}
+.elbzotech-lang-global-demo-style .language-box-global .elbzotech-dropdown-list .label-item-e{
+	display: flex;
+    align-items: center;
+    color: var(--bzo-body_typo-color);
+}
+.elbzotech-lang-global-demo-style .dropdown-link{
+	color: var(--bzo-body_typo-color);
+}
+
+.elbzotech-lang-global-demo-style .dropdown-link:hover,
+.elbzotech-lang-global-demo-style .language-box-global .elbzotech-dropdown-list .label-item-e:hover{
+	color: var(--bzo-main-color);
+}
+.elbzotech-lang-global-demo-style .language-box-global .label-language{
+	margin-right: 5px;
+}
+.elbzotech-lang-global-demo-style .language-box-global .label-e i{
+	font-size: 12px;
+}
+

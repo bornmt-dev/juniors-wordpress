@@ -1,0 +1,3 @@
+.elbzotech-logo-global-style-image a{
+	display: flex;
+}

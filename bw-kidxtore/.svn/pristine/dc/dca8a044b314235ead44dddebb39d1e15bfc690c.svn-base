@@ -1,0 +1,393 @@
+/*Tool Panel*/
+.widget-indexdm-inner-loading{
+      position: absolute;
+    top: 25%;
+    left: 50%;
+    margin-left: -8px;
+    font-size: 20px;
+}
+.active .dm-open i.fa-pulse,
+.dm-open i.fa-times {
+  display: none;
+}
+.active .dm-open i.fa-times {
+  display: block;
+}
+.dm-button {
+    position: absolute;
+    background-color: #dd2400;
+    border-radius: 3px 0 0 3px;
+    color: #fff;
+    top: 247px;
+    left: -65px;
+    display: block;
+    padding: 10px 5px;
+    z-index: 9999;
+    font-size: 12px;
+    width: 65px;
+    height: 60px;
+    text-align: center;
+    -webkit-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+    line-height: 15px;
+}
+.dm-button span{
+  display: block;
+}
+.dm-button.dm-support {
+  top: 310px;
+  background-position: center -43px;
+  background: #2a5db8;
+}
+.dm-button:hover,
+.dm-button.dm-support:hover{
+  background: #6327eb;
+}
+.dm-button.dm-guide {
+  top: 373px;
+  background-position: center -93px;
+  background: #2a5db8;
+}
+.dm-button:before {
+  /*content: attr(data-title-close);
+  display: inline-block;*/
+}
+.dm-button:focus,
+.dm-button:hover {
+  color: #fff;
+}
+.dm-button i {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  right: 0;
+  font-size: 20px;
+}
+.active .dm-button:before {
+  content: attr(data-title);
+}
+#widget_indexdm {
+  background: #fff;
+  z-index: 10000;
+  width: 380px;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: -380px;
+  -webkit-transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out;
+  text-align: center;
+}
+#widget_indexdm.active {
+  right: 0;
+}
+#indexdm_img.active {
+  display: flex;
+}
+.img-demo {
+  background-position: center top;
+  display: none;
+}
+#widget_indexdm .widget-indexdm-inner {
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+  position: absolute;
+  left: 15px;
+  bottom: 0;
+  color: #111;
+  right: 0;
+  padding-right: 15px;
+  top: 0;
+}
+#widget_indexdm .dm-header {
+  text-align: center;
+}
+#widget_indexdm .dm-header .header-event {
+  margin: 15px 0;
+  padding-bottom: 5px;
+}
+#widget_indexdm .dm-header .header-event img {
+  margin-bottom: 0;
+  border-radius: 3px;
+}
+#widget_indexdm .dm-header .header-button > a {
+  margin-bottom: 20px;
+}
+#widget_indexdm .dm-header .header-button {
+  border-bottom: 1px solid #e5e5e5;
+}
+#widget_indexdm .dm-header .header-button > a:hover {
+  /*background: #ff607c;*/
+}
+/*#widget_indexdm .dm-header .box-demo-home {
+    padding-top: 10px;
+    border-top: 1px solid #e5e5e5;
+}*/
+#widget_indexdm .dm-header .header-description {
+  color: #111;
+  margin: 30px 0 30px;
+      text-transform: capitalize;
+    font-weight: 600;
+    margin-bottom: 15px;
+    font-size: 18px;
+}
+#widget_indexdm .dm-header .header-description:after{
+    content: '';
+    height: 2px;
+    width: 60px;
+    background: var(--bzo-main-color);
+    display: block;
+    margin: 10px auto 5px;
+}
+#widget_indexdm .dm-header .header-description h3 {
+  text-transform: uppercase;
+  font-size: 16px;
+  font-weight: bold;
+}
+#widget_indexdm .dm-header .header-description h3 span {
+  font-size: 24px;
+}
+#widget_indexdm .dm-header .header-description h4 {
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: bold;
+}
+#widget_indexdm .dm-header .header-description h2 {
+  text-transform: uppercase;
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 0;
+}
+#widget_indexdm .dm-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+#widget_indexdm .dm-content .item-content {
+     padding: 0;
+    width: 48%;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+}
+#widget_indexdm .dm-content .item-content > a {
+  display: flex;
+  width: 100%;
+  position: relative;
+  justify-content: center;
+  margin-bottom: 10px;
+  text-align: center;
+  border: 1px solid #eee;
+  background: #ebebeb;
+  padding: 4px;
+  background-size: 100% auto;
+  /* padding-top: 0px; */
+  border-radius: 3px;
+}
+#widget_indexdm .dm-content .item-content > a.mobiledm-href {
+  background: none;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+}
+#widget_indexdm .dm-content .item-content > a img {
+  max-width: 100%;
+  vertical-align: top;
+  margin-bottom: 0;
+}
+#widget_indexdm .dm-content .item-content h5 {
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+#widget_indexdm .dm-content .item-content > a:before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  width: 0;
+  top: 0px;
+  bottom: 0;
+  z-index: 1;
+  transition: 0.3s all ease-out;
+  -webkit-transition: 0.3s all ease-out;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 3px;
+}
+#widget_indexdm .dm-content .item-content > a.mobiledm-href {
+  margin-bottom: 15px;
+}
+#widget_indexdm .dm-content .item-content > a.mobiledm-href:before {
+  top: 0;
+  bottom: auto;
+  height: 160px;
+}
+#widget_indexdm .dm-content .item-content > a.mobiledm-href:after {
+  align-self: flex-start;
+  top: 60px;
+}
+#widget_indexdm .dm-content .item-content > a:after {
+  content: 'View Demo';
+  display: block;
+  align-self: center;
+  position: absolute;
+  z-index: 5;
+  color: #fff;
+  opacity: 0;
+  transition-delay: 0.3s;
+  -webkit-transition-delay: 0.1s;
+}
+#widget_indexdm .dm-content .item-content > a:hover:after {
+  align-self: center;
+  opacity: 1;
+}
+#widget_indexdm .dm-content .item-content > a:hover:before {
+  width: 100%;
+}
+#indexdm_img {
+  position: fixed;
+  right: 380px;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.7);
+  justify-content: flex-end;
+  align-items: center;
+  display: none;
+}
+#widget_indexdm .dm-content .item-content > a span.new-item {
+  display: block;
+  width: 38px;
+  height: 38px;
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  z-index: 999;
+}
+#indexdm_img:before {
+  content: '';
+  background: rgba(0, 0, 0, 0.7);
+  display: block;
+  position: fixed;
+  right: 0;
+  left: auto;
+  width: 380px;
+  top: 0;
+  bottom: 0;
+}
+#indexdm_img > div {
+  display: inline-block;
+  width: 800px;
+  height: 100%;
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+  background-position: center top;
+}
+#indexdm_img > div.mobile-hover {
+  background-size: auto;
+}
+#indexdm_img.active > div {
+  -webkit-animation: mymove 40s infinite;
+  -webkit-animation-play-state: running;
+  animation: mymove 40s infinite;
+  animation-play-state: running;
+  -webkit-animation-delay: 1s;
+  animation-delay: 1s;
+  
+}
+#widget_indexdm.active-demo{
+   border-left: 1px solid #e5e5e5;
+}
+@-webkit-keyframes mymove {
+  0% {
+    background-position: center top;
+  }
+  50% {
+    background-position: center bottom;
+  }
+  100% {
+    background-position: center top;
+  }
+}
+@keyframes mymove {
+  0% {
+    background-position: center top;
+  }
+  50% {
+    background-position: center bottom;
+  }
+  100% {
+    background-position: center top;
+  }
+}
+#widget_indexdm .mobile-content {
+  margin-bottom: 30px;
+}
+#widget_indexdm .mobile-content h3 {
+  text-transform: uppercase;
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+.tool-panel-main-color-css a{
+  width: 20px;
+  height: 20px;
+  display: flex;
+    color: #fff;
+    justify-content: center;
+    align-items: center;
+  border-radius: 3px;
+  font-size: 14px;
+}
+.tool-panel-main-color-css{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+      gap: 10px;
+      max-width: 250px;
+      margin: auto;
+}
+.active-demo .dm-button{
+  opacity: 0;
+}
+@media (max-width: 1440px) {
+  #indexdm_img > div {
+    width: 600px;
+  }
+}
+@media (max-width: 767px) {
+  #widget_indexdm {
+    display: none;
+  }
+ .dm-button:before{
+    display: none;
+  }
+  .dm-button{
+    width: 40px;
+    height: 40px;
+    top: 268px;
+    left: -40px;
+    padding: 20px;
+  }
+  .dm-button:before{
+    display: none;
+  }
+  .dm-button.dm-guide {
+    top: 352px;
+  }
+}
+@media (max-width: 440px) {
+  #widget_indexdm {
+      width: 309px;
+      right: -309px;
+  }
+}
+@media (max-width: 374px) {
+  #widget_indexdm {
+      width: 253px;
+      right: -253px;
+  }
+}
+
+/*End tool panel*/

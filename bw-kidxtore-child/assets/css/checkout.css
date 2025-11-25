@@ -1,0 +1,166 @@
+.woocommerce-checkout .woocommerce .col2-set .col-1, .woocommerce-page .col2-set .col-1 {
+    width: 85%;
+}
+
+.woocommerce-checkout .woocommerce form .form-row-first, .woocommerce-page form .form-row-first, .woocommerce-checkout .woocommerce form .form-row-last, .woocommerce-page form .form-row-last {
+    float: none;
+}
+
+.woocommerce-checkout .woocommerce form .form-row-first, .woocommerce form .form-row-last, .woocommerce-page form .form-row-first, .woocommerce-page form .form-row-last {
+    width: 100%;
+}
+
+.woocommerce-checkout .woocommerce form .form-row .required {
+    color: #2792D7;
+   
+}
+
+.woocommerce-checkout .order-custom {
+    border-radius: 10px;
+    border: 1px solid var(--gray-30, rgba(47, 49, 58, 0.30));
+    padding: 50px 30px;  
+}
+
+.woocommerce-checkout .shop_table.woocommerce-checkout-review-order-table td.product-name {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.woocommerce-checkout .shop_table.woocommerce-checkout-review-order-table td.product-name span.checkout-product-image img {
+    width: 50px;
+    height: 50px;
+}
+
+.woocommerce-checkout tr.gift-addons {
+    display: flex;
+    flex-direction: column;
+}
+
+.woocommerce-checkout .gift-addons-title {
+    color: #000;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400 !important;
+    line-height: 24px;
+    letter-spacing: 0.035px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.woocommerce-checkout .gift-addons-options {
+    text-align: left !important;
+    color: var(--Black, #2F313A);
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-family: "Poppins", sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400 !important;
+    line-height: 160%;
+    padding-top: 0!important;
+
+}
+
+.woocommerce-checkout tr.woocommerce-shipping-totals.shipping {
+    display: flex;
+    flex-direction: column;
+}
+
+.woocommerce-checkout tr.woocommerce-shipping-totals.shipping td {
+    text-align: left;
+}
+
+.woocommerce-checkout tr.gift-addons td input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.woocommerce-checkout tr.gift-addons, .woocommerce-checkout .gift-addons td {
+    border: 0 !important;
+}
+
+/* .woocommerce-checkout #billing_lava_reward_no_field {
+    overflow: hidden;
+    width: 0;
+    height: 0;
+} */
+
+.woocommerce-checkout  .select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: 35px;
+    padding-left: 10px;
+}
+
+.woocommerce-checkout .product-name i ,
+.woocommerce-checkout .product-name i::before {
+    font-weight: 900 !important;
+    font-family: 'Line Awesome Free' !important;
+    font-size: 14px;
+}
+
+.woocommerce-checkout .checkout-page-quantity-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.woocommerce-checkout  .cart_item .detail-qty input {
+    font-size: 12px !important;
+}
+
+
+.woocommerce-checkout  .detail-qty {
+    padding: 5px;
+}
+
+.woocommerce-checkout .product-quantity input {
+    height: 15px !important;
+    max-width: 25px;
+}
+
+.woocommerce-checkout .remove-item  {
+    font-size: 12px;
+    color: #727272;
+}
+
+.woocommerce-terms-and-conditions-checkbox-text,
+.woocommerce-privacy-policy-text p {
+    font-weight: 400;
+    color: #2F313A;
+}
+
+.woocommerce-terms-and-conditions-checkbox-text a,
+.woocommerce-privacy-policy-text p a{
+    color: #2792D7;
+}
+
+.woocommerce-checkout p.disclaimer {
+    font-style: italic;
+    font-size: 16px;
+}
+
+.woocommerce-checkout .woocommerce-customer-details div.woocommerce-column.woocommerce-column--1.woocommerce-column--billing-address.col-1,
+.woocommerce-checkout .woocommerce-customer-details div.woocommerce-column.woocommerce-column--2.woocommerce-column--shipping-address.col-2 {
+     width: 100%;
+}
+
+.woocommerce-checkout tr.order-total small.includes_tax span.woocommerce-Price-amount.amount {
+    display: none;
+}
+
+.woocommerce-checkout input[type="checkbox"]:checked:before {
+    background: #2792D7;
+}
+
+
+#place_order:disabled,
+#place_order[disabled] {
+    opacity: 0.5 !important;
+    pointer-events: none !important;
+    cursor: not-allowed;
+}
+
+@media screen and (max-width: 1200px) {
+    .woocommerce-checkout .woocommerce .col2-set .col-1, .woocommerce-page .col2-set .col-1  {
+        width: 100%;
+    }
+}

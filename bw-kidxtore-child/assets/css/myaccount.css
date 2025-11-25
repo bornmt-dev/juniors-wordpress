@@ -1,0 +1,256 @@
+.woocommerce-account .woocommerce-orders-table__cell-order-actions .woocommerce-button.button.view {
+    border: none;
+    color: #2792D7;
+    font-family: Poppins;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.woocommerce-account .woocommerce-orders-table__cell-order-actions .woocommerce-button.button.view:hover {
+    
+    background: #fff;
+    
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation ul li.is-active a {
+    color: #2792D7;
+}
+
+.woocommerce-account .woocommerce-MyAccount-navigation ul li a:hover {
+    color: #2792D7;
+}
+
+.woocommerce-account .woocommerce table.shop_table thead tr th {
+    text-align: center;
+}
+
+.woocommerce-account .woocommerce table.shop_table tbody th,.woocommerce-account .woocommerce table.shop_table th {
+    font-weight: 600;
+    text-align: center;
+}
+
+.woocommerce-account .woocommerce table.shop_table td {
+    text-align: center;
+}
+
+.woocommerce-account table.woocommerce-orders-table thead {
+    background: rgba(47, 49, 58, 0.10);
+}
+
+.woocommerce-account .woocommerce table.shop_table {
+    border: 1px solid var(--Neutrals-Black-30, rgba(47, 49, 58, 0.30));
+}
+
+.woocommerce-account .woocommerce-address-fields button.button, .woocommerce-account .woocommerce-MyAccount-content button.button {
+    /* position: absolute; */
+    bottom: -30px;
+    right: 0;
+    border-radius: 40px;
+    background: #2792D7;
+    border: none;
+    color: #FFF;
+    font-family: Poppins;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 24px;
+    letter-spacing: 0.5px;
+    text-transform: capitalize;
+}
+
+.woocommerce-account.woocommerce-page .woocommerce-MyAccount-content, .woocommerce-account.woocommerce-page .woocommerce-MyAccount-content  {
+    position: relative;
+}
+
+.woocommerce-account.woocommerce-edit-account .woocommerce-MyAccount-content {
+    position: relative;
+   /* padding-top: 60px; */
+}
+
+.woocommerce-account.woocommerce-page .addresses .title .edit {
+    color: white;
+    background-color: #2792D7;
+    border-radius: 40px;
+    padding: 5px 15px;
+    display: inline-block;
+}
+
+.register-text {
+    margin: 0;
+    padding: 0;
+}
+
+.registerform-lost-pass {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+}
+
+.popup-redirect.register-link {
+    color: #2792D7;
+}
+
+.elbzotech-login-popup-content {
+    cursor: default;
+}
+/*
+@media(max-width: 991px){
+    .woocommerce-account .woocommerce-MyAccount-navigation{
+        border: 1px solid var(--bzo-border-color);
+        border-radius: 15px;
+        padding: 10px;
+    }
+    .woocommerce-MyAccount-navigation>ul li{
+        display: flex;
+    }
+} */
+
+@media(max-width: 991px){
+    .woocommerce-account .woocommerce-MyAccount-content{
+        padding-left:0px;
+    }
+    .woocommerce-account .woocommerce-MyAccount-navigation{
+        border: 1px solid var(--bzo-border-color) !important;
+        border-radius: 15px !important;
+        padding: 10px;
+    }
+    .woocommerce-MyAccount-navigation{
+        margin-bottom: 20px;
+    }
+    .woocommerce-MyAccount-navigation>ul li{
+        display: flex !important;
+    }
+    .woocommerce-MyAccount-navigation>ul li a{
+        padding: 0 10px;
+    }
+    .woocommerce table.shop_table td, .woocommerce table.shop_table th, .woocommerce-cart table.cart td:first-child{
+        padding: 10px 0;
+    }
+}
+
+/* Basic styling for all icons */
+.woocommerce-MyAccount-navigation li a::before {
+    content: ""; 
+    display: inline-block; 
+    vertical-align: middle; 
+    margin-right: 8px; 
+    background-repeat: no-repeat;
+    background-size: contain; 
+    background-position: center center;
+    width: 16px; 
+    height: 16px; 
+}
+
+
+/* Account details */
+.woocommerce-MyAccount-navigation-link--edit-account a::before {
+    background-image: url('/wp-content/uploads/2025/06/user.svg');
+    margin-top: 28px;
+}
+
+/* Account details */
+.woocommerce-MyAccount-navigation-link--edit-address a::before {
+    background-image: url('/wp-content/uploads/2025/06/address.svg');
+    margin-top: 28px;
+}
+
+/* Order */
+.woocommerce-MyAccount-navigation-link--orders a::before {
+    background-image: url('/wp-content/uploads/2025/06/orders.svg');
+    margin-top: 28px;
+}
+
+/* logout */
+.woocommerce-MyAccount-navigation-link--logout a::before {
+    background-image: url('/wp-content/uploads/2025/06/logout.svg');
+    margin-top: 28px;
+} 
+
+/*addresses*/
+.u-column1.col-1.woocommerce-Address {
+    width: auto !important;
+}
+
+/*my-account navigations */
+.woocommerce-MyAccount-navigation>ul li a{
+    padding: 5px 5px;
+    display: flex;
+    
+    }
+
+.page-id-12 .woocommerce div.woocommerce-MyAccount-content .u-columns.woocommerce-Addresses.col2-set.addresses a.edit br{
+ display:none;
+}
+
+@media screen and (max-width: 480px) {
+
+    .woocommerce-account .woocommerce-MyAccount-navigation ul li {
+        padding: 0;
+    }   
+}
+
+.page-id-12 .woocommerce-MyAccount-content br{
+ display:none;
+}
+
+/*Edit button */
+.woocommerce-Address-title {
+    display: flex;             
+    justify-content: space-between; 
+    align-items: center;        
+    flex-wrap: wrap;            
+    margin-bottom: 15px;        
+}
+
+/*Edit button */
+.woocommerce-Address .edit {
+    
+    background-color: #0073aa; 
+    color: #ffffff;      
+    padding: 8px 16px;    
+    text-align: center;        
+    border-radius: 40px;    
+    cursor: pointer;             
+}
+
+
+.page-id-12 .myaccount-tab-title li a {
+    height: 100%;
+    line-height: 100%;
+    font-size: 18px !important;
+}
+
+.page-id-12 .loyale-login-btn {
+    text-align: left;
+    /* position: absolute; */
+    top: 57% !important;
+    left: 25%;
+}
+
+.page-id-12 .loyale-login-btn a {
+    width: fit-content !important;
+    display: flex !important;
+}
+.woocommerce-LostPassword.lost_password {
+    display: block;
+    width: 100%;
+}
+
+.myacc-loyal-sso h5,
+.myacc-loyal-sso > div  {
+    text-align: left !important;
+}
+ 
+@media screen and (max-width: 450px)  {
+    .page-id-12 .loyale-login-btn {
+        left: 150px;
+    }
+}
+
+label[for='newsletter_consent'],
+label[for='marketing_emails_consent'] {
+    font-weight: 400 !important;
+} 

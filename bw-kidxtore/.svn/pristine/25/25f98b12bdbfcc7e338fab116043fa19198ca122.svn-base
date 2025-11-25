@@ -1,0 +1,2137 @@
+<?php
+/**
+ * 
+ * Get option redux plugin
+ * 
+ * @return void
+ *
+ * */
+if(!function_exists('bzotech_get_redux_option')){
+    function bzotech_get_redux_option($key){
+        $option_name = bzotech_get_option_name();
+        $bzotech_theme_option = get_option($option_name);
+        if(isset($bzotech_theme_option[$key])){
+            $values = $bzotech_theme_option[$key];
+            if(isset($values['rgba']) && isset($values['color'])){
+                if($values['alpha'] != '1') $values = $values['rgba'];
+                else $values = $values['color'];
+            }
+            return $values;
+        }
+        else return null;
+    }
+}
+if(!function_exists('bzotech_get_option_name')){
+    function bzotech_get_option_name(){
+        $bzotech_option_name = apply_filters('bzotech_option_name',"bzotech_theme_option");
+        return $bzotech_option_name;
+    }
+}
+
+/**
+ * 
+ * Get option theme option
+ * 
+ * @return void
+ *
+ * */
+if(!function_exists('bzotech_get_option')){
+    function bzotech_get_option($key,$default=NULL){
+        if(class_exists('Redux')){
+            $value = bzotech_get_redux_option($key);
+            if(empty($value) && $default !== NULL && $value !== "0") $value = $default;
+            return $value;
+        }
+        else{
+            if(function_exists('ot_get_option')){
+                $value = ot_get_option($key,$default);
+                if(empty($value) && $default) $value = $default;
+                return $value;
+            }
+        }
+        
+        return $default;
+    }
+}
+
+/**
+ * 
+ * Get post by post_type
+ * 
+ * @return void
+ *
+ * */
+if(!function_exists('bzotech_list_post_type')){
+    function bzotech_list_post_type($post_type = 'page',$add_empty = false,$default=array(),$admin=true){
+        global $post;
+        $post_temp = $post;
+        $page_list = array();
+        if($add_empty) $page_list[''] = esc_html__('-- Choose One --','bw-kidxtore');
+        if(is_array($default) and count($default)>0){
+            foreach ($default as $key => $value) {
+               $page_list[$key] =  $value;
+            }
+            
+        }
+        if($admin){
+            if(is_admin()){
+
+                $pages = get_posts( array( 'post_type' => $post_type, 'posts_per_page' => -1, 'orderby' => 'title', 'order' => 'ASC' ) );
+                
+                if(is_array($pages)){
+                    foreach ($pages as $page) {
+                        $page_list[$page->ID] = $page->post_title;
+                    }
+                }
+            }
+        }else {
+
+            $pages = get_posts( array( 'post_type' => $post_type, 'posts_per_page' => -1, 'orderby' => 'title', 'order' => 'ASC' ) );
+            
+            if(is_array($pages)){
+                foreach ($pages as $page) {
+                    $page_list[$page->ID] = $page->post_title;
+                }
+            }
+        }
+        $post = $post_temp;
+        return $page_list;
+    }
+}
+
+/**
+ * 
+ * Get style inline
+ * 
+ * @return string
+ *
+ * */
+if(!function_exists('bzotech_add_html_attr')){   
+    function bzotech_add_html_attr($value,$echo = false,$attr='style'){
+        $output = '';
+        if(!empty($attr)){
+            $output = $attr.'="'.$value.'"';
+        }
+        if($echo) echo apply_filters('bzotech_output_content',$output);
+        else return $output;
+    }
+}
+
+/**
+ * 
+ * Get google font
+ * 
+ * @return string
+ *
+ * */ 
+if ( !function_exists( 'bzotech_get_google_link' ) ) {
+    function bzotech_get_google_link($fonts=null) {
+        $fonts_list2 = $font1 ='';
+        $fonts_list  = 'Fredoka:300,400,500,600,700|Poppins:300,400,500,600,700,800';
+        if(!empty($fonts) && is_array($fonts)){
+            $step ='|';
+            $dem =0;
+            foreach ($fonts as $key => $value) {
+                $fonts_add = explode(',', $value);
+                if($key == 0 && ('Fredoka' == $fonts_add[0] || 'Poppins' == $fonts_add[0]))  $step ='';
+                if('Fredoka' !== $fonts_add[0] && 'Poppins' !== $fonts_add[0]){
+					if($key == 0){
+						$font1 = $fonts_add[0];
+						$fonts_list2 .= $fonts_add[0].':100,300,400,500,600,700,800';
+					}else if($font1 !==$fonts_add[0]){
+						$fonts_list2 .= $step.$fonts_add[0].':100,300,400,500,600,700,800';
+					}
+                    $dem = $dem+1;
+                    
+                }
+            }
+            if($dem==2)$fonts_list='';
+			if($dem==1)$fonts_list=$fonts_list.'|';
+            if(!empty($fonts_list2)) $fonts_list = $fonts_list.$fonts_list2;
+        }
+        $fonts_list  = array($fonts_list);
+        if ( 'off' !== _x( 'on', 'Google font: on or off', 'bw-kidxtore' ) ) {
+
+
+            $fonts_url = add_query_arg( array(
+                'family' => urlencode( implode( '|', $fonts_list ) ),
+            ), "//fonts.googleapis.com/css" );
+        }
+
+        return $fonts_url;
+    }
+}
+
+/**
+ * 
+ * Get current ID
+ * 
+ * @return int
+ *
+ * */
+if(!function_exists('bzotech_get_current_id')){   
+    function bzotech_get_current_id(){
+        $id = get_the_ID();
+        if(is_front_page() && is_home()) $id = (int)get_option( 'page_on_front' );
+        if(!is_front_page() && is_home()) $id = (int)get_option( 'page_for_posts' );
+        if(is_archive() || is_search()) $id = 0;
+        if (class_exists('woocommerce')) {
+            if(is_shop()) $id = (int)get_option('woocommerce_shop_page_id');
+            if(is_cart()) $id = (int)get_option('woocommerce_cart_page_id');
+            if(is_checkout()) $id = (int)get_option('woocommerce_checkout_page_id');
+            if(is_account_page()) $id = (int)get_option('woocommerce_myaccount_page_id');
+        }
+        return $id;
+    }
+}
+
+/**
+ * 
+ * Get option value by ID default get theme option
+ * 
+ * @return void
+ *
+ * */
+if(!function_exists('bzotech_get_value_by_id')){   
+    function bzotech_get_value_by_id($key,$meta_empty = false){
+        if(!empty($key)){
+            $id = bzotech_get_current_id();
+            $value = get_post_meta($id,$key,true);
+            if(isset($value['rgba']) && isset($value['color'])){
+                if($value['alpha'] != '1') $value = $value['rgba'];
+                else $value = $value['color'];
+            }
+            if(empty($value) && !$meta_empty) $value = bzotech_get_option($key);
+            $session_page = bzotech_get_option('session_page');
+
+            if($session_page == '1'){
+                if($key == 'bzotech_header_page' || $key == 'bzotech_footer_page' || $key == 'main_color' || $key == 'main_color2' || $key == 'body_bg'){
+                    $val_meta = get_post_meta($id,$key,true);
+                    if(isset($val_meta['rgba']) && isset($val_meta['color'])){
+                        if($val_meta['alpha'] != '1') $val_meta = $val_meta['rgba'];
+                        else $val_meta = $val_meta['color'];
+                    }
+                    if(!empty($val_meta)) { $_SESSION[$key] = $val_meta;}
+                    if(isset($_SESSION[$key])) $session_val = $_SESSION[$key];
+                    else $session_val = '';
+                    if(!empty($session_val)) $value = $session_val;
+                }
+				if($key == 'body_typo'|| $key == 'title_typo'){
+                    $val_meta = get_post_meta($id,$key,true);
+                   
+                    if(!empty($val_meta['font-family'])) $_SESSION[$key] = $val_meta; 
+                    if(isset($_SESSION[$key])) $session_val = $_SESSION[$key];
+                    else $session_val = '';
+                    if(!empty($session_val)) $value = $session_val;
+                }
+            }
+            return $value;
+        }
+        else return esc_html__('Missing a variable of this funtion','bw-kidxtore');
+    }
+}
+
+
+/**
+ * 
+ * Check woocommerce page
+ * 
+ * @return bool
+ *
+ * */
+if (!function_exists('bzotech_is_woocommerce_page')){
+    function bzotech_is_woocommerce_page() {
+        if(  function_exists ( "is_woocommerce" ) && is_woocommerce()){
+                return true;
+        }
+        $woocommerce_keys   =   array ( "woocommerce_shop_page_id" ,
+                                        "woocommerce_terms_page_id" ,
+                                        "woocommerce_cart_page_id" ,
+                                        "woocommerce_checkout_page_id" ,
+                                        "woocommerce_pay_page_id" ,
+                                        "woocommerce_thanks_page_id" ,
+                                        "woocommerce_myaccount_page_id" ,
+                                        "woocommerce_edit_address_page_id" ,
+                                        "woocommerce_view_order_page_id" ,
+                                        "woocommerce_change_password_page_id" ,
+                                        "woocommerce_logout_page_id" ,
+                                        "woocommerce_lost_password_page_id" ) ;
+        foreach ( $woocommerce_keys as $wc_page_id ) {
+                if ( get_the_ID () == get_option ( $wc_page_id , 0 ) ) {
+                        return true ;
+                }
+        }
+        return false;
+    }
+}
+
+/**
+ * 
+ * Check woocommerce inner page
+ * 
+ * @return bool
+ *
+ * */
+if (!function_exists('bzotech_is_woocommerce_page_inner')){
+    function bzotech_is_woocommerce_page_inner() {
+        if(  function_exists ( "is_woocommerce" ) && is_woocommerce()){
+                return true;
+        }
+        $woocommerce_keys   =   array ( 
+                                        "woocommerce_cart_page_id" ,
+                                        "woocommerce_checkout_page_id" ,
+                                        "woocommerce_pay_page_id" ,
+                                        "woocommerce_thanks_page_id" ,
+                                        "woocommerce_myaccount_page_id" ,
+                                        "woocommerce_edit_address_page_id" ,
+                                        "woocommerce_view_order_page_id" ,
+                                        "woocommerce_change_password_page_id" ,
+                                        "woocommerce_logout_page_id" ,
+                                        "woocommerce_lost_password_page_id" ) ;
+        foreach ( $woocommerce_keys as $wc_page_id ) {
+                if ( get_the_ID () == get_option ( $wc_page_id , 0 ) ) {
+                        return true ;
+                }
+        }
+        return false;
+    }
+}
+
+/**
+ * 
+ * Get preload
+ * 
+ * @return html
+ *
+ * */
+if(!function_exists('bzotech_preload')){
+    function bzotech_preload(){
+        $preload = bzotech_get_option('show_preload');
+        if($preload == '1'):
+            $preload_style = bzotech_get_option('preload_style');
+            $preload_bg = bzotech_get_option('preload_bg');
+            $preload_img = bzotech_get_option('preload_image');
+            if(isset($preload_img['url'])) $preload_img = $preload_img['url'];
+        ?>
+        <div id="loading" class="preload-loading preload-style-<?php echo esc_attr($preload_style)?>">
+            <div id="loading-center">
+                <?php
+                switch ($preload_style) {
+                    case 'style2':
+                        ?>
+                        <div id="loading-center-absolute">
+                            <div id="object<?php echo esc_attr($preload_style)?>"></div>
+                        </div>
+                        <?php
+                        break;
+
+                    case 'style3':
+                        ?>
+                        <div id="loading-center-absolute<?php echo esc_attr($preload_style)?>">
+                            <div class="object<?php echo esc_attr($preload_style)?>" id="object_one<?php echo esc_attr($preload_style)?>"></div>
+                            <div class="object<?php echo esc_attr($preload_style)?>" id="object_two<?php echo esc_attr($preload_style)?>"></div>
+                            <div class="object<?php echo esc_attr($preload_style)?>" id="object_three<?php echo esc_attr($preload_style)?>"></div>
+                            <div class="object<?php echo esc_attr($preload_style)?>" id="object_four<?php echo esc_attr($preload_style)?>"></div>
+                        </div>
+                        <?php
+                        break;
+
+                    case 'style4':
+                        ?>
+                        <div id="loading-center-absolute<?php echo esc_attr($preload_style)?>">
+                            <div class="object<?php echo esc_attr($preload_style)?>" id="object_one<?php echo esc_attr($preload_style)?>"></div>
+                            <div class="object<?php echo esc_attr($preload_style)?>" id="object_two<?php echo esc_attr($preload_style)?>"></div>
+                            <div class="object<?php echo esc_attr($preload_style)?>" id="object_three<?php echo esc_attr($preload_style)?>"></div>
+                        </div>
+                        <?php
+                        break;
+
+                    case 'style5':
+                        ?>
+                        <div id="loading-center-absolute<?php echo esc_attr($preload_style)?>">
+                            <div class="object<?php echo esc_attr($preload_style)?>" id="first_object<?php echo esc_attr($preload_style)?>"></div>
+                            <div class="object<?php echo esc_attr($preload_style)?>" id="second_object<?php echo esc_attr($preload_style)?>"></div>
+                        </div>
+                        <?php
+                        break;
+
+                    case 'style6':
+                        ?>
+                        <div id="loading-center-absolute<?php echo esc_attr($preload_style)?>">
+                            <div class="object<?php echo esc_attr($preload_style)?>" id="object_one<?php echo esc_attr($preload_style)?>"></div>
+                            <div class="object<?php echo esc_attr($preload_style)?>" id="object_two<?php echo esc_attr($preload_style)?>"></div>
+                            <div class="object<?php echo esc_attr($preload_style)?>" id="object_three<?php echo esc_attr($preload_style)?>"></div>
+                            <div class="object<?php echo esc_attr($preload_style)?>" id="object_four<?php echo esc_attr($preload_style)?>"></div>
+                            <div class="object<?php echo esc_attr($preload_style)?>" id="object_five<?php echo esc_attr($preload_style)?>"></div>
+                        </div>
+                        <?php
+                        break;
+
+                    case 'style7':
+                        ?>
+                        <div id="loading-center-absolute<?php echo esc_attr($preload_style)?>">
+                            <div class="object<?php echo esc_attr($preload_style)?>" id="object_one<?php echo esc_attr($preload_style)?>"></div>
+                        </div>
+                        <?php
+                        break;
+
+                    case 'custom-image':
+                        ?>
+                        <div id="loading-center-absolute-image">
+                            <img src="<?php echo esc_url($preload_img)?>" alt="<?php esc_attr_e("preload-image",'bw-kidxtore');?>"/>
+                        </div>
+                        <?php
+                        break;
+                    
+                    default:
+                        ?>
+                        <div id="loading-center-absolute">
+                            <div class="object" id="object_four"></div>
+                            <div class="object" id="object_three"></div>
+                            <div class="object" id="object_two"></div>
+                            <div class="object" id="object_one"></div>
+                        </div>
+                        <?php
+                        break;
+                }
+                ?> 
+            </div>
+        </div>
+        <?php endif;
+    }
+}
+
+
+/**
+ * 
+ * Get template file to forder bzotech-templates
+ * 
+ * @return void
+ *
+ * */
+if(!function_exists('bzotech_get_template')){
+    function bzotech_get_template( $view_name,$slug=false,$data=array(),$echo=FALSE ){
+        $html = Bzotech_Template::load_view($view_name,$slug,$data,$echo);
+        if(!$echo) return $html;
+    }
+}
+
+/**
+ * 
+ * Get template file to forder bzotech-templates/posts
+ * 
+ * @return void
+ *
+ * */
+if(!function_exists('bzotech_get_template_post')){
+    function bzotech_get_template_post( $view_name,$slug=false,$data=array(),$echo=FALSE ){
+        $view_name = 'posts/'.$view_name;
+        $html = Bzotech_Template::load_view($view_name,$slug,$data,$echo);
+        if(!$echo) return $html;
+    }
+}
+
+/**
+ * 
+ * Get template file to forder bzotech-templates/elements
+ * 
+ * @return void
+ *
+ * */
+if(!function_exists('bzotech_get_template_element')){
+    function bzotech_get_template_element( $view_name,$slug=false,$data=array(),$echo=FALSE ){
+        $view_name = 'elements/'.$view_name;
+        $html = Bzotech_Template::load_view($view_name,$slug,$data,$echo);
+        if(!$echo) return $html;
+    }
+}
+
+/**
+ * 
+ * Get template file to forder bzotech-templates/products
+ * 
+ * @return void
+ *
+ * */
+if(!function_exists('bzotech_get_template_product')){
+    function bzotech_get_template_product( $view_name,$slug=false,$data=array(),$echo=FALSE ){
+        $view_name = 'products/'.$view_name;
+        $html = Bzotech_Template::load_view($view_name,$slug,$data,$echo);
+        if(!$echo) return $html;
+    }
+}
+
+/**
+ * 
+ * Get template file to forder bzotech-templates/woocommerce
+ * 
+ * @return void
+ *
+ * */
+if(!function_exists('bzotech_get_template_woocommerce')){
+    function bzotech_get_template_woocommerce( $view_name,$slug=false,$data=array(),$echo=FALSE ){
+        $view_name = 'woocommerce/'.$view_name;
+        $html = Bzotech_Template::load_view($view_name,$slug,$data,$echo);
+        if(!$echo) return $html;
+    }
+}
+
+/**
+ * 
+ * Get template file to forder bzotech-templates/widgets
+ * 
+ * @return void
+ *
+ * */
+if(!function_exists('bzotech_get_template_widget')){
+    function bzotech_get_template_widget( $view_name,$slug=false,$data=array(),$echo=FALSE ){
+        $view_name = 'widgets/'.$view_name;
+        $html = Bzotech_Template::load_view($view_name,$slug,$data,$echo);
+        if(!$echo) return $html;
+    }
+}
+
+/**
+ * 
+ * Get template file to forder bzotech-templates/elementor
+ * 
+ * @return void
+ *
+ * */
+
+if(!function_exists('bzotech_get_template_elementor_global')){
+    function bzotech_get_template_elementor_global( $view_name,$slug=false,$data=array(),$echo=FALSE){
+        
+        $view_name = 'elementor/global/'.$view_name;
+        $html = Bzotech_Template::load_view($view_name,$slug,$data,$echo);
+        if(!$echo) return $html;
+    }
+}
+
+/**
+ * 
+ * Echo sidebar by position
+ * 
+ * @return void
+ *
+ * */
+if(!function_exists('bzotech_output_sidebar')){
+    function bzotech_output_sidebar($position){
+        $sidebar = bzotech_get_sidebar();
+        $sidebar_pos = $sidebar['position'];
+        if($sidebar_pos == $position) get_sidebar();
+    }
+}
+
+/**
+ * 
+ * Get list sidebar
+ * 
+ * @return array
+ *
+ * */
+if(!function_exists('bzotech_get_sidebar_list')){
+    function bzotech_get_sidebar_list(){
+        global $wp_registered_sidebars;
+        $sidebars = array(
+            esc_html__('--Select--','bw-kidxtore') => ''
+            );
+        foreach( $wp_registered_sidebars as $id=>$sidebar ) {
+          $sidebars[ $sidebar[ 'name' ] ] = $id;
+        }
+        return $sidebars;
+    }
+}
+
+/**
+ * 
+ * Get sidebar
+ * 
+ * @return array
+ *
+ * */
+if(!function_exists('bzotech_get_sidebar')){
+    function bzotech_get_sidebar(){
+        $default=array(
+            'position'=>'right',
+            'style'=>'default',
+            'id'      =>'blog-sidebar'
+        );
+        if(class_exists("woocommerce") && bzotech_is_woocommerce_page()) $default['id'] = 'woocommerce-sidebar';
+        return apply_filters('bzotech_get_sidebar',$default);
+    }
+}
+
+/**
+ * 
+ * Echo class by sidebar
+ * 
+ * @return string
+ *
+ * */
+if(!function_exists('bzotech_get_main_class')){
+    function bzotech_get_main_class(){
+        $sidebar=bzotech_get_sidebar();
+        $sidebar_pos=$sidebar['position'];
+        $main_class = 'content-wrap content-no-sidebar bzotech-col-md-12';
+        if($sidebar_pos != 'no' && is_active_sidebar( $sidebar['id'])) $main_class = 'content-wrap content-sidebar-type-'.$sidebar['style'].' content-sidebar-'.$sidebar_pos.' bzotech-col-lg-9 bzotech-col-md-8 bzotech-col-sm-8 bzotech-col-xs-12';
+        return apply_filters('bzotech_main_class',$main_class);
+    }
+}
+
+/**
+ * 
+ * Get size string to array
+ * 
+ * @return array
+ *
+ * */
+if(!function_exists('bzotech_get_size_crop')){
+    function bzotech_get_size_crop($size='',$default=''){
+        if(!empty($size) && strpos($size, 'x')){
+            $size = str_replace('|', 'x', $size);
+            $size = str_replace(',', 'x', $size);
+            $size = explode('x', $size);
+        }
+        if(empty($size) && !empty($default)) $size = $default;
+        return $size;
+    }
+}
+
+/**
+ * 
+ * Get metabox
+ * 
+ * @return html
+ *
+ * */
+if(!function_exists('bzotech_display_metabox')){
+    function bzotech_display_metabox($type ='', $data = array(), $split = '|',$class_css=''){
+       
+        if(empty($data)) $data = ['author','comments'];
+        switch ($type) {
+            case 'detail-post':
+                
+                if(!empty($data)){ ?>
+                    <ul class="list-inline-block post-meta-data <?php echo esc_attr($class_css); ?>">
+                    <?php
+                        foreach ($data as $key => $value) {
+                            switch ($value) {
+                                case 'date':
+                                    ?>
+                                    <li class="post-meta-data__item meta-date">
+                                        <div class="post-meta-data__content">
+                                            <i class="lar la-calendar-minus"></i>
+                                            <span><?php echo get_the_date() ?></span>
+                                        </div>
+                                        <?php if($key < (count($data)-1)) echo '<span class="split">'.$split.'</span>';?>
+                                    </li>
+                                    <?php
+                                    break;
+
+                                case 'cats':
+                                    $cats = get_the_category_list('<span>, </span>');
+                                    if($cats): ?>
+                                        <li class="post-meta-data__item meta-cats">  
+                                            <div class="post-meta-data__content">
+                                                                    
+                                                <?php echo apply_filters('bzotech_output_content',$cats);?>
+                                            </div>
+                                            <?php if($key < (count($data)-1)) echo '<span class="split">'.$split.'</span>';?>
+                                        </li>
+                                    
+                                    <?php endif;
+                                    break;
+
+                                case 'tags':
+                                    $tags = get_the_tag_list('',', ','');
+                                    if($tags):?>
+                                        <li class="post-meta-data__item meta-tags">
+                                            <div class="post-meta-data__content">
+                                                <i class="las la-hashtag "></i>
+                                                <?php if($tags) echo apply_filters('bzotech_output_content',$tags); else esc_html_e("No Tag",'bw-kidxtore');?>
+                                            </div>
+                                            <?php if($key < (count($data)-1)) echo '<span class="split">'.$split.'</span>';?>
+                                        </li>
+                                    <?php endif;
+                                    break;
+
+                                case 'comments':
+                                    ?>
+
+                                    <li class="post-meta-data__item comments-item">
+                                        <div class="post-meta-data__content">
+                                            <i class="las la-comments"></i>
+                                            <a href="<?php echo esc_url( get_comments_link() ); ?>"><?php echo get_comments_number(); ?> 
+                                                <span>
+                                                <?php 
+                                                    if(get_comments_number() != 1) esc_html_e('Comments', 'bw-kidxtore') ;
+                                                    else esc_html_e('Comment', 'bw-kidxtore') ;
+                                                ?>
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <?php if($key < (count($data)-1)) echo '<span class="split">'.$split.'</span>';?>
+                                    </li>
+                                    <?php
+                                    break;
+
+                                case 'views':
+                                    ?>
+                                    <li class="post-meta-data__item meta-views">
+                                        <div class="post-meta-data__content">
+                                            <i class="las la-eye"></i>
+                                            <span>
+                                                <?php echo bzotech_get_post_view(). ' ';
+                                                if(bzotech_get_post_view() != 1) echo esc_html__("Views",'bw-kidxtore');
+                                                else echo esc_html__("View",'bw-kidxtore');
+                                                ?>
+                                            </span>
+                                        </div>
+                                        <?php if($key < (count($data)-1)) echo '<span class="split">'.$split.'</span>';?>
+                                    </li>
+                                  
+                                    <?php
+                                    break;
+                                case 'like':
+                                    if(function_exists('bzotech_getPostLikeLink')){
+                                    ?>
+                                        <li class="post-meta-data__item meta-like">
+                                            <div class="post-meta-data__content">
+                                                <?php echo bzotech_getPostLikeLink(get_the_ID()); ?>
+                                            </div>
+                                            <?php if($key < (count($data)-1)) echo '<span class="split">'.$split.'</span>';?>
+                                        </li>
+                                  
+                                    <?php }
+                                    break;
+
+                                default:
+                                    ?>
+                                    <li class="post-meta-data__item avata">
+                                        <div class="post-meta-data__content">
+                                            <i class="las la-user-circle"></i><?php echo esc_html__('By: ','bw-kidxtore');?>
+                                            <a href="<?php echo get_author_posts_url( get_the_author_meta( 'ID' ), get_the_author_meta( 'user_nicename' ) ); ?>">                                                                                        
+                                                <span class="name"><?php echo get_the_author(); ?></span>
+                                                    
+                                            </a>
+                                        </div>
+                                        <?php if($key < (count($data)-1)) echo '<span class="split">'.$split.'</span>';?>
+                                    </li>
+                                    <?php
+                                    break;
+                            }                            
+                        }  
+                         ?></ul>
+                <?php                      
+                }
+                break;
+            case 'tags-share':
+                $check_share = bzotech_get_option('post_single_share',array());
+                $post_type = get_post_type();
+                $tags = get_the_tag_list('','','');
+                $check_navigation   =  bzotech_get_option('post_single_navigation','0');
+                if((isset($check_share[$post_type]) && $check_share[$post_type] == '1') || $tags || $check_navigation == '1') { ?>
+
+                    <div class="tags-and-share <?php echo esc_attr($class_css); ?>">
+                       
+
+                        <div class="flex-wrapper align-content-center justify_content-space-between">
+                          
+                            <?php
+                            if ($tags):
+                                $tag_count = count(get_the_tags()); ?>
+                                <div class="tags-post-wrap flex-wrapper">
+                                    <span class="tags-and-share-title"><?php esc_html_e('Tag', 'bw-kidxtore') ; ?></span>
+                                    <div class="tags-post">
+                                        <?php echo apply_filters(' bzotech_output_content', $tags); ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                            
+                            <?php if ((isset($check_share[$post_type]) && $check_share[$post_type] == '1')) { ?>
+                                <div class="single-post-share-wrap flex-wrapper">
+                                    <span class="tags-and-share-title"><?php esc_html_e('Share', 'bw-kidxtore') ; ?></span>
+                                    <?php
+                                     bzotech_get_template('share', '', array('el_class' => 'single-post-share text-right'), true);
+                                    ?>
+                                </div>
+                            <?php } ?>
+                        </div>
+                        
+                    </div>
+                    <?php
+                }
+                break;
+            case 'grid-post':
+                if(!empty($data)){ ?>
+                    <ul class="list-inline-block post-meta-data <?php echo esc_attr($class_css); ?>">
+                    <?php
+                        foreach ($data as $key => $value) {
+                            switch ($value) {
+                                case 'date':
+                                    ?>
+                                    <li class="post-meta-data__item meta-date">
+                                        <div class="post-meta-data__content">
+                                            <i class="fa fa-calendar"></i>
+                                            <span><?php echo get_the_date() ?></span>
+                                        </div>
+                                        <?php if($key < (count($data)-1)) echo '<span class="split">'.$split.'</span>';?>
+                                    </li>
+                                    <?php
+                                    break;
+
+                                case 'cats':
+                                    $cats = get_the_category_list('<span>,</span>');
+                                    if($cats): ?>
+                                        <li class="post-meta-data__item meta-cats">  
+                                            <div class="post-meta-data__content">
+                                                <i class="fa fa-folder"></i>                          
+                                                <?php echo '<div class="flex-wrapper flex_wrap-wrap align_items-center">'.apply_filters('bzotech_output_content',$cats),'</div>';?>
+                                            </div>
+                                            <?php if($key < (count($data)-1)) echo '<span class="split">'.$split.'</span>';?>
+                                        </li>
+                                    
+                                    <?php endif;
+                                    break;
+
+                                case 'tags':
+                                    $tags = get_the_tag_list('','<span>,</span>','');
+                                    if($tags):?>
+                                        <li class="post-meta-data__item meta-tags">
+                                            <div class="post-meta-data__content">
+                                                <i class="fa fa-tags"></i>
+                                                <?php if($tags) echo '<div class="flex-wrapper flex_wrap-wrap align_items-center">'.apply_filters('bzotech_output_content',$tags); else esc_html_e("No Tag",'bw-kidxtore').'</div>';?>
+                                            </div>
+                                            <?php if($key < (count($data)-1)) echo '<span class="split">'.$split.'</span>';?>
+                                        </li>
+                                    <?php endif;
+                                    break;
+
+                                case 'comments':
+                                    ?>
+
+                                    <li class="post-meta-data__item comments-item">
+                                        <div class="post-meta-data__content">
+                                            <i class="fa fa-comments"></i>
+                                            <a href="<?php echo esc_url( get_comments_link() ); ?>"><?php echo get_comments_number(); ?> 
+                                                <span>
+                                                <?php 
+                                                    if(get_comments_number() != 1) esc_html_e('Comments', 'bw-kidxtore') ;
+                                                    else esc_html_e('Comment', 'bw-kidxtore') ;
+                                                ?>
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <?php if($key < (count($data)-1)) echo '<span class="split">'.$split.'</span>';?>
+                                    </li>
+                                    <?php
+                                    break;
+
+                                case 'views':
+                                    ?>
+                                    <li class="post-meta-data__item meta-views">
+                                        <div class="post-meta-data__content">
+                                            <i class="fa fa-eye"></i>
+                                            
+                                            <span>
+                                                <?php echo bzotech_get_post_view(). ' ';
+                                                if(bzotech_get_post_view() != 1) echo esc_html__("Views",'bw-kidxtore');
+                                                else echo esc_html__("View",'bw-kidxtore');
+                                                ?>
+                                            </span>
+                                        </div>
+                                        <?php if($key < (count($data)-1)) echo '<span class="split">'.$split.'</span>';?>
+                                    </li>
+                                  
+                                    <?php
+                                    break;
+                                case 'like':
+                                    if(function_exists('bzotech_getPostLikeLink')){
+                                    ?>
+                                        <li class="post-meta-data__item meta-like">
+                                            <div class="post-meta-data__content">
+                                                <?php echo bzotech_getPostLikeLink(get_the_ID()); ?>
+                                            </div>
+                                            <?php if($key < (count($data)-1)) echo '<span class="split">'.$split.'</span>';?>
+                                        </li>
+                                  
+                                    <?php }
+                                    break;
+
+                                default:
+                                    ?>
+                                    <li class="post-meta-data__item avata">
+                                        <div class="post-meta-data__content">
+                                            <i class="fa fa-user"></i><?php echo esc_html__('By: ','bw-kidxtore');?>
+                                            <a href="<?php echo get_author_posts_url( get_the_author_meta( 'ID' ), get_the_author_meta( 'user_nicename' ) ); ?>">                                                                                        
+                                                <span class="name"><?php echo get_the_author(); ?></span>
+                                                    
+                                            </a>
+                                        </div>
+                                        <?php if($key < (count($data)-1)) echo '<span class="split">'.$split.'</span>';?>
+                                    </li>
+                                    <?php
+                                    break;
+                            }                            
+                        }  
+                         ?></ul>
+                <?php                      
+                }
+                break;
+
+            case 'grid-post2':
+                if(!empty($data)){ ?>
+                    <ul class="list-inline-block post-meta-data <?php echo esc_attr($class_css); ?>">
+                    <?php
+                        foreach ($data as $key => $value) {
+                            switch ($value) {
+                                case 'date':
+                                    ?>
+                                    <li class="post-meta-data__item meta-date">
+                                        <div class="post-meta-data__content">
+                                            <i class="fa fa-calendar"></i>
+                                            <span><?php echo get_the_date() ?></span>
+                                        </div>
+                                        <?php if($key < (count($data)-1)) echo '<span class="split">'.$split.'</span>';?>
+                                    </li>
+                                    <?php
+                                    break;
+
+                                case 'cats':
+                                    $cats = get_the_category_list('<span>,</span>');
+                                    if($cats): ?>
+                                        <li class="post-meta-data__item meta-cats">  
+                                            <div class="post-meta-data__content">
+                                                <i class="fa fa-folder"></i>                          
+                                                <?php echo '<div class="flex-wrapper flex_wrap-wrap align_items-center">'.apply_filters('bzotech_output_content',$cats),'</div>';?>
+                                            </div>
+                                            <?php if($key < (count($data)-1)) echo '<span class="split">'.$split.'</span>';?>
+                                        </li>
+                                    
+                                    <?php endif;
+                                    break;
+
+                                case 'tags':
+                                    $tags = get_the_tag_list('','<span>,</span>','');
+                                    if($tags):?>
+                                        <li class="post-meta-data__item meta-tags">
+                                            <div class="post-meta-data__content">
+                                                <i class="fa fa-tags"></i>
+                                                <?php if($tags) echo '<div class="flex-wrapper flex_wrap-wrap align_items-center">'.apply_filters('bzotech_output_content',$tags); else esc_html_e("No Tag",'bw-kidxtore').'</div>';?>
+                                            </div>
+                                            <?php if($key < (count($data)-1)) echo '<span class="split">'.$split.'</span>';?>
+                                        </li>
+                                    <?php endif;
+                                    break;
+
+                                case 'comments':
+                                    ?>
+
+                                    <li class="post-meta-data__item comments-item">
+                                        <div class="post-meta-data__content">
+                                            <i class="fa fa-comments"></i>
+                                            <a href="<?php echo esc_url( get_comments_link() ); ?>"><?php echo get_comments_number(); ?> 
+                                                <span>
+                                                <?php 
+                                                    if(get_comments_number() != 1) esc_html_e('Comments', 'bw-kidxtore') ;
+                                                    else esc_html_e('Comment', 'bw-kidxtore') ;
+                                                ?>
+                                                </span>
+                                            </a>
+                                        </div>
+                                        <?php if($key < (count($data)-1)) echo '<span class="split">'.$split.'</span>';?>
+                                    </li>
+                                    <?php
+                                    break;
+
+                                case 'views':
+                                    ?>
+                                    <li class="post-meta-data__item meta-views">
+                                        <div class="post-meta-data__content">
+                                            <i class="fa fa-eye"></i>
+                                            
+                                            <span>
+                                                <?php echo bzotech_get_post_view(). ' ';
+                                                if(bzotech_get_post_view() != 1) echo esc_html__("Views",'bw-kidxtore');
+                                                else echo esc_html__("View",'bw-kidxtore');
+                                                ?>
+                                            </span>
+                                        </div>
+                                        <?php if($key < (count($data)-1)) echo '<span class="split">'.$split.'</span>';?>
+                                    </li>
+                                  
+                                    <?php
+                                    break;
+                                case 'like':
+                                    if(function_exists('bzotech_getPostLikeLink')){
+                                    ?>
+                                        <li class="post-meta-data__item meta-like">
+                                            <div class="post-meta-data__content">
+                                                <?php echo bzotech_getPostLikeLink(get_the_ID()); ?>
+                                            </div>
+                                            <?php if($key < (count($data)-1)) echo '<span class="split">'.$split.'</span>';?>
+                                        </li>
+                                  
+                                    <?php }
+                                    break;
+
+                                default:
+                                    ?>
+                                     
+                                    <li class="post-meta-data__item avata">
+                                        <a class="post-meta-data__content" href="<?php echo get_author_posts_url( get_the_author_meta( 'ID' ), get_the_author_meta( 'user_nicename' ) ); ?>">       
+                                            <?php echo get_avatar( get_the_author_meta( 'ID' ), 40 ); ?>                                                                           
+                                            <span class="name"><?php echo get_the_author(); ?></span>
+                                                
+                                        </a>
+                                        <?php if($key < (count($data)-1)) echo '<span class="split">'.$split.'</span>';?>
+                                    </li>
+                                    <?php
+                                    break;
+                            }                            
+                        }  
+                         ?></ul>
+                <?php                      
+                }
+                break;
+
+            
+            default:
+                
+                ?>
+                <ul class="list-inline-block post-meta-data <?php echo esc_attr($class_css); ?>">
+                    <?php
+                    if(!empty($data)){
+                        foreach ($data as $key => $value) {
+                            switch ($value) {
+                                case 'date':
+                                    ?>
+                                    <li class="meta-item"><i class="fa fa-calendar"></i><span class="silver"><?php echo get_the_date()?></span></li>
+                                    <?php if($key < (count($data)-1) && $split) echo '<li class="split">'.$split.'</li>';?>
+                                    <?php
+                                    break;
+
+                                case 'cats':
+                                    $cats = get_the_category_list(' ');
+                                    if($cats):?>
+                                        <li class="meta-item"><i class="fa fa-folder-open" aria-hidden="true"></i>                            
+                                            <?php echo apply_filters('bzotech_output_content',$cats);?>
+                                        </li>
+                                        <?php if($key < (count($data)-1) && $split) echo '<li class="split">'.$split.'</li>';?>
+                                    <?php endif;
+                                    break;
+
+                                case 'tags':
+                                    $tags = get_the_tag_list(' ',' ',' ');
+                                    if($tags):?>
+                                        <li class="meta-item"><i class="fa fa-tags" aria-hidden="true"></i>
+                                            <?php $tags = get_the_tag_list(' ',' ',' ');?>
+                                            <?php if($tags) echo apply_filters('bzotech_output_content',$tags); else esc_html_e("No Tag",'bw-kidxtore');?>
+                                        </li>
+                                        <?php if($key < (count($data)-1) && $split) echo '<li class="split">'.$split.'</li>';?>
+                                    <?php endif;
+                                    break;
+
+                                case 'comments':
+                                    ?>
+                                    <li class="meta-item"><i aria-hidden="true" class="fa fa-comment"></i>
+                                        <a href="<?php echo esc_url( get_comments_link() ); ?>"><?php echo get_comments_number(); ?> 
+                                        <?php 
+                                            if(get_comments_number() != 1) esc_html_e('Comments', 'bw-kidxtore') ;
+                                            else esc_html_e('Comment', 'bw-kidxtore') ;
+                                        ?>
+                                        </a>
+                                    </li>
+                                    <?php if($key < (count($data)-1) && $split) echo '<li class="split">'.$split.'</li>';?>
+                                    <?php
+                                    break;
+
+                                case 'views':
+                                    ?>
+                                    <li class="meta-item"><i class="fa fa-eye"></i>
+                                        <span class="silver"><?php echo bzotech_get_post_view(). ' ';
+                                        if(bzotech_get_post_view() != 1) echo esc_html__("Views",'bw-kidxtore');
+                                        else echo esc_html__("View",'bw-kidxtore');
+                                        ?>
+                                        </span>
+                                    </li>
+                                    <?php if($key < (count($data)-1) && $split) echo '<li class="split">'.$split.'</li>';?>
+                                    <?php
+                                    break;
+
+                                default:
+                                    ?>
+                                    <li class="meta-item">
+                                        <i class="fa fa-user" aria-hidden="true"></i>
+                                        <a href="<?php echo esc_url(get_author_posts_url(get_the_author_meta('ID'))); ?>"><?php echo get_the_author(); ?></a>
+                                    </li>
+                                    <?php if($key < (count($data)-1) && $split) echo '<li class="split">'.$split.'</li>';?>
+                                    <?php
+                                    break;
+                            }                            
+                        }                        
+                    }
+                    ?>
+                </ul>               
+                <?php
+                break;
+        }
+    }
+}
+
+/**
+ * 
+ * Get paging navigation
+ * 
+ * @return html
+ *
+ * */
+if(!function_exists('bzotech_paging_nav')){
+    function bzotech_paging_nav($query = false,$style = '',$echo = true){
+        if($query){
+            $big = 999999999;
+            $paged = ( get_query_var( 'paged' ) ) ? absint( get_query_var( 'paged' ) ) : 1;
+            $links = array(
+                    'base' => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
+                    'format'       => '&page=%#%',
+                    'current'      => max( 1, $paged ),
+                    'total'        => $query->max_num_pages,
+                    'end_size'     => 2,
+                    'mid_size'     => 1
+                );
+        }
+        else{
+            if ( $GLOBALS['wp_query']->max_num_pages < 2 ) {
+                return;
+            }
+
+            $paged        = get_query_var( 'paged' ) ? intval( get_query_var( 'paged' ) ) : 1;
+            $pagenum_link = html_entity_decode( get_pagenum_link() );
+            $query_args   = array();
+            $url_parts    = explode( '?', $pagenum_link );
+
+            if ( isset( $url_parts[1] ) ) {
+                wp_parse_str( $url_parts[1], $query_args );
+            }
+
+            $pagenum_link = remove_query_arg( array_keys( $query_args ), $pagenum_link );
+            $pagenum_link = trailingslashit( $pagenum_link ) . '%_%';
+
+            $format  = $GLOBALS['wp_rewrite']->using_index_permalinks() && ! strpos( $pagenum_link, 'index.php' ) ? 'index.php/' : '';
+            $format .= $GLOBALS['wp_rewrite']->using_permalinks() ? user_trailingslashit( 'page/%#%', 'paged' ) : '?paged=%#%';
+
+            // Set up paginated links.
+            $links = array(
+                'base'          => $pagenum_link,
+                'format'        => $format,
+                'total'         => $GLOBALS['wp_query']->max_num_pages,
+                'current'       => $paged,
+                'end_size'      => 2,
+                'mid_size'      => 1,
+                'add_args'      => array_map( 'urlencode', $query_args ),
+            );
+        }
+        $data = array(
+            'links' => $links,
+            'style' => $style,
+        );
+        $html = bzotech_get_template( 'paging-nav', false, $data, $echo );
+        if(!$echo) return $html;
+    }
+}
+
+/**
+ * 
+ * Get post list style
+ * 
+ * @return array
+ *
+ * */
+if(!function_exists('bzotech_get_post_list_style')){
+    function bzotech_get_post_list_style(){
+        $list = apply_filters('bzotech_post_list_item_style',array(
+            '' => esc_html__('Default','bw-kidxtore'),
+            'style2' => esc_html__('Post list 2','bw-kidxtore'),
+            ));        
+        return $list;
+    }
+}
+
+/**
+ * 
+ * Get post item style
+ * 
+ * @return array
+ *
+ * */
+if(!function_exists('bzotech_get_post_style')){
+    function bzotech_get_post_style($style = 'element'){
+        $list = apply_filters('bzotech_post_item_style',array(
+            '' => esc_html__('Default','bw-kidxtore'),
+            'style2' => esc_html__('Style 2 (home 3)','bw-kidxtore'),
+            'style3' => esc_html__('Style 3 (home 4)','bw-kidxtore'),
+            'style4' => esc_html__('Style 4 (home 5)','bw-kidxtore'),
+            'style5' => esc_html__('Style 5 (home 7)','bw-kidxtore'),
+
+            ));
+        
+        return $list;
+    }
+}
+
+/**
+ * 
+ * Get product thumb animation
+ * 
+ * @return array
+ *
+ * */
+if(!function_exists('bzotech_get_product_thumb_animation')){
+    function bzotech_get_product_thumb_animation($style = 'element'){
+        $list = apply_filters('bzotech_product_item_style',array(
+            ''                  => esc_html__('None','bw-kidxtore'),
+            'zoom-thumb'        => esc_html__('Zoom','bw-kidxtore'),
+            'rotate-thumb'      => esc_html__('Rotate','bw-kidxtore'),
+            'zoomout-thumb'     => esc_html__('Zoom Out','bw-kidxtore'),
+            'translate-thumb'   => esc_html__('Translate','bw-kidxtore'),
+            'slider-thumb'   => esc_html__('Slider','bw-kidxtore'),
+            ));
+        return $list;
+    }
+}
+
+/**
+ * 
+ * Get thumb animation
+ * 
+ * @return array
+ *
+ * */
+if(!function_exists('bzotech_get_thumb_animation')){
+    function bzotech_get_thumb_animation($style = 'element'){
+        $list = apply_filters('bzotech_thumb_animation',array(
+            ''                          => esc_html__("Default",'bw-kidxtore'),
+            'zoom-image'                => esc_html__("Zoom",'bw-kidxtore'),
+            'fade-out-in'               => esc_html__("Fade out-in",'bw-kidxtore'),
+            'zoom-image fade-out-in'    => esc_html__("Zoom Fade out-in",'bw-kidxtore'),
+            'fade-in-out'               => esc_html__("Fade in-out",'bw-kidxtore'),
+            'zoom-rotate'               => esc_html__("Zoom rotate",'bw-kidxtore'),
+            'zoom-rotate fade-out-in'   => esc_html__("Zoom rotate Fade out-in",'bw-kidxtore'),
+            'overlay-image'             => esc_html__("Overlay",'bw-kidxtore'),
+            'overlay-image zoom-image'  => esc_html__("Overlay Zoom",'bw-kidxtore'),
+            'zoom-image line-scale'     => esc_html__("Zoom image line",'bw-kidxtore'),
+            'gray-image'                => esc_html__("Gray image",'bw-kidxtore'),
+            'gray-image line-scale'     => esc_html__("Gray image line",'bw-kidxtore'),
+            'pull-curtain'              => esc_html__("Pull curtain",'bw-kidxtore'),
+            'pull-curtain gray-image'   => esc_html__("Pull curtain gray image",'bw-kidxtore'),
+            'pull-curtain zoom-image'   => esc_html__("Pull curtain zoom image",'bw-kidxtore'),
+        ));
+        return $list;
+    }
+}
+
+/**
+ * 
+ * Get product list style
+ * 
+ * @return array
+ *
+ * */
+if(!function_exists('bzotech_get_product_list_style')){
+    function bzotech_get_product_list_style(){
+        $list = apply_filters('bzotech_product_list_item_style',array(
+            ''          => esc_html__('Default','bw-kidxtore'),
+            'style2'          => esc_html__('Style 2','bw-kidxtore'),
+            ));
+        return $list;
+    }
+}
+
+/**
+ * 
+ * Get product item style
+ * 
+ * @return array
+ *
+ * */
+if(!function_exists('bzotech_get_product_style')){
+    function bzotech_get_product_style($style = 'element'){
+        $list = apply_filters('bzotech_product_item_style',array(
+            ''          => esc_html__('Default','bw-kidxtore'),
+            'style2'    => esc_html__('Product grid 2','bw-kidxtore'),
+            'style3'    => esc_html__('Product grid 3','bw-kidxtore'),
+            'style4'    => esc_html__('Product grid 4','bw-kidxtore'),
+            'style5'    => esc_html__('Product grid 5','bw-kidxtore'),
+            'style6'    => esc_html__('Product grid 6','bw-kidxtore'),
+            'style7'    => esc_html__('Product list column','bw-kidxtore'),
+            'style8'    => esc_html__('Product grid 8','bw-kidxtore'),
+            'style9'    => esc_html__('Product grid 9','bw-kidxtore'),
+            'style10'    => esc_html__('Product grid 10','bw-kidxtore'),
+            ));
+        return $list;
+    }
+}
+
+/**
+ * 
+ * Get filter url current
+ * 
+ * @return array
+ *
+ * */
+if(!function_exists('bzotech_get_filter_url')){
+    function bzotech_get_filter_url($key,$value){
+        if(function_exists('bzotech_get_current_url')) $current_url = bzotech_get_current_url();
+        else{
+            if(function_exists('wc_get_page_id')) $current_url = get_permalink( wc_get_page_id( 'shop' ) );
+            else $current_url = get_permalink();
+        }
+        $current_url = get_pagenum_link();
+        if(isset($_GET[$key])){
+            $current_val_string = sanitize_text_field($_GET[$key]);
+            if($current_val_string == $value){
+                $current_url = str_replace('&'.$key.'='.$_GET[$key], '', $current_url);
+                if(strpos($current_url,'&') > -1 )$current_url = str_replace('?'.$key.'='.$_GET[$key], '?', $current_url);
+                else $current_url = str_replace('?'.$key.'='.$_GET[$key], '', $current_url);
+            }
+            if(strpos($current_val_string,',') > -1 ) $current_val_key = explode(',', $current_val_string);
+            else $current_val_key = explode('%2C', $current_val_string);
+            $val_encode = str_replace(',', '%2C', $current_val_string);
+            if(!empty($current_val_string)){
+                if(!in_array($value, $current_val_key)) $current_val_key[] = $value;
+                else{
+                    $pos = array_search($value, $current_val_key);
+                    unset($current_val_key[$pos]);
+                }            
+                $new_val_string = implode('%2C', $current_val_key);
+                $current_url = str_replace($key.'='.$val_encode, $key.'='.$new_val_string, $current_url);
+                if (strpos($current_url, '?') == false) $current_url = str_replace('&','?',$current_url);
+            }
+            else $current_url = str_replace($key.'=', $key.'='.$value, $current_url);     
+        }
+        else{
+            if(strpos($current_url,'?') > -1 ){
+                $current_url .= '&amp;'.$key.'='.$value;
+            }
+            else {
+                $current_url .= '?'.$key.'='.$value;
+            }
+        }
+        return $current_url;
+    }
+}
+
+/**
+ * 
+ * Get url current by key
+ * 
+ * @return string
+ *
+ * */
+if(!function_exists('bzotech_get_key_url')){
+    function bzotech_get_key_url($key,$value){
+        if(function_exists('bzotech_get_current_url')) $current_url = bzotech_get_current_url();
+        else{
+            if(function_exists('wc_get_page_id')) $current_url = get_permalink( wc_get_page_id( 'shop' ) );
+            else $current_url = get_permalink();
+        }
+        $current_url = get_pagenum_link();
+        if(isset($_GET[$key])){
+            $current_url = str_replace('&'.$key.'='.$_GET[$key], '', $current_url);
+            if(strpos($current_url,'&') > -1 )$current_url = str_replace('?'.$key.'='.$_GET[$key], '?', $current_url);
+            else $current_url = str_replace('?'.$key.'='.$_GET[$key], '', $current_url);
+        }
+        if(strpos($current_url,'?') > -1 ){
+            $current_url .= '&amp;'.$key.'='.$value;
+        }
+        else {
+            $current_url .= '?'.$key.'='.$value;
+        }
+        return $current_url;
+    }
+}
+
+/**
+ * 
+ * Get size random
+ * 
+ * @return array
+ *
+ * */
+if(!function_exists('bzotech_size_random')){
+    function bzotech_size_random($size){
+        if(count($size) > 2){
+            $sizes = array();
+            if(is_array($size)){
+                foreach ($size as $key => $value) {
+                    $i = $key + 1;
+                    if($i % 2 == 1 && isset($size[$i])) $sizes[] = array($value,$size[$i]);
+                }
+            }
+            $k = array_rand($sizes);
+            $size = $sizes[$k];
+        }
+        return $size;
+    }
+}
+
+/**
+ * 
+ * Set post view
+ * 
+ * @return void
+ *
+ * */
+if(!function_exists('bzotech_set_post_view')){
+    function bzotech_set_post_view($post_id=false){
+        if(!$post_id) $post_id=get_the_ID();
+        $view=(int)get_post_meta($post_id,'post_views',true);
+        $view++;
+        update_post_meta($post_id,'post_views',$view);
+    }
+}
+
+/**
+ * 
+ * Get post view
+ * 
+ * @return void
+ *
+ * */
+if(!function_exists('bzotech_get_post_view')){
+    function bzotech_get_post_view($post_id=false){
+        if(!$post_id) $post_id=get_the_ID();
+        return (int)get_post_meta($post_id,'post_views',true);
+    }
+}
+
+/**
+ * 
+ * Cut string
+ * 
+ * @return string
+ *
+ * */
+if(!function_exists('bzotech_substr')){
+    function bzotech_substr($string='',$start=0,$end=1){
+        $output = '';
+        if(!empty($string)){
+            $string = strip_tags($string);
+            if($end ==''){
+                $output = $string;
+            }else if((int)$end !== 0 and (int)$end < strlen($string)){
+                
+                if($string[$end] != ''){
+                    for ($i=$end; $i < strlen($string) ; $i++) { 
+                        if($string[$i] == ' ' || $string[$i] == '.' || $i == strlen($string)-1){
+                            $end = $i;
+                            break;
+                        }
+                    }
+                }
+                $output = substr($string,$start,$end);
+            }else if((int)$end !== 0 and (int)$end > strlen($string)){
+                 $output =$string;
+            }else{
+                 $output ='';
+            }
+            
+        }
+        return $output;
+    }
+}
+
+
+/**
+ * 
+ * Get order list
+ * 
+ * @return array
+ *
+ * */
+if(!function_exists('bzotech_get_order_list')){
+    function bzotech_get_order_list($current=false,$extra=array(),$return='array'){
+        $default = array(
+            esc_html__('None','bw-kidxtore')               => 'none',
+            esc_html__('ID','bw-kidxtore')                 => 'ID',
+            esc_html__('Author','bw-kidxtore')             => 'author',
+            esc_html__('Title','bw-kidxtore')              => 'title',
+            esc_html__('Name','bw-kidxtore')               => 'name',
+            esc_html__('Date','bw-kidxtore')               => 'date',
+            esc_html__('Last Modified Date','bw-kidxtore') => 'modified',
+            esc_html__('Post Parent','bw-kidxtore')        => 'parent',
+        );
+
+        if(!empty($extra) and is_array($extra))
+        {
+            $default=array_merge($default,$extra);
+        }
+
+        if($return=="array")
+        {
+            return $default;
+        }elseif($return=='option')
+        {
+            $html='';
+            if(!empty($default)){
+                foreach($default as $key=>$value){
+                    $selected=selected($key,$current,false);
+                    $html.="<option {$selected} value='{$value}'>{$key}</option>";
+                }
+            }
+            return $html;
+        }
+    }
+}
+
+/**
+ * 
+ * Get size image
+ * 
+ * @return array
+ *
+ * */
+if(!function_exists('bzotech_get_size_image')){
+    function bzotech_get_size_image($default, $value = ''){
+        $return = $default;
+        if(strpos($value,'x')){
+            $size_arr = explode('x',$value);
+            if(is_array($size_arr) and count($size_arr) == 2){
+                $return = $size_arr;
+            }
+        }else{
+            if($value != '' and !empty($value)){
+                $return = $value;
+            }else if(strpos($default,'x')){
+                $size_arr = explode('x',$default);
+                if(is_array($size_arr) and count($size_arr) == 2){
+                    $return = $size_arr;
+                }
+            }
+        }
+        return $return;
+    }
+}
+
+/**
+ * 
+ * Get BreadCrumb
+ * 
+ * @return html
+ *
+ * */
+if(!function_exists('bzotech_breadcrumb')){
+    function bzotech_breadcrumb($step = '',$class_item='') {
+        global $post;
+       
+        if(is_home() && !is_front_page()) echo '<a class="'.$class_item.'" href="'.esc_url(home_url()).'">'.esc_html__('Home','bw-kidxtore').'</a>'.$step.'<span  class="'.$class_item.'" >'.esc_html__('Blog','bw-kidxtore').'</span>';
+        else echo '<a class="'.$class_item.'" href="'.esc_url(home_url()).'">'.esc_html__('Home','bw-kidxtore').'</a>';
+        if (is_single()){
+            
+            if(is_singular('post')){
+                echo apply_filters('bzotech_output_content',$step);
+                echo get_the_category_list($step);
+            }
+            echo apply_filters('bzotech_output_content',$step).'<span class="'.$class_item.'" >'.get_the_title().'</span>';
+        } elseif (is_page()) {
+            if($post->post_parent){
+                $anc = get_post_ancestors( get_the_ID() );
+                $title = get_the_title();
+                foreach ( $anc as $ancestor ) { 
+                    $output = $step.'<a class="'.$class_item.'" href="'.esc_url(get_permalink($ancestor)).'" title="'.get_the_title($ancestor).'">'.get_the_title($ancestor).'</a>';
+                }
+                echo apply_filters('bzotech_output_content',$output);
+                echo apply_filters('bzotech_output_content',$step).'<span class="'.$class_item.'" >'.$title.'</span>';
+
+            } else {
+                echo apply_filters('bzotech_output_content',$step).'<span class="'.$class_item.'" >'.get_the_title().'</span>';
+            }
+        }
+        elseif(is_archive()) echo apply_filters('bzotech_output_content',$step).'<span  class="'.$class_item.'" >'.get_the_archive_title().'</span>';
+        elseif(is_search()) echo apply_filters('bzotech_output_content',$step).'<span class="'.$class_item.'">'.esc_html__('Search Results for: ','bw-kidxtore').get_search_query().'</span>';
+        elseif(is_404()) echo apply_filters('bzotech_output_content',$step).'<span class="'.$class_item.'">'.esc_html__('404','bw-kidxtore').'</span>';
+    }
+}
+
+
+/**
+ * 
+ * Echo style background
+ * 
+ * @return string
+ *
+ * */
+if(!function_exists('bzotech_fill_css_background')){
+    function bzotech_fill_css_background($data){
+        $string = '';
+        if(!empty($data['background-color'])) $string .= 'background-color:'.$data['background-color'].';';
+        if(!empty($data['background-repeat'])) $string .= 'background-repeat:'.$data['background-repeat'].';';
+        if(!empty($data['background-attachment'])) $string .= 'background-attachment:'.$data['background-attachment'].';';
+        if(!empty($data['background-position'])) $string .= 'background-position:'.$data['background-position'].';';
+        if(!empty($data['background-size'])) $string .= 'background-size:'.$data['background-size'].';';
+        if(!empty($data['background-image'])) $string .= 'background-image:url("'.$data['background-image'].'");';
+        if(!empty($string)) return Bzotech_Assets::build_css($string);
+        else return false;
+    }
+}
+
+/**
+ * 
+ * Get text editor
+ * 
+ * @return html
+ *
+ * */
+if(!function_exists('bzotech_parse_text_editor')){
+    function bzotech_parse_text_editor($content){
+
+        $content = shortcode_unautop( $content );
+        $content = do_shortcode( $content );
+        $content = wptexturize( $content );
+
+        if ( $GLOBALS['wp_embed'] instanceof \WP_Embed ) {
+            $content = $GLOBALS['wp_embed']->autoembed( $content );
+        }
+
+        return $content;
+    }
+}
+
+/**
+ * 
+ * Get button compare
+ * 
+ * @return html
+ *
+ * */
+if(!function_exists('bzotech_compare_url')){
+    function bzotech_compare_url($icon='',$id = false,$text = '',$class='',$tooltip = true){
+        $html = $tooltip_html ='';
+        if(empty($icon)) $icon = '<i class="las la-exchange-alt"></i>';
+        if($tooltip) $tooltip_html = 'title="'.$text.'" data-toggle="tooltip" data-placement="top"';
+        if(class_exists('YITH_Woocompare')){
+            if(!$id) $id = get_the_ID();
+            $cp_link = str_replace('&', '&amp;',add_query_arg( array('action' => 'yith-woocompare-add-product','id' => $id )));
+            $html = '<a '.$tooltip_html.' href="'.esc_url($cp_link).'" class="product-compare compare compare-link '.esc_attr($class).'" data-product_id="'.get_the_ID().'">'.$icon.'<span>'.$text.'</span></a>';
+  
+    }
+        return $html;
+    }
+}
+
+/**
+ * 
+ * Get button wishlist
+ * 
+ * @return html
+ *
+ * */
+if(!function_exists('bzotech_wishlist_url')){
+    function bzotech_wishlist_url($icon='',$text='',$class='',$tooltip = true){
+        $html = $tooltip_html ='';
+        if(empty($icon)) $icon = '<i class="la-heart lar"></i>';
+        if($tooltip) $tooltip_html = 'title="'.$text.'" data-toggle="tooltip" data-placement="top"';
+        if(class_exists('YITH_WCWL')) 
+            $html = '<a '.$tooltip_html.' href="'.esc_url(str_replace('&', '&amp;',add_query_arg( 'add_to_wishlist', get_the_ID() ))).'" class="add_to_wishlist wishlist-link '.esc_attr($class).'" rel="nofollow" data-product-id="'.get_the_ID().'" data-product-title="'.esc_attr(get_the_title()).'">'.$icon.'<span>'.$text.'</span></a>';
+        return $html;
+    }
+}
+
+/**
+ * 
+ * Get terms filter
+ * 
+ * @return array
+ *
+ * */
+if(!function_exists('bzotech_get_terms_filter')){
+    function bzotech_get_terms_filter($taxonomy){
+        $get_terms_args = array( 'hide_empty' => '1' );
+
+        $orderby = wc_attribute_orderby( $taxonomy );
+
+        switch ( $orderby ) {
+            case 'name' :
+                $get_terms_args['orderby']    = 'name';
+                $get_terms_args['menu_order'] = false;
+            break;
+            case 'id' :
+                $get_terms_args['orderby']    = 'id';
+                $get_terms_args['order']      = 'ASC';
+                $get_terms_args['menu_order'] = false;
+            break;
+            case 'menu_order' :
+                $get_terms_args['menu_order'] = 'ASC';
+            break;
+        }
+
+        $terms = get_terms( $taxonomy, $get_terms_args );
+
+        if (is_array($terms) && 0 === count( $terms ) ) {
+            return;
+        }
+
+        switch ( $orderby ) {
+            case 'name_num' :
+                usort( $terms, '_wc_get_product_terms_name_num_usort_callback' );
+            break;
+            case 'parent' :
+                usort( $terms, '_wc_get_product_terms_parent_usort_callback' );
+            break;
+        }
+        return $terms;
+    }
+}
+
+/**
+ * 
+ * remove w3c of ifarme
+ * 
+ * @return html
+ *
+ * */
+if(!function_exists('bzotech_remove_w3c')){
+    function bzotech_remove_w3c($embed_code){
+        $embed_code=str_replace('webkitallowfullscreen','',$embed_code);
+        $embed_code=str_replace('mozallowfullscreen','',$embed_code);
+        $embed_code=str_replace('frameborder="0"','',$embed_code);
+        $embed_code=str_replace('frameborder="no"','',$embed_code);
+        $embed_code=str_replace('scrolling="no"','',$embed_code);
+        $embed_code=str_replace('&','&amp;',$embed_code);
+        return $embed_code;
+    }
+}
+
+/**
+ * 
+ * fix import category
+ * 
+ * @return void
+ *
+ * */
+if(!function_exists('bzotech_fix_import_category')){
+    function bzotech_fix_import_category($taxonomy,$demo='1'){
+        global $bzotech_config;
+        $data = $bzotech_config['import_category'][$demo];
+        if(!empty($data)){
+            $data = json_decode($data,true);
+            if(is_array($data)){
+                foreach ($data as $cat => $value) {
+                    $parent_id = 0;
+                    $term = get_term_by( 'slug',$cat, $taxonomy );
+                    if(isset($term->term_id)){
+                        $term_parent = get_term_by( 'slug', $value['parent'], $taxonomy );
+                        if(isset($term_parent->term_id)) $parent_id = $term_parent->term_id;
+                        if($parent_id) wp_update_term( $term->term_id, $taxonomy, array('parent'=> $parent_id) );
+                        if($value['thumbnail']){
+                            if($taxonomy == 'product_cat')  update_woocommerce_term_meta( $term->term_id, 'thumbnail_id', $value['thumbnail']);
+                            else{
+                                update_term_meta( $term->term_id, 'thumbnail_id', $value['thumbnail']);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**
+ * 
+ * Get val root css of option by array type
+ * 
+ * @return void
+ *
+ * */
+
+if(!function_exists('bzotech_get_css_option_array_type')){
+    function bzotech_get_css_option_array_type($key='',$defaults=array()){
+        $css ='';
+        if(!empty($key)){
+            $array= bzotech_get_value_by_id($key);
+            if(is_array($array)){
+                foreach($array as $attr=>$value){
+                    if(!empty($value)){
+                        $css .='--bzo-'.$key.'-'.$attr.':'.$value.';';
+                    }
+                    else if(array_key_exists($attr,$defaults)){
+                        $css .='--bzo-'.$key.'-'.$attr.':'.$defaults[$attr].';';
+                    }
+                }
+            }else{
+                if(is_array($defaults)){
+                    foreach($defaults as $attr=>$value){
+                       $css .='--bzo-'.$key.'-'.$attr.':'.$value.';';
+                    }
+                }
+            }
+            
+        }
+        return apply_filters('bzotech_get_css_option_array_type',$css);
+    }
+}
+/**
+ * 
+ * Get image html
+ * 
+ * @return html
+ * 
+ * */
+if(!function_exists('bzotech_get_picture_html')){
+    function bzotech_get_picture_html($array=[]){
+        $output = '';
+        if(!empty($array['image'])){ 
+            if(!isset($array['media'])) $array['media'] = '768';
+            if(!isset($array['image_size'])) $array['image_size'] = 'full';
+            if(!isset($array['image_mobile_size'])) $array['image_mobile_size'] = 'full';
+            if(empty($array['image_mobile'])) $array['image_mobile'] = $array['image'];
+            $output = '<picture>
+                            <source media="(min-width:'.$array['media'].'px)" 
+                            srcset="'.wp_get_attachment_image_url($array['image'],$array['image_size']).'">
+                            '.wp_get_attachment_image($array['image_mobile'],$array['image_mobile_size']).'
+                        </picture>';
+
+        }
+        return $output;
+    }
+}
+/**
+ * 
+ * Get image html
+ * 
+ * @return html
+ * 
+ * */
+if(!function_exists('bzotech_get_icon_svg')){
+    function bzotech_get_icon_svg($icon){
+        
+        $array =[
+            'icon_search_default'=>'<svg class="icon-search-default" width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11.5 21.7975C16.7467 21.7975 21 17.5442 21 12.2975C21 7.05083 16.7467 2.79754 11.5 2.79754C6.25329 2.79754 2 7.05083 2 12.2975C2 17.5442 6.25329 21.7975 11.5 21.7975Z" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M22 22.7975L20 20.7975" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>',
+            'icon_search_default_white'=>'<svg class="icon-search-default-white" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M22 22L20 20" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>',
+            'testimonial-right'=>'<svg class="testimonial-right" xmlns="http://www.w3.org/2000/svg" width="42" height="32" viewBox="0 0 42 32" fill="none">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M21.8999 2.73535L23.0499 0.735352C30.0099 3.86202 35.1032 7.50534 38.3299 11.6653C40.7216 14.7089 42.0086 18.4746 41.9799 22.3453C42.0695 24.6622 41.2515 26.9225 39.6999 28.6454C38.9958 29.4396 38.1279 30.0718 37.1559 30.4982C36.184 30.9246 35.1311 31.1352 34.0699 31.1154C33.0131 31.1416 31.9621 30.951 30.9818 30.5554C30.0015 30.1598 29.1125 29.5676 28.3699 28.8153C27.6292 28.1037 27.0428 27.2473 26.6471 26.2994C26.2514 25.3515 26.055 24.3324 26.0699 23.3054C26.0504 22.3424 26.2631 21.3888 26.6899 20.5254C27.5782 19.0221 28.7026 17.6715 30.0199 16.5254C31.6732 14.992 32.4966 13.6587 32.4899 12.5254C32.4063 11.1987 31.8615 9.94289 30.9499 8.97534C29.4032 7.20201 26.3866 5.12202 21.8999 2.73535ZM8.57989 16.8654C10.3399 15.2654 11.2099 13.8654 11.2099 12.7454C11.1633 11.3801 10.6396 10.0744 9.72992 9.05536C8.28992 7.33536 5.28992 5.27537 0.729916 2.87537L1.92993 0.76535C8.48326 3.43202 13.4499 6.94536 16.8299 11.3054C19.392 14.4009 20.8052 18.2871 20.8299 22.3054C20.8892 24.6783 20.0086 26.9786 18.3799 28.7054C17.6709 29.5218 16.7955 30.1771 15.8124 30.6273C14.8292 31.0774 13.7612 31.312 12.6799 31.3153C11.6507 31.3215 10.6313 31.1141 9.68634 30.7062C8.74136 30.2982 7.89126 29.6986 7.18988 28.9453C6.44686 28.2198 5.85829 27.3514 5.45959 26.3925C5.06089 25.4335 4.86029 24.4038 4.86987 23.3654C4.88987 21.2587 6.13324 19.102 8.59991 16.8954L8.57989 16.8654Z" fill="#97A066"/>
+            </svg>',
+            'testimonial-left'=>'<svg class="testimonial-left" xmlns="http://www.w3.org/2000/svg" width="42" height="32" viewBox="0 0 42 32" fill="none">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M20.6 2.73535L19.45 0.735352C12.49 3.86202 7.39666 7.50534 4.16999 11.6653C1.77826 14.7089 0.491271 18.4746 0.519964 22.3453C0.430341 24.6622 1.2484 26.9225 2.79999 28.6454C3.50403 29.4396 4.37197 30.0718 5.34394 30.4982C6.31591 30.9246 7.36879 31.1352 8.43 31.1154C9.4868 31.1416 10.5377 30.951 11.5181 30.5554C12.4984 30.1598 13.3873 29.5676 14.13 28.8153C14.8707 28.1037 15.4571 27.2473 15.8528 26.2994C16.2485 25.3515 16.4449 24.3324 16.43 23.3054C16.4495 22.3424 16.2368 21.3888 15.81 20.5254C14.9217 19.0221 13.7973 17.6715 12.48 16.5254C10.8267 14.992 10.0033 13.6587 10.01 12.5254C10.0936 11.1987 10.6384 9.94289 11.55 8.97534C13.0967 7.20201 16.1133 5.12202 20.6 2.73535ZM33.92 16.8654C32.16 15.2654 31.29 13.8654 31.29 12.7454C31.3366 11.3801 31.8602 10.0744 32.77 9.05536C34.21 7.33536 37.21 5.27537 41.77 2.87537L40.57 0.76535C34.0166 3.43202 29.05 6.94536 25.67 11.3054C23.1079 14.4009 21.6947 18.2871 21.67 22.3054C21.6107 24.6783 22.4913 26.9786 24.12 28.7054C24.829 29.5218 25.7044 30.1771 26.6875 30.6273C27.6706 31.0774 28.7387 31.312 29.82 31.3153C30.8492 31.3215 31.8686 31.1141 32.8135 30.7062C33.7585 30.2982 34.6086 29.6986 35.31 28.9453C36.053 28.2198 36.6416 27.3514 37.0403 26.3925C37.439 25.4335 37.6396 24.4038 37.63 23.3654C37.61 21.2587 36.3666 19.102 33.9 16.8954L33.92 16.8654Z" fill="#97A066"/>
+            </svg>',
+            'ch-header-avocado-left'=>'<svg class="ch-header-left avocado" xmlns="http://www.w3.org/2000/svg" width="38" height="45" viewBox="0 0 38 45" fill="none">
+            <path d="M10.6677 39.7329C5.91971 36.7941 3.64891 32.5273 3.90313 26.9334C3.93294 26.2767 4.06258 25.6238 4.14529 24.9696L4.82419 22.8114C4.88296 22.7323 4.93561 22.6488 4.98167 22.5616C5.7457 20.7519 6.90998 19.1393 8.38631 17.8462C10.8904 15.6601 13.4041 13.4849 15.9276 11.3207C17.3343 10.1097 18.9726 9.50695 20.8228 9.48474C21.0163 9.48149 21.2102 9.48228 21.4021 9.48168C21.4647 7.5644 20.1803 5.788 18.293 5.15313C17.8216 4.99375 17.3431 4.85432 16.8614 4.70277L17.7592 1.8485C20.2323 2.47995 22.232 3.30696 23.8016 6.33876C23.8754 6.29467 23.95 6.2532 24.0214 6.20677C25.6908 5.11882 27.4682 4.86149 29.3721 5.47385C31.1031 6.03105 32.8421 6.56542 34.5768 7.1111L34.9731 7.23577C34.6558 8.2446 34.3682 9.20895 34.0526 10.1621C33.4124 12.0743 32.1289 13.3803 30.2234 14.0099C29.4989 14.2484 28.7113 14.3016 27.9458 14.4425C28.0013 14.6373 28.0833 14.8983 28.1502 15.1624C28.954 18.3242 29.7566 21.4859 30.558 24.6474C30.916 26.0336 31.0384 27.4709 30.9201 28.899C30.8629 29.5826 30.7558 30.2616 30.6719 30.9424L30.0156 33.0285C29.8078 33.4382 29.621 33.8617 29.3958 34.2589C26.6295 39.1498 22.4265 41.5598 16.8287 41.5055C14.0783 41.4298 11.8489 40.4751 10.6677 39.7329ZM7.28035 25.0166C7.21254 25.3501 7.04934 25.9592 6.96874 26.5816C6.1867 32.632 10.5977 38.0265 16.6861 38.4823C23.7249 39.0098 29.3541 32.3247 27.6382 25.4711C26.8496 22.3194 26.0516 19.1705 25.2443 16.0246C24.3687 12.5926 20.4719 11.3802 17.7919 13.7016C15.3733 15.7917 12.9532 17.8833 10.5315 19.9765C9.0387 21.2705 8.00569 22.8738 7.28035 25.0166ZM31.1575 9.22923C30.097 8.89563 29.0402 8.55051 27.9734 8.23709C27.7293 8.16508 27.4516 8.1775 27.1921 8.19246C25.9808 8.26044 24.7841 9.22784 24.6055 10.2296C25.7306 10.5835 26.8318 11.0258 27.9756 11.2652C29.3477 11.5535 30.8282 10.5344 31.1575 9.22923Z" fill="#97A066"/>
+            <path d="M24.5918 30.2038C24.1474 31.6325 23.2902 32.8975 22.129 33.8384C20.9678 34.7794 19.5548 35.3538 18.0693 35.4889C16.5838 35.6241 15.0927 35.3138 13.785 34.5974C12.4774 33.881 11.4121 32.7909 10.7242 31.4652C10.0363 30.1395 9.75694 28.6379 9.92141 27.1509C10.0859 25.664 10.6868 24.2586 11.648 23.113C12.6092 21.9674 13.8874 21.1331 15.3204 20.7161C16.7534 20.299 18.2768 20.318 19.6973 20.7705C21.5937 21.3695 23.1742 22.6993 24.0918 24.4678C25.0094 26.2364 25.1893 28.2993 24.5918 30.2038ZM21.7158 29.3133C22.4543 26.9656 21.1278 24.3952 18.7866 23.6453C16.4341 22.8917 13.8448 24.2351 13.1019 26.5965C12.3634 28.9442 13.6902 31.5163 16.0297 32.2689C18.3818 33.0191 20.973 31.6747 21.7158 29.3133Z" fill="#97A066"/>
+            </svg>',
+            'ch-header-avocado-right'=>'<svg class="ch-header-right avocado" xmlns="http://www.w3.org/2000/svg"  version="1.1" width="38" height="45" viewBox="0 0 865 1024">
+            <title/>
+            <g id="icomoon-ignore">
+            </g>
+            <path fill="#97a066" d="M622.251 904.144c108.043-66.874 159.716-163.967 153.932-291.26-0.678-14.944-3.628-29.801-5.51-44.687l-15.449-49.111c-1.337-1.8-2.535-3.7-3.584-5.684-17.386-41.181-43.88-77.876-77.474-107.302-56.982-49.746-114.183-99.244-171.606-148.491-32.010-27.557-69.291-41.273-111.393-41.778-4.403-0.074-8.816-0.056-13.182-0.070-1.424-43.629 27.803-84.052 70.749-98.499 10.727-3.627 21.616-6.8 32.577-10.248l-20.43-64.95c-56.277 14.369-101.781 33.188-137.498 102.178-1.679-1.003-3.377-1.947-5.002-3.004-37.988-24.757-78.434-30.613-121.758-16.678-39.39 12.679-78.962 24.839-118.436 37.257l-9.018 2.837c7.22 22.956 13.765 44.901 20.946 66.59 14.568 43.513 43.775 73.232 87.136 87.559 16.486 5.427 34.409 6.638 51.828 9.844-1.263 4.433-3.129 10.372-4.651 16.382-18.291 71.949-36.555 143.895-54.791 215.836-8.146 31.544-10.932 64.25-8.24 96.748 1.302 15.556 3.739 31.007 5.648 46.499l14.934 47.47c4.729 9.323 8.979 18.96 14.104 27.998 62.949 111.295 158.59 166.136 285.971 164.9 62.587-1.723 113.318-23.447 140.197-40.336zM699.332 569.267c1.543 7.589 5.257 21.449 7.091 35.612 17.796 137.68-82.579 260.435-221.124 270.807-160.172 12.004-288.267-140.12-249.221-296.077 17.945-71.719 36.104-143.374 54.475-214.96 19.925-78.097 108.599-105.686 169.584-52.861 55.037 47.561 110.107 95.157 165.214 142.789 33.969 29.446 57.476 65.93 73.982 114.69zM155.994 210.016c24.132-7.591 48.18-15.445 72.456-22.577 5.555-1.639 11.874-1.356 17.779-1.016 27.564 1.547 54.795 23.561 58.86 46.356-25.602 8.053-50.661 18.118-76.688 23.566-31.223 6.56-64.912-16.63-72.406-46.33z"/>
+            <path fill="#97a066" d="M305.4 687.304c10.113 32.511 29.619 61.297 56.042 82.707 26.424 21.413 58.577 34.484 92.381 37.558 33.803 3.077 67.734-3.984 97.492-20.287 29.755-16.302 53.997-41.108 69.65-71.275s22.011-64.337 18.268-98.174c-3.743-33.835-17.417-65.816-39.29-91.885s-50.959-45.054-83.568-54.543c-32.609-9.491-67.275-9.059-99.599 1.238-43.154 13.631-79.119 43.891-99.999 84.134-20.88 40.245-24.974 87.188-11.378 130.526zM370.845 667.040c-16.805-53.423 13.38-111.914 66.656-128.978 53.532-17.149 112.453 13.421 129.359 67.156 16.805 53.423-13.387 111.953-66.624 129.079-53.523 17.071-112.488-13.521-129.39-67.256z"/>
+            </svg>',
+            'ch-header-avocado-white-left'=>'<svg class="ch-header-left avocado" xmlns="http://www.w3.org/2000/svg" width="38" height="45" viewBox="0 0 38 45" fill="none">
+            <path d="M10.6677 39.7329C5.91971 36.7941 3.64891 32.5273 3.90313 26.9334C3.93294 26.2767 4.06258 25.6238 4.14529 24.9696L4.82419 22.8114C4.88296 22.7323 4.93561 22.6488 4.98167 22.5616C5.7457 20.7519 6.90998 19.1393 8.38631 17.8462C10.8904 15.6601 13.4041 13.4849 15.9276 11.3207C17.3343 10.1097 18.9726 9.50695 20.8228 9.48474C21.0163 9.48149 21.2102 9.48228 21.4021 9.48168C21.4647 7.5644 20.1803 5.788 18.293 5.15313C17.8216 4.99375 17.3431 4.85432 16.8614 4.70277L17.7592 1.8485C20.2323 2.47995 22.232 3.30696 23.8016 6.33876C23.8754 6.29467 23.95 6.2532 24.0214 6.20677C25.6908 5.11882 27.4682 4.86149 29.3721 5.47385C31.1031 6.03105 32.8421 6.56542 34.5768 7.1111L34.9731 7.23577C34.6558 8.2446 34.3682 9.20895 34.0526 10.1621C33.4124 12.0743 32.1289 13.3803 30.2234 14.0099C29.4989 14.2484 28.7113 14.3016 27.9458 14.4425C28.0013 14.6373 28.0833 14.8983 28.1502 15.1624C28.954 18.3242 29.7566 21.4859 30.558 24.6474C30.916 26.0336 31.0384 27.4709 30.9201 28.899C30.8629 29.5826 30.7558 30.2616 30.6719 30.9424L30.0156 33.0285C29.8078 33.4382 29.621 33.8617 29.3958 34.2589C26.6295 39.1498 22.4265 41.5598 16.8287 41.5055C14.0783 41.4298 11.8489 40.4751 10.6677 39.7329ZM7.28035 25.0166C7.21254 25.3501 7.04934 25.9592 6.96874 26.5816C6.1867 32.632 10.5977 38.0265 16.6861 38.4823C23.7249 39.0098 29.3541 32.3247 27.6382 25.4711C26.8496 22.3194 26.0516 19.1705 25.2443 16.0246C24.3687 12.5926 20.4719 11.3802 17.7919 13.7016C15.3733 15.7917 12.9532 17.8833 10.5315 19.9765C9.0387 21.2705 8.00569 22.8738 7.28035 25.0166ZM31.1575 9.22923C30.097 8.89563 29.0402 8.55051 27.9734 8.23709C27.7293 8.16508 27.4516 8.1775 27.1921 8.19246C25.9808 8.26044 24.7841 9.22784 24.6055 10.2296C25.7306 10.5835 26.8318 11.0258 27.9756 11.2652C29.3477 11.5535 30.8282 10.5344 31.1575 9.22923Z" fill="#DBDEC9"/>
+            <path d="M24.5918 30.2038C24.1474 31.6325 23.2902 32.8975 22.129 33.8384C20.9678 34.7794 19.5548 35.3538 18.0693 35.4889C16.5838 35.6241 15.0927 35.3138 13.785 34.5974C12.4774 33.881 11.4121 32.7909 10.7242 31.4652C10.0363 30.1395 9.75694 28.6379 9.92141 27.1509C10.0859 25.664 10.6868 24.2586 11.648 23.113C12.6092 21.9674 13.8874 21.1331 15.3204 20.7161C16.7534 20.299 18.2768 20.318 19.6973 20.7705C21.5937 21.3695 23.1742 22.6993 24.0918 24.4678C25.0094 26.2364 25.1893 28.2993 24.5918 30.2038ZM21.7158 29.3133C22.4543 26.9656 21.1278 24.3952 18.7866 23.6453C16.4341 22.8917 13.8448 24.2351 13.1019 26.5965C12.3634 28.9442 13.6902 31.5163 16.0297 32.2689C18.3818 33.0191 20.973 31.6747 21.7158 29.3133Z" fill="#DBDEC9"/>
+            </svg>',
+            'ch-header-avocado-white-right'=>'<svg class="ch-header-right avocado" xmlns="http://www.w3.org/2000/svg"  version="1.1" width="38" height="45" viewBox="0 0 865 1024">
+            <title/>
+            <g id="icomoon-ignore">
+            </g>
+            <path fill="#DBDEC9" d="M622.251 904.144c108.043-66.874 159.716-163.967 153.932-291.26-0.678-14.944-3.628-29.801-5.51-44.687l-15.449-49.111c-1.337-1.8-2.535-3.7-3.584-5.684-17.386-41.181-43.88-77.876-77.474-107.302-56.982-49.746-114.183-99.244-171.606-148.491-32.010-27.557-69.291-41.273-111.393-41.778-4.403-0.074-8.816-0.056-13.182-0.070-1.424-43.629 27.803-84.052 70.749-98.499 10.727-3.627 21.616-6.8 32.577-10.248l-20.43-64.95c-56.277 14.369-101.781 33.188-137.498 102.178-1.679-1.003-3.377-1.947-5.002-3.004-37.988-24.757-78.434-30.613-121.758-16.678-39.39 12.679-78.962 24.839-118.436 37.257l-9.018 2.837c7.22 22.956 13.765 44.901 20.946 66.59 14.568 43.513 43.775 73.232 87.136 87.559 16.486 5.427 34.409 6.638 51.828 9.844-1.263 4.433-3.129 10.372-4.651 16.382-18.291 71.949-36.555 143.895-54.791 215.836-8.146 31.544-10.932 64.25-8.24 96.748 1.302 15.556 3.739 31.007 5.648 46.499l14.934 47.47c4.729 9.323 8.979 18.96 14.104 27.998 62.949 111.295 158.59 166.136 285.971 164.9 62.587-1.723 113.318-23.447 140.197-40.336zM699.332 569.267c1.543 7.589 5.257 21.449 7.091 35.612 17.796 137.68-82.579 260.435-221.124 270.807-160.172 12.004-288.267-140.12-249.221-296.077 17.945-71.719 36.104-143.374 54.475-214.96 19.925-78.097 108.599-105.686 169.584-52.861 55.037 47.561 110.107 95.157 165.214 142.789 33.969 29.446 57.476 65.93 73.982 114.69zM155.994 210.016c24.132-7.591 48.18-15.445 72.456-22.577 5.555-1.639 11.874-1.356 17.779-1.016 27.564 1.547 54.795 23.561 58.86 46.356-25.602 8.053-50.661 18.118-76.688 23.566-31.223 6.56-64.912-16.63-72.406-46.33z"/>
+            <path fill="#DBDEC9" d="M305.4 687.304c10.113 32.511 29.619 61.297 56.042 82.707 26.424 21.413 58.577 34.484 92.381 37.558 33.803 3.077 67.734-3.984 97.492-20.287 29.755-16.302 53.997-41.108 69.65-71.275s22.011-64.337 18.268-98.174c-3.743-33.835-17.417-65.816-39.29-91.885s-50.959-45.054-83.568-54.543c-32.609-9.491-67.275-9.059-99.599 1.238-43.154 13.631-79.119 43.891-99.999 84.134-20.88 40.245-24.974 87.188-11.378 130.526zM370.845 667.040c-16.805-53.423 13.38-111.914 66.656-128.978 53.532-17.149 112.453 13.421 129.359 67.156 16.805 53.423-13.387 111.953-66.624 129.079-53.523 17.071-112.488-13.521-129.39-67.256z"/>
+            </svg>',
+            'reply'=>'<svg width="21" height="18" viewBox="0 0 21 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19.7145 17.7103C19.5109 17.7073 19.3126 17.6453 19.1436 17.5319C18.9745 17.4184 18.842 17.2584 18.7621 17.0712C18.6954 16.9133 18.6879 16.7363 18.6859 16.5539C18.6819 16.2195 18.6859 15.8781 18.6859 15.5478C18.6919 14.9327 18.6979 14.2946 18.6578 13.667C18.5691 12.2885 18.0514 10.9722 17.1774 9.90258C16.3033 8.83291 15.1166 8.0634 13.7834 7.7018C13.1987 7.54395 12.5958 7.46389 11.9903 7.46369C10.9209 7.46169 9.8515 7.46085 8.78211 7.46119H4.30018L4.70421 7.88527L4.79394 7.97951C4.84407 8.02964 4.88066 8.07174 4.91976 8.11034C5.21485 8.4061 5.51026 8.70152 5.80602 8.9966C6.41256 9.60248 7.01828 10.2089 7.62315 10.8157C7.93345 11.127 8.02418 11.4724 7.90437 11.8709C7.78757 12.2559 7.5264 12.4935 7.12789 12.5777C7.05372 12.5935 6.97813 12.6015 6.90231 12.6018C6.62861 12.6018 6.38299 12.4895 6.1504 12.2579L4.83504 10.9426L3.37883 9.48535C2.63594 8.74279 1.89337 8.00006 1.15115 7.25717C0.615783 6.7208 0.616785 6.15435 1.15115 5.61648L2.26098 4.50565C3.53022 3.23541 4.84257 1.92156 6.13687 0.633274C6.23994 0.526725 6.36306 0.441619 6.49917 0.382859C6.63527 0.324099 6.78165 0.292847 6.92989 0.290901C7.14361 0.290053 7.35187 0.358389 7.52353 0.485695C7.6952 0.613002 7.82107 0.792443 7.88231 0.997202C8.01265 1.40424 7.9169 1.76165 7.58907 2.08949L6.88728 2.79128C6.23094 3.44728 5.57443 4.10312 4.91775 4.75879C4.88467 4.79138 4.82802 4.84351 4.77288 4.89364C4.7398 4.92321 4.70772 4.95229 4.68015 4.97785L4.21296 5.41196H4.85109C4.90522 5.41196 4.9729 5.41196 5.03856 5.40845C5.0937 5.40845 5.14734 5.40544 5.18895 5.40544C5.89074 5.40544 6.60355 5.40093 7.29432 5.39692C7.98508 5.39291 8.69789 5.3879 9.39567 5.3879C10.3812 5.3879 11.1953 5.39692 11.9587 5.41547C13.841 5.45908 15.4772 5.92627 16.8176 6.80802C18.158 7.68977 19.2443 9.00212 20.0388 10.7135C20.5005 11.707 20.7306 12.8153 20.7406 14.1021C20.7496 15.0275 20.7491 15.8676 20.7406 16.6712C20.7411 16.9121 20.6578 17.1456 20.5049 17.3318C20.3521 17.518 20.1393 17.6453 19.903 17.6918C19.8409 17.7038 19.7778 17.7101 19.7145 17.7103Z" fill="white"/>
+            </svg>',
+            'edit'=>'<svg xmlns="http://www.w3.org/2000/svg" width="27" height="26" viewBox="0 0 27 26" fill="none">
+                    <path d="M25.3909 25.318H2.47344C2.31059 25.3158 2.15502 25.2502 2.03986 25.135C1.9247 25.0199 1.85906 24.8643 1.85693 24.7015C1.85906 24.5386 1.9247 24.383 2.03986 24.2679C2.15502 24.1527 2.31059 24.0871 2.47344 24.085H25.3909C25.5538 24.0871 25.7093 24.1527 25.8245 24.2679C25.9397 24.383 26.0053 24.5386 26.0074 24.7015C26.0053 24.8643 25.9397 25.0199 25.8245 25.135C25.7093 25.2502 25.5538 25.3158 25.3909 25.318Z" fill="white"/>
+                    <path d="M2.1857 25.2602C1.85717 25.261 1.53271 25.1874 1.23662 25.0451C0.940532 24.9027 0.680481 24.6953 0.475925 24.4382C0.270763 24.1833 0.126375 23.885 0.0537349 23.566C-0.0189049 23.2469 -0.0178821 22.9155 0.0567075 22.5969C0.352629 21.2899 0.664987 19.9829 0.977349 18.6842L1.35548 17.1306C1.44986 16.7335 1.6551 16.3715 1.94731 16.0866L5.93403 12.0917C9.45221 8.56803 12.9786 5.04711 16.5132 1.52893C16.9605 1.05148 17.5 0.669784 18.0991 0.406976C18.6982 0.144168 19.3444 0.00571466 19.9985 0C20.5565 0.0062143 21.1105 0.0948583 21.6425 0.263047C22.5322 0.517404 23.3323 1.01689 23.9515 1.70443C24.5707 2.39197 24.9841 3.23982 25.1443 4.15112C25.1838 4.36588 25.2113 4.58267 25.2265 4.8005V4.98134C25.2424 5.70108 25.1097 6.41636 24.8368 7.08251C24.5638 7.74867 24.1564 8.35138 23.64 8.85299L12.6416 19.8432C11.5456 20.9392 10.4633 22.0352 9.39468 23.1312C8.9725 23.5782 8.42534 23.8876 7.82465 24.019C7.00264 24.208 6.18064 24.4135 5.29287 24.6108L2.67068 25.2355C2.51019 25.2594 2.34777 25.2677 2.1857 25.2602ZM2.28433 18.454L2.01307 19.5637C1.75825 20.6241 1.50343 21.6845 1.25683 22.7449C1.21178 22.9038 1.20391 23.071 1.23385 23.2335C1.26378 23.396 1.33071 23.5495 1.42945 23.6819C1.52891 23.8015 1.65522 23.8958 1.79807 23.9572C1.94093 24.0187 2.09628 24.0455 2.25146 24.0354C2.35802 24.0468 2.46548 24.0468 2.57204 24.0354L4.42976 23.5915L7.16704 22.9339L2.62136 18.3882L2.58025 18.3225H2.35831L2.28433 18.454ZM2.95838 16.81L8.3836 22.2352L8.53157 22.1448L20.5164 10.16L15.0665 4.76763L2.95838 16.81ZM20.1136 1.1919C19.2101 1.19767 18.3373 1.5206 17.6476 2.10433C17.2729 2.44737 16.9163 2.80954 16.579 3.18938C16.4228 3.362 16.2748 3.5264 16.1187 3.68258L16.0118 3.79767L21.3959 9.19002L21.511 9.08315L22.0289 8.62283C22.4413 8.28987 22.8236 7.92129 23.1715 7.52135C23.78 6.77127 24.0861 5.82084 24.0299 4.85662C23.9736 3.8924 23.5589 2.98403 22.8673 2.30983C22.127 1.60226 21.1375 1.2153 20.1136 1.23301V1.1919Z" fill="white"/>
+                    <path d="M8.02979 17.6978C7.93532 17.6914 7.84452 17.6587 7.76757 17.6036C7.69062 17.5484 7.63056 17.4729 7.59413 17.3855C7.53421 17.2874 7.506 17.1731 7.51335 17.0584C7.52071 16.9437 7.56327 16.834 7.63523 16.7443C7.68886 16.6728 7.74942 16.6067 7.81606 16.547L9.05729 15.2976L14.8113 9.54355C14.9185 9.44545 15.0406 9.365 15.173 9.30518L15.247 9.25586C15.6333 9.25586 15.7813 9.40382 15.8717 9.58466C15.9322 9.6761 15.9644 9.78329 15.9644 9.89291C15.9644 10.0025 15.9322 10.1097 15.8717 10.2012C15.8241 10.2701 15.769 10.3335 15.7073 10.3902L14.7702 11.3273C12.7481 13.3494 10.7232 15.3688 8.69561 17.3855C8.5469 17.5202 8.36554 17.6137 8.16953 17.6567L8.02979 17.6978Z" fill="white"/>
+                    </svg>',
+                'face'=>'<svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g clip-path="url(.clip0_614_7842)">
+                        <path d="M30.0049 15C30.0049 6.71507 23.2898 0 15.0049 0C6.71995 0 0.00488281 6.71507 0.00488281 15C0.00488281 22.4877 5.48707 28.6932 12.6624 29.8192V19.3397H8.85694V15H12.6624V11.6959C12.6624 7.93973 14.898 5.86027 18.3254 5.86027C19.9693 5.86027 21.6871 6.15616 21.6871 6.15616V9.84658H19.7967C17.9309 9.84658 17.3556 11.0055 17.3556 12.189V15H21.5145L20.8487 19.3397H17.3556V29.8192C24.5227 28.6932 30.0049 22.4877 30.0049 15Z" fill="#1877F2"/>
+                        </g>
+                        <defs>
+                        <clipPath class="clip0_614_7842">
+                        <rect width="30" height="30" fill="white"/>
+                        </clipPath>
+                        </defs>
+                        </svg>',
+                'envelope'=>'<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none">
+                    <g clip-path="url(.clip0_1633_6431)">
+                    <path d="M15.0049 30C23.2892 30 30.0049 23.2843 30.0049 15C30.0049 6.71573 23.2892 0 15.0049 0C6.72061 0 0.00488281 6.71573 0.00488281 15C0.00488281 23.2843 6.72061 30 15.0049 30Z" fill="#F2A42E"/>
+                    <g clip-path="url(.clip1_1633_6431)">
+                    <path d="M21.5625 8.75H8.4375C7.85753 8.75056 7.30149 8.96026 6.89139 9.33308C6.48129 9.7059 6.25062 10.2114 6.25 10.7386V19.2614C6.25062 19.7886 6.48129 20.2941 6.89139 20.6669C7.30149 21.0397 7.85753 21.2494 8.4375 21.25H21.5625C22.1425 21.2494 22.6985 21.0397 23.1086 20.6669C23.5187 20.2941 23.7494 19.7886 23.75 19.2614V10.7386C23.7494 10.2114 23.5187 9.7059 23.1086 9.33308C22.6985 8.96026 22.1425 8.75056 21.5625 8.75ZM21.0086 12.0394L15.3836 16.0167C15.2739 16.0942 15.1389 16.1363 15 16.1363C14.8611 16.1363 14.7261 16.0942 14.6164 16.0167L8.99141 12.0394C8.92532 11.994 8.86981 11.9372 8.8281 11.8721C8.78639 11.8071 8.75932 11.7352 8.74846 11.6605C8.73759 11.5859 8.74315 11.51 8.76482 11.4374C8.78648 11.3647 8.82381 11.2967 8.87465 11.2372C8.92548 11.1778 8.9888 11.1281 9.06093 11.0912C9.13306 11.0542 9.21255 11.0306 9.2948 11.0217C9.37704 11.0129 9.4604 11.019 9.54002 11.0397C9.61964 11.0605 9.69394 11.0954 9.75859 11.1424L15 14.8484L20.2414 11.1424C20.3725 11.0524 20.5372 11.013 20.7 11.0325C20.8629 11.0521 21.0107 11.1292 21.1115 11.2471C21.2123 11.3649 21.258 11.5141 21.2387 11.6624C21.2195 11.8107 21.1368 11.9461 21.0086 12.0394Z" fill="white"/>
+                    </g>
+                    </g>
+                    <defs>
+                    <clipPath class="clip0_1633_6431">
+                    <rect width="30" height="30" fill="white"/>
+                    </clipPath>
+                    <clipPath class="clip1_1633_6431">
+                    <rect width="18.75" height="18.75" fill="white" transform="translate(6.25 5)"/>
+                    </clipPath>
+                    </defs>
+                    </svg>',
+                'twitter'=>'<svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(.clip0_614_7844)">
+                    <path d="M15.0049 30C23.2892 30 30.0049 23.2843 30.0049 15C30.0049 6.71573 23.2892 0 15.0049 0C6.72061 0 0.00488281 6.71573 0.00488281 15C0.00488281 23.2843 6.72061 30 15.0049 30Z" fill="#2DAAE1"/>
+                    <path d="M24.6222 9.03328C23.9147 9.34723 23.1547 9.55947 22.3558 9.65487C23.1712 9.16657 23.7959 8.39279 24.0909 7.47187C23.3162 7.93194 22.4685 8.25583 21.5845 8.42946C20.865 7.66261 19.8391 7.18384 18.7041 7.18384C16.5255 7.18384 14.7587 8.94995 14.7587 11.1298C14.7587 11.4387 14.7935 11.74 14.8604 12.0293C11.5808 11.8645 8.67326 10.2935 6.72709 7.90648C6.38726 8.48946 6.19274 9.16728 6.19274 9.89049C6.19274 11.2593 6.88946 12.4671 7.94812 13.1745C7.32141 13.1551 6.70846 12.9859 6.1605 12.6812V12.731C6.1605 14.6431 7.52048 16.2374 9.32577 16.6C8.99414 16.6909 8.64611 16.7383 8.28606 16.7383C8.0315 16.7383 7.78452 16.7142 7.54325 16.6689C8.0454 18.236 9.50271 19.3768 11.229 19.409C9.87845 20.4677 8.17676 21.0987 6.32853 21.0987C6.0102 21.0987 5.69558 21.0797 5.38672 21.0425C7.13328 22.1624 9.20704 22.8162 11.4355 22.8162C18.6934 22.8162 22.6627 16.8034 22.6627 11.5891C22.6627 11.4179 22.659 11.248 22.6507 11.0787C23.4241 10.5193 24.0916 9.82669 24.6222 9.03328Z" fill="white"/>
+                    </g>
+                    <defs>
+                    <clipPath class="clip0_614_7844">
+                    <rect width="30" height="30" fill="white"/>
+                    </clipPath>
+                    </defs>
+                    </svg>',
+                'pinterest'=>'<svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M30 15C30 23.2863 23.2863 30 15 30C13.4516 30 11.9637 29.7641 10.5605 29.3286C11.1714 28.3306 12.0847 26.6976 12.4234 25.3972C12.6048 24.6956 13.3548 21.8286 13.3548 21.8286C13.8448 22.7601 15.2722 23.5524 16.7903 23.5524C21.3145 23.5524 24.5746 19.3911 24.5746 14.2198C24.5746 9.26613 20.5282 5.55847 15.3266 5.55847C8.85484 5.55847 5.41331 9.90121 5.41331 14.6371C5.41331 16.8387 6.58669 19.5786 8.45565 20.4496C8.73992 20.5827 8.89113 20.5222 8.95766 20.25C9.00605 20.0444 9.26008 19.0222 9.375 18.5504C9.41129 18.3992 9.39314 18.2661 9.27218 18.121C8.66129 17.3649 8.16532 15.9859 8.16532 14.6976C8.16532 11.3891 10.6694 8.18952 14.9395 8.18952C18.623 8.18952 21.2056 10.6996 21.2056 14.2923C21.2056 18.3508 19.1552 21.1633 16.4879 21.1633C15.0181 21.1633 13.9113 19.9476 14.2681 18.4536C14.6915 16.6694 15.5081 14.746 15.5081 13.4577C15.5081 12.3085 14.8911 11.3468 13.6089 11.3468C12.1028 11.3468 10.8931 12.9012 10.8931 14.9879C10.8931 16.3185 11.3407 17.2137 11.3407 17.2137C11.3407 17.2137 9.85887 23.4919 9.58669 24.6653C9.28427 25.9597 9.40524 27.7863 9.53226 28.9718C3.95565 26.7883 0 21.3569 0 15C0 6.71371 6.71371 0 15 0C23.2863 0 30 6.71371 30 15Z" fill="#CC0000"/>
+                    </svg>',
+                'hide-filters'=>'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M4 6H20" stroke="#898989" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M4 12H16" stroke="#898989" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M4 18H12" stroke="#898989" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>',
+                'orderby-filters'=>'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M4 18H20" stroke="#898989" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M6 12H18" stroke="#898989" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M8 6H16" stroke="#898989" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>',
+                'testimonial'=>'<svg xmlns="http://www.w3.org/2000/svg" width="747" height="327" viewBox="0 0 747 327" fill="none">
+                    <path d="M672.259 301.637C685.491 301.637 698.18 296.387 707.536 287.043C716.893 277.699 722.149 265.025 722.149 251.81V31.0484C722.135 29.1225 722.01 27.1989 721.775 25.2873C719.861 25.0522 717.935 24.9274 716.006 24.9136H74.7405C61.509 24.9136 48.8194 30.1631 39.4633 39.5074C30.1073 48.8516 24.8511 61.5252 24.8511 74.7399V295.595C24.865 297.521 24.9899 299.445 25.2252 301.356C27.1393 301.592 29.0653 301.716 30.9937 301.73L672.259 301.637Z" fill="white"/>
+                    <path d="M18.7083 295.502V74.6463C18.7083 59.7797 24.6215 45.5219 35.1471 35.0097C45.6727 24.4974 59.9485 18.5916 74.8339 18.5916H715.912C717.44 18.5916 719.031 18.5916 720.496 18.8408C719.14 13.4922 716.917 8.40087 713.917 3.76825C707.615 1.22312 700.883 -0.0878374 694.086 -0.0932617H52.9137C38.8553 -0.0932617 25.3726 5.48439 15.4318 15.4127C5.49094 25.3409 -0.09375 38.8066 -0.09375 52.8472V273.703C-0.0883188 280.491 1.22434 287.215 3.77268 293.509C8.40414 296.518 13.5041 298.739 18.8642 300.079C18.833 298.553 18.7083 297.059 18.7083 295.502Z" fill="white"/>
+                    <path d="M52.9136 326.549H694.086C708.144 326.549 721.627 320.972 731.568 311.044C741.508 301.115 747.093 287.65 747.093 273.609V52.8471C747.09 46.0554 745.766 39.3289 743.196 33.0411C738.571 30.0389 733.483 27.8188 728.135 26.4702C728.135 27.9961 728.385 29.5844 728.385 31.048V251.903C728.385 266.77 722.471 281.028 711.946 291.54C701.42 302.052 687.145 307.958 672.259 307.958H31.087C29.528 307.958 27.9689 307.958 26.5034 307.709C27.8401 313.064 30.0638 318.159 33.0826 322.781C39.3902 325.295 46.1226 326.574 52.9136 326.549Z" fill="white"/>
+                    <path d="M727.138 19.8372C730.819 20.5742 734.413 21.691 737.864 23.1693C734.09 17.6564 729.321 12.8935 723.801 9.12451C725.282 12.5705 726.4 16.1606 727.138 19.8372Z" fill="white"/>
+                    <path d="M19.862 306.744C16.1823 305.986 12.5886 304.859 9.13574 303.38C12.9095 308.893 17.6784 313.656 23.1983 317.425C21.718 313.99 20.5999 310.41 19.862 306.744Z" fill="white"/>
+                    </svg>',
+                    'ch-header-right'=>'<svg class="ch-header-right" xmlns="http://www.w3.org/2000/svg" width="25" height="18" viewBox="0 0 25 18" fill="none">
+                    <path d="M19.1596 0.370511C21.6769 0.363679 23.576 1.6148 24.4176 3.57878C24.8312 4.53147 24.9509 5.58584 24.7615 6.60693C24.572 7.62802 24.082 8.56938 23.3542 9.31054C21.0875 11.6055 18.8193 13.9005 16.5032 16.1431C15.009 17.5969 13.1784 18.0008 11.2026 17.3555C9.22686 16.7102 8.01224 15.2852 7.64762 13.2377C7.34378 11.5175 7.79955 9.95735 9.0362 8.70016C11.2978 6.39936 13.5789 4.11754 15.8796 1.8547C16.8876 0.854105 18.1273 0.377344 19.1596 0.370511ZM11.3173 11.6435C11.6984 10.4872 12.4616 9.49484 13.4815 8.82922C14.5981 9.59371 15.3577 10.592 15.7094 11.875C16.0611 13.158 15.9153 14.3993 15.3296 15.702C16.507 14.5056 17.5932 13.4002 18.6643 12.3123L12.8312 6.4811C12.8054 6.49288 12.7814 6.50821 12.7598 6.52665C11.7663 7.51737 10.7643 8.5005 9.78518 9.50565C9.36551 9.93001 9.05756 10.4517 8.88883 11.024C9.86494 11.1675 10.1164 11.1766 11.3173 11.6435ZM12.8745 16.1408C13.0796 14.2383 10.4726 11.8583 8.69665 12.2865C8.49232 14.0501 10.1331 16.1644 11.8688 16.339C11.2935 15.6952 10.8772 14.9255 10.6534 14.0918C11.3735 14.7941 11.9698 15.62 12.8745 16.1408ZM22.9941 3.36545C21.6853 1.16385 18.4926 0.790333 16.6073 2.63133C15.7573 3.46186 15.0356 4.12159 14.1902 4.95592C14.0383 5.10775 13.8544 5.31653 13.5901 5.56781L14.2434 6.24196L17.0456 3.43302C17.7426 2.71835 18.6894 2.30101 19.6875 2.26845C20.9302 2.20619 22.0119 2.62146 22.9941 3.36545ZM13.2065 13.3865L13.423 12.1218C13.9334 13.1702 14.0208 14.2869 14.0922 15.4621C15.1374 13.9567 14.9004 11.566 13.4685 10.2679C12.9756 10.7051 12.6656 11.2548 12.4104 11.8621C12.2425 12.2569 12.2266 12.3343 12.5578 12.6426C12.7872 12.8528 12.9961 13.152 13.2065 13.3896V13.3865Z" fill="#80B4FF"/>
+                    <path d="M7.0174 13.8421C5.42828 12.2918 3.70548 10.7386 2.1346 9.04408C0.311526 7.07403 0.463449 3.91966 2.34881 1.97466C4.24785 0.0152306 7.37821 -0.226945 9.44057 1.54269C10.4524 2.40966 11.2971 3.47099 12.2299 4.45791L11.5363 5.14117C10.7501 4.34783 9.96622 3.56057 9.18686 2.77027C8.60314 2.16625 7.85534 1.74612 7.03563 1.56167C5.36448 1.18208 3.45253 1.97466 2.65873 3.40418C2.99752 3.19313 3.29985 2.98132 3.62344 2.80671C5.17989 1.96403 7.3653 2.01793 8.78198 3.55298C9.47551 4.30456 10.2252 5.00224 10.953 5.72346C10.2146 6.47124 9.50285 7.20688 8.7759 7.92506C7.47848 9.20958 6.79407 10.7461 6.85408 12.5826C6.86927 13.0449 6.97182 13.5035 7.0174 13.8421Z" fill="#80B4FF"/>
+                    </svg>',
+                    'ch-header-left'=>'<svg class="ch-header-left" xmlns="http://www.w3.org/2000/svg" width="25" height="18" viewBox="0 0 25 18" fill="none">
+                    <path d="M19.1596 0.370511C21.6769 0.363679 23.576 1.6148 24.4176 3.57878C24.8312 4.53147 24.9509 5.58584 24.7615 6.60693C24.572 7.62802 24.082 8.56938 23.3542 9.31054C21.0875 11.6055 18.8193 13.9005 16.5032 16.1431C15.009 17.5969 13.1784 18.0008 11.2026 17.3555C9.22686 16.7102 8.01224 15.2852 7.64762 13.2377C7.34378 11.5175 7.79955 9.95735 9.0362 8.70016C11.2978 6.39936 13.5789 4.11754 15.8796 1.8547C16.8876 0.854105 18.1273 0.377344 19.1596 0.370511ZM11.3173 11.6435C11.6984 10.4872 12.4616 9.49484 13.4815 8.82922C14.5981 9.59371 15.3577 10.592 15.7094 11.875C16.0611 13.158 15.9153 14.3993 15.3296 15.702C16.507 14.5056 17.5932 13.4002 18.6643 12.3123L12.8312 6.4811C12.8054 6.49288 12.7814 6.50821 12.7598 6.52665C11.7663 7.51737 10.7643 8.5005 9.78518 9.50565C9.36551 9.93001 9.05756 10.4517 8.88883 11.024C9.86494 11.1675 10.1164 11.1766 11.3173 11.6435ZM12.8745 16.1408C13.0796 14.2383 10.4726 11.8583 8.69665 12.2865C8.49232 14.0501 10.1331 16.1644 11.8688 16.339C11.2935 15.6952 10.8772 14.9255 10.6534 14.0918C11.3735 14.7941 11.9698 15.62 12.8745 16.1408ZM22.9941 3.36545C21.6853 1.16385 18.4926 0.790333 16.6073 2.63133C15.7573 3.46186 15.0356 4.12159 14.1902 4.95592C14.0383 5.10775 13.8544 5.31653 13.5901 5.56781L14.2434 6.24196L17.0456 3.43302C17.7426 2.71835 18.6894 2.30101 19.6875 2.26845C20.9302 2.20619 22.0119 2.62146 22.9941 3.36545ZM13.2065 13.3865L13.423 12.1218C13.9334 13.1702 14.0208 14.2869 14.0922 15.4621C15.1374 13.9567 14.9004 11.566 13.4685 10.2679C12.9756 10.7051 12.6656 11.2548 12.4104 11.8621C12.2425 12.2569 12.2266 12.3343 12.5578 12.6426C12.7872 12.8528 12.9961 13.152 13.2065 13.3896V13.3865Z" fill="#80B4FF"/>
+                    <path d="M7.0174 13.8421C5.42828 12.2918 3.70548 10.7386 2.1346 9.04408C0.311526 7.07403 0.463449 3.91966 2.34881 1.97466C4.24785 0.0152306 7.37821 -0.226945 9.44057 1.54269C10.4524 2.40966 11.2971 3.47099 12.2299 4.45791L11.5363 5.14117C10.7501 4.34783 9.96622 3.56057 9.18686 2.77027C8.60314 2.16625 7.85534 1.74612 7.03563 1.56167C5.36448 1.18208 3.45253 1.97466 2.65873 3.40418C2.99752 3.19313 3.29985 2.98132 3.62344 2.80671C5.17989 1.96403 7.3653 2.01793 8.78198 3.55298C9.47551 4.30456 10.2252 5.00224 10.953 5.72346C10.2146 6.47124 9.50285 7.20688 8.7759 7.92506C7.47848 9.20958 6.79407 10.7461 6.85408 12.5826C6.86927 13.0449 6.97182 13.5035 7.0174 13.8421Z" fill="#80B4FF"/>
+                    </svg>',
+                    'ch-header-white-left'=>'<svg class="ch-header-left" xmlns="http://www.w3.org/2000/svg" width="23" height="31" viewBox="0 0 23 31" fill="none">
+                    <g clip-path="url(.clip0_1904_7703)">
+                    <path d="M21.5026 15.8234C21.8797 15.7137 14.2905 31.2478 9.87526 28.3102C5.46002 25.3726 17.2759 17.0062 21.5026 15.8234Z" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M21.4995 15.1075C21.88 15.246 15.6469 -0.654276 10.8223 1.79311C5.99777 4.2405 17.2902 13.5529 21.4995 15.1075Z" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M21.5161 15.5442C21.5161 15.5442 2.30815 25.0497 1.50782 16.6254C0.707486 8.20122 20.2116 14.3177 21.5161 15.5442Z" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+                    </g>
+                    <defs>
+                    <clipPath class="clip0_1904_7703">
+                    <rect width="23" height="30" fill="white" transform="translate(23 30.1084) rotate(-180)"/>
+                    </clipPath>
+                    </defs>
+                    </svg>',
+                    'star_5'=>'<svg class="star-5" xmlns="http://www.w3.org/2000/svg" width="138" height="26" viewBox="0 0 138 26" fill="none">
+                                <path d="M12.0815 2.13274C12.4286 1.32678 13.5714 1.32678 13.9185 2.13274L16.2801 7.61672C16.4249 7.95289 16.7417 8.18311 17.1062 8.21692L23.0516 8.76833C23.9253 8.84937 24.2785 9.93618 23.6192 10.5153L19.1334 14.456C18.8584 14.6976 18.7374 15.0701 18.8179 15.4272L20.1307 21.2519C20.3236 22.108 19.3991 22.7797 18.6446 22.3316L13.5106 19.2832C13.1958 19.0963 12.8042 19.0963 12.4894 19.2832L7.35543 22.3316C6.6009 22.7797 5.6764 22.108 5.86934 21.2519L7.18213 15.4272C7.26261 15.0701 7.14157 14.6976 6.86659 14.456L2.38081 10.5153C1.72155 9.93618 2.07467 8.84937 2.94844 8.76833L8.8938 8.21692C9.25826 8.18311 9.57513 7.95289 9.7199 7.61672L12.0815 2.13274Z" fill="#FFC12B"/>
+                                <path d="M40.0815 2.13274C40.4286 1.32678 41.5714 1.32678 41.9185 2.13274L44.2801 7.61672C44.4249 7.95289 44.7417 8.18311 45.1062 8.21692L51.0516 8.76833C51.9253 8.84937 52.2785 9.93618 51.6192 10.5153L47.1334 14.456C46.8584 14.6976 46.7374 15.0701 46.8179 15.4272L48.1307 21.2519C48.3236 22.108 47.3991 22.7797 46.6446 22.3316L41.5106 19.2832C41.1958 19.0963 40.8042 19.0963 40.4894 19.2832L35.3554 22.3316C34.6009 22.7797 33.6764 22.108 33.8693 21.2519L35.1821 15.4272C35.2626 15.0701 35.1416 14.6976 34.8666 14.456L30.3808 10.5153C29.7215 9.93618 30.0747 8.84937 30.9484 8.76833L36.8938 8.21692C37.2583 8.18311 37.5751 7.95289 37.7199 7.61672L40.0815 2.13274Z" fill="#FFC12B"/>
+                                <path d="M68.0815 2.13274C68.4286 1.32678 69.5714 1.32678 69.9185 2.13274L72.2801 7.61672C72.4249 7.95289 72.7417 8.18311 73.1062 8.21692L79.0516 8.76833C79.9253 8.84937 80.2785 9.93618 79.6192 10.5153L75.1334 14.456C74.8584 14.6976 74.7374 15.0701 74.8179 15.4272L76.1307 21.2519C76.3236 22.108 75.3991 22.7797 74.6446 22.3316L69.5106 19.2832C69.1958 19.0963 68.8042 19.0963 68.4894 19.2832L63.3554 22.3316C62.6009 22.7797 61.6764 22.108 61.8693 21.2519L63.1821 15.4272C63.2626 15.0701 63.1416 14.6976 62.8666 14.456L58.3808 10.5153C57.7215 9.93618 58.0747 8.84937 58.9484 8.76833L64.8938 8.21692C65.2583 8.18311 65.5751 7.95289 65.7199 7.61672L68.0815 2.13274Z" fill="#FFC12B"/>
+                                <path d="M96.0815 2.13274C96.4286 1.32678 97.5714 1.32678 97.9185 2.13274L100.28 7.61672C100.425 7.95289 100.742 8.18311 101.106 8.21692L107.052 8.76833C107.925 8.84937 108.278 9.93618 107.619 10.5153L103.133 14.456C102.858 14.6976 102.737 15.0701 102.818 15.4272L104.131 21.2519C104.324 22.108 103.399 22.7797 102.645 22.3316L97.5106 19.2832C97.1958 19.0963 96.8042 19.0963 96.4894 19.2832L91.3554 22.3316C90.6009 22.7797 89.6764 22.108 89.8693 21.2519L91.1821 15.4272C91.2626 15.0701 91.1416 14.6976 90.8666 14.456L86.3808 10.5153C85.7215 9.93618 86.0747 8.84937 86.9484 8.76833L92.8938 8.21692C93.2583 8.18311 93.5751 7.95289 93.7199 7.61672L96.0815 2.13274Z" fill="#FFC12B"/>
+                                <path d="M124.082 2.13274C124.429 1.32678 125.571 1.32678 125.918 2.13274L128.28 7.61672C128.425 7.95289 128.742 8.18311 129.106 8.21692L135.052 8.76833C135.925 8.84937 136.278 9.93618 135.619 10.5153L131.133 14.456C130.858 14.6976 130.737 15.0701 130.818 15.4272L132.131 21.2519C132.324 22.108 131.399 22.7797 130.645 22.3316L125.511 19.2832C125.196 19.0963 124.804 19.0963 124.489 19.2832L119.355 22.3316C118.601 22.7797 117.676 22.108 117.869 21.2519L119.182 15.4272C119.263 15.0701 119.142 14.6976 118.867 14.456L114.381 10.5153C113.722 9.93618 114.075 8.84937 114.948 8.76833L120.894 8.21692C121.258 8.18311 121.575 7.95289 121.72 7.61672L124.082 2.13274Z" fill="#FFC12B"/>
+                                </svg>',
+        ];
+       
+        if(!empty($array[$icon]))
+        return $array[$icon];
+        else return;
+    }
+}
+if(!function_exists('bzotech_filter_price')){
+    function bzotech_filter_price($min,$max,$filtered_posts = array()){
+        global $wpdb;
+        $matched_products = array( 0 );
+        $matched_products_query = apply_filters( 'woocommerce_price_filter_results', $wpdb->get_results( $wpdb->prepare("
+            SELECT DISTINCT ID, post_parent, post_type FROM $wpdb->posts
+            INNER JOIN $wpdb->postmeta ON ID = post_id
+            WHERE post_type IN ( 'product', 'product_variation' ) AND post_status = 'publish' AND meta_key = '%s' AND meta_value BETWEEN %d AND %d
+        ", '_price', $min, $max ), OBJECT_K ), $min, $max );
+
+        if (!empty($matched_products_query ) && is_array($matched_products_query) ) {
+            foreach ( $matched_products_query as $product ) {
+                if ( $product->post_type == 'product' )
+                    $matched_products[] = $product->ID;
+                if ( $product->post_parent > 0 && ! in_array( $product->post_parent, $matched_products ) )
+                    $matched_products[] = $product->post_parent;
+            }
+        }
+
+        // Filter the id's
+        if ( sizeof( $filtered_posts ) == 0) {
+            $filtered_posts = $matched_products;
+        } else {
+            $filtered_posts = array_intersect( $filtered_posts, $matched_products );
+        }
+        return $filtered_posts;
+    }
+}
+
+//Don't Show popup
+if(!is_admin() && session_status() == PHP_SESSION_NONE){
+    session_start();
+}
+if(!isset($_SESSION['dont_show_popup'])) $_SESSION['dont_show_popup'] = false;
+add_action( 'wp_ajax_set_dont_show', 'bzotech_set_dont_show' );
+add_action( 'wp_ajax_nopriv_set_dont_show', 'bzotech_set_dont_show' );
+if(!function_exists('bzotech_set_dont_show')){
+    function bzotech_set_dont_show() {
+        $ajax_security = bzotech_get_option('ajax_security');
+        if($ajax_security == true){
+           check_ajax_referer( 'mailchimp-ajax-nonce', 'security' );
+        }
+        
+
+        $checked = sanitize_text_field($_POST['checked']);
+        
+        if($checked){
+            session_start();  
+            $_SESSION['dont_show_popup'] = $checked;
+        }
+        else{
+            unset($_SESSION['dont_show_popup']); 
+            session_destroy();
+        }
+        
+    }
+}
+function bzotech_hexToRgb($hex, $alpha = false) {
+   $hex      = str_replace('#', '', $hex);
+   $length   = strlen($hex);
+   $rgb[] = hexdec($length == 6 ? substr($hex, 0, 2) : ($length == 3 ? str_repeat(substr($hex, 0, 1), 2) : 0));
+   $rgb[] = hexdec($length == 6 ? substr($hex, 2, 2) : ($length == 3 ? str_repeat(substr($hex, 1, 1), 2) : 0));
+   $rgb[] = hexdec($length == 6 ? substr($hex, 4, 2) : ($length == 3 ? str_repeat(substr($hex, 2, 1), 2) : 0));
+   if ( $alpha ) {
+      $rgb[] = $alpha;
+   }
+   return $rgb;
+}
+if(!function_exists('bzotech_mix_color')){
+    function bzotech_mix_color($color_1, $color_2, $opacity=1, $weight = 1) {
+        $color_1 = bzotech_hexToRgb($color_1);
+        $color_2 = bzotech_hexToRgb($color_2);
+        $f = function ($x) use ($weight) {
+            return $weight * $x;
+        };
+
+        $g = function ($x) use ($weight) {
+            return (1 - $weight) * $x;
+        };
+
+        $h = function ($x, $y) {
+            return round($x + $y);
+        };
+        $rgb= 'rgba(';
+        $array_color = array_map($h, array_map($f, $color_1), array_map($g, $color_2));
+        foreach($array_color as $key=>$value){
+            if($key==0)
+                $rgb .= $value;
+            else $rgb .= ', '.$value;
+        }
+        $rgb .= ', '.$opacity.')';
+        return $rgb;
+    }
+}
+if(!function_exists('bzotech_text_edit_shortcode') && function_exists('bzotech_reg_shortcode')){
+    function bzotech_text_edit_shortcode($args, $content) {
+        if(empty($args['drive']))
+            $args['drive'] = 'p';
+        if(empty($args['style']))
+            $args['style'] = '';
+        if(empty($args['class']))
+            $args['class'] = '';
+        $html ='<'.$args['drive'].' class="'.$args['class'].'" style="'.$args['style'].'">'.$content.'</'.$args['drive'].'>';
+        return $html;
+    }
+    bzotech_reg_shortcode( 'bzotech_text', 'bzotech_text_edit_shortcode' );
+}
+if(!function_exists('bzotech_list_demo')){
+    function bzotech_list_demo() {
+        global $bzotech_number_demo;
+        $bzotech_number_demo = 16;
+        $array = array();
+        for($demo = 1; $demo <= $bzotech_number_demo; $demo++ ){
+            $array[(string)$demo] = 'Demo '.$demo;
+        }
+        return $array;
+    } 
+}
+if(!function_exists('bzotech_list_class_style_by_theme')){
+    function bzotech_list_class_style_by_theme() {
+        $array = [
+            'e-main-color'    => esc_html__( 'Main color', 'bw-kidxtore' ),
+            'e-main-color2'   => esc_html__( 'Main color 2', 'bw-kidxtore' ),
+            'e-bg-color'      => esc_html__( 'Background color', 'bw-kidxtore' ),
+            'e-bg-color2'     => esc_html__( 'Background color 2', 'bw-kidxtore' ),
+            'e-bg-color-darken'     => esc_html__( 'Background color darken', 'bw-kidxtore' ),
+            'e-bg-color-lighten'     => esc_html__( 'Background color lighten', 'bw-kidxtore' ),
+            'e-bg-color-title'     => esc_html__( 'Background color title', 'bw-kidxtore' ),
+            'e-bg-color-title2'     => esc_html__( 'Background color title2', 'bw-kidxtore' ),
+            'e-color-body'    => esc_html__( 'Color body', 'bw-kidxtore' ),
+            'e-color-title'   => esc_html__( 'Color title', 'bw-kidxtore' ),
+            'e-color-white'   => esc_html__( 'Color white', 'bw-kidxtore' ),
+            'e-color-gray'   => esc_html__( 'Color gray', 'bw-kidxtore' ),
+            'e-font-body'   => esc_html__( 'Font body', 'bw-kidxtore' ),
+            'e-font-title'   => esc_html__( 'Font title', 'bw-kidxtore' ),
+        ];
+
+        return $array;
+    }
+}
+if(!function_exists('bzotech_list_class_style_hover_by_theme')){
+    function bzotech_list_class_style_hover_by_theme() {
+        $array = [
+            'hover-e-main-color'    => esc_html__( 'Hover main color', 'bw-kidxtore' ),
+            'hover-e-main-color2'   => esc_html__( 'Hover main color 2', 'bw-kidxtore' ),
+            'hover-e-color-body'    => esc_html__( 'Hover color body', 'bw-kidxtore' ),
+            'hover-e-color-title'   => esc_html__( 'Hover color title', 'bw-kidxtore' ),
+            'hover-e-color-gray'   => esc_html__( 'Hover color gray', 'bw-kidxtore' ),
+        ];
+
+        return $array;
+    }
+}
+if(!function_exists('bzotech_implode')){
+    function bzotech_implode($attr = '', $separator=' ') {
+
+        if(!empty($attr) && is_array($attr)) $return = implode($separator, $attr);
+        else $return = '';
+        return $return;
+    }
+}
+if(!function_exists('bzotech_get_list_category')){
+    function bzotech_get_list_category($taxonomy='category',$by='slug'){
+        $listcate = get_terms($taxonomy);
+        $newarr = [];
+        foreach($listcate as $value){
+            if(!empty($value->$by))
+            $newarr[$value->$by] = $value->name; 
+        }
+
+        return $newarr;
+
+    }
+}
+if(!function_exists('bzotech_get_id_page_megamenu')){
+    function bzotech_get_id_page_megamenu(){
+        $attr = array();
+        $nav_menus = wp_get_nav_menus();
+        if(is_array($nav_menus)){
+            foreach($nav_menus as $value){
+               $menu_items = wp_get_nav_menu_items( $value->term_id);
+               
+                if(is_array($menu_items))
+                foreach($menu_items as $menu_item){
+                    $content = get_post_meta($menu_item->ID,'content1',true);
+                    
+                     if(!empty($menu_item->content2) && !empty($menu_item->enable_megamenu)) $attr[] = $menu_item->content2;
+                }
+            }
+        }
+        return $attr;
+    }
+}

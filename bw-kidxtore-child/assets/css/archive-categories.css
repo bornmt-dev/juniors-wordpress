@@ -1,0 +1,113 @@
+.category-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 50px;
+    padding: 20px;
+    justify-content: space-between;
+}
+
+.category-item {
+    text-align: center;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 220px;
+    border-radius: 15px;
+    border: 1px solid #D6D6D6;
+}
+
+.category-item img {
+    width: 200px; 
+    height: 200px!important; 
+    object-fit: contain; 
+    padding: 20px; 
+    margin-bottom: 10px;
+    z-index: 2;
+}
+
+a.category-link {
+    height: 200px;
+}
+p.category-product-count {
+    color: #727272;
+    text-align: center;
+    font-family: "Poppins", sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0.035px;
+}
+
+.category-item h3 {
+    color: #111;
+    text-align: center;
+    font-family: "Poppins", sans-serif;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: 0.035px;
+    text-transform: capitalize;
+}
+
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.pagination .page-number {
+    text-decoration: none;
+    padding: 8px 16px;
+    margin: 0 5px;
+    background-color: #0073e6;
+    color: white;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.pagination .page-number:hover {
+    background-color: #005bb5;
+}
+
+.pagination .current {
+    background-color: #005bb5;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+@media screen and (max-width: 480px) {
+
+    
+    .category-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        padding: 20px;
+    }
+
+    .category-item {
+        text-align: center;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: auto;
+        justify-content: flex-start;
+    }
+
+    a.category-link {
+        height: 170px;
+    }
+
+    .category-item img {
+        height: 170px!important;
+        width: 170px;
+    }
+
+
+}

@@ -1,0 +1,110 @@
+
+17/3/2025
+assets/global/js/ajax.js
+inc/controler/woocommerce-control.php
+========================================
+2.5 27/02/2025
+Updated:
+    - Index 16
+========================================
+
+2.5 11/02/2025
+Updated:
+    - Index 15
+    
+========================================
+2.4.4 25/12/2024
+Updated: 
+    - Plugin Bzotech Elementor 1.2
+    - plugin revslider 6.7.25
+Fix:
+    - Update the Swiper slider to version 8.4.5 for compatibility with Elementor version 3.26.3. 
+
+2.4.3 20/11/2024
+Updated:
+    
+Fix:
+    - Disable woocommerce message contains outdated copies of some WooCommerce template files
+2.4.2 24/10/2024
+Updated:
+    - Slider Revolution ver: 6.7.20: We have updated the Slider Revolution plugin. You can update it by deleting the current plugin and reinstalling it.
+    - bw-printxtore.pot: We have updated the data for the theme's language translation. There might be new translations added, and you can use the Loco Translate plugin to "Sync" them.
+    - Load css Elementor: In the previous version, the CSS files would be fully loaded. In this version, the Elementor CSS files will only be loaded when you use that specific Elementor
+Fix:
+    - Fix importer: Add importing elementor site settings, update settings default
+    - Product sticky: The sliding effect of the product has become smoother.
+    - Fix Theme check
+
+2.4 16/04/2024
+Fix:
+    - Link slider category in elementor slider
+    - Menu hover
+Updated:
+    - Index 14
+    - product video
+2.3 16/04/2024
+Updated:
+    - Index 13
+
+2.2 17/02/2024
+Updated:
+    - Index 12
+
+2.1 12/08/2023
+Updated:
+    - Index 11
+
+2.0 11/27/2023
+Updated:
+    - Index 10
+
+1.9 11/22/2023
+Updated:
+    - Index 9
+
+1.8 10/16/2023
+Updated:
+    - Index 8
+
+1.7 09/30/2023
+Updated:
+    - Index 7
+
+1.6 09/01/2023
+Updated:
+    - Index 6
+
+1.5 08/04/2023
+- Add pages: 
+    Testimonials 
+    Brands Page 
+    Products Categories
+    Sale Products 
+    Top Rated Products 
+    Featured Products 
+    Recent Products 
+    Best Seller Products 
+    Most Viewed Products
+
+- Update detail page style
+    Product gallery vertical
+    Product gallery sticky
+
+1.4 08/03/2023
+Updated:
+	- Index 5
+	- Taskbar footer on devices 
+1.3 07/29/2023
+Updated:
+	- Index 4
+
+1.2 07/13/2023
+Updated:
+	- Index 3
+	
+1.1 06/27/2023
+Fixed
+	- Fix the error of changing demo data link 
+Updated:
+	- bzotech-core 1.4
+	

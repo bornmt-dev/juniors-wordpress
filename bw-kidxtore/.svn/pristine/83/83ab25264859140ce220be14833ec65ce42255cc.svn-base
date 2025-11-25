@@ -1,0 +1,411 @@
+
+
+/*Begin Mailchimp elementor*/
+.elbzotech-mailchimp-global-default .mc4wp-form-fields{
+  display: flex;
+  gap: 15px;
+}
+.elbzotech-mailchimp-global-default .mc4wp-form-fields input[type="email"]{
+    padding: 0 20px;
+    border: none;
+    border-radius: 10px;
+    background: #fff;
+    width: 100%;
+}
+.elbzotech-mailchimp-global-default .mc4wp-form-fields input[type="email"]::-webkit-input-placeholde,
+.elbzotech-mailchimp-global-default .mc4wp-form-fields input[type="email"]::-moz-placeholder,
+.elbzotech-mailchimp-global-default .mc4wp-form-fields input[type="email"]:-ms-input-placeholder,
+.elbzotech-mailchimp-global-default .mc4wp-form-fields input[type="email"]:-moz-placeholder{
+    color: #727272;
+}
+.elbzotech-mailchimp-global-default .mc4wp-form-fields button[type="submit"]{
+    border: none;
+    display: inline-block;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 28px;
+    padding: 10px 30px;
+    text-transform: uppercase;
+    background: #fff;
+    border-radius: 10px;
+    font-family: inherit;
+    color: var(--bzo-main-color);
+}
+@media(max-width: 767px){
+    .elbzotech-mailchimp-global-default .mc4wp-form-fields button[type="submit"]{
+        font-size: 14px;
+        padding: 10px 15px;
+    }
+}
+.elbzotech-mailchimp-global-default .mc4wp-form-fields button[type="submit"]:hover{
+    transition: all .3s ease-in-out;
+    color: var(--bzo-gray-color); 
+}
+button[type="submit"]:hover{
+    cursor: pointer;
+}
+/*Begin style 2 - popup newsletter */
+.elbzotech-mailchimp-global-style2{
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: -40%;
+    bottom: 0;
+    background: rgb(0 0 0 / 50%);
+    transition: all 0.5s ease-out 0s;
+    -webkit-transition: all 0.5s ease-out 0s;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 15px;
+    opacity: 0;
+    visibility: hidden;
+}
+.elbzotech-mailchimp-global-style2.actived{
+    opacity: 1;
+    visibility: visible;
+    transition: all 0.5s ease-out 0s;
+    -webkit-transition: all 0.5s ease-out 0s;
+    top: 0;
+}
+.elbzotech-mailchimp-global-style2 .content-popup-mailchimp{
+    overflow: hidden;
+    position: relative;
+}
+.elbzotech-mailchimp-global-style2 .elbzotech-close-popup{
+    right: 15px;
+    top: 15px;
+    font-size: 22px;
+    color: #454545;
+    height: 40px;
+    width: 40px;
+    text-align: center;
+    line-height: 40px;
+    padding: 0;
+    transition: all 0.3s ease-out 0s;
+    -webkit-transition: all 0.3s ease-out 0s;
+}
+.elbzotech-mailchimp-global-style2 .elbzotech-close-popup:hover{
+    color: var(--bzo-main-color);
+
+}
+.elbzotech-mailchimp-global-style2 .content-popup-mailchimp .title{
+    margin-bottom: 16px;
+    text-transform: capitalize;
+}
+.elbzotech-mailchimp-global-style2 .content-popup-mailchimp .desc{
+    margin-bottom: 15px;
+    line-height: 28px;
+}
+.elbzotech-mailchimp-global-style2 .adv-thumb-link{
+    width: 40%;
+}
+.elbzotech-mailchimp-global-style2 .info-mailchimp{
+    width: 60%;
+    padding: 50px 90px 50px 0px;
+    text-align: center;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+.elbzotech-mailchimp-global-style2 .info-mailchimp .mc4wp-error{
+    text-align: center;
+    margin-top: 5px;
+    color: #d0342c;
+}
+
+.elbzotech-mailchimp-global-style2 .info-mailchimp .desc{
+    color: #454545;
+}
+.elbzotech-mailchimp-global-style2 .mc4wp-form-fields input[type="email"]{
+    display: block;
+    width: 100%;
+    background: #f5f5f5;
+    height: 54px;
+    border: none;
+    border-radius: 15px;
+    color: #727272;
+    font-size: 14px;
+    border: none;
+    margin-bottom: 20px;
+}
+.elbzotech-mailchimp-global-style2 .mc4wp-form-fields input[type="email"]::-webkit-input-placeholde,
+.elbzotech-mailchimp-global-style2 .mc4wp-form-fields input[type="email"]::-moz-placeholder,
+.elbzotech-mailchimp-global-style2 .mc4wp-form-fields input[type="email"]:-ms-input-placeholder,
+.elbzotech-mailchimp-global-style2 .mc4wp-form-fields input[type="email"]:-moz-placeholder
+{
+    color:#727272;
+}
+.elbzotech-mailchimp-global-style2 input[type="submit"],
+.elbzotech-mailchimp-global-style2 button[type="submit"]
+{
+    border: none;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 12px 25px;
+    font-size: 16px;
+    line-height: 24px;
+    border-radius: 40px;
+    display: inline-block;
+    cursor: pointer;
+    z-index: 1;
+    position: relative;
+    font-family: var(--bzo-body_typo-font-family);
+    overflow: hidden;
+    transition: .3s;
+    background: linear-gradient(180deg, var(--bzo-main-color) 0%, var(--bzo-main-color-mix) 100%);
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 1px;
+    transition: .3s;
+}
+.elbzotech-mailchimp-global-style2 button[type="submit"]:hover,
+.elbzotech-mailchimp-global-style2 button[type="submit"]:focus
+{
+    color: #fff;
+    transition: .3s;
+/*    background: linear-gradient(180deg, var(--bzo-main-color-mix) 0%, var(--bzo-main-color) 100%);*/
+    
+}
+.elbzotech-mailchimp-global-style2 button[type="submit"]::after{
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 100%;
+    border-radius: 0px;
+    top: 0;
+    left: auto;
+    right: 0;
+    z-index: -1;
+    transition: .3s;
+    background: linear-gradient(180deg, var(--bzo-main-color-mix) 0%, var(--bzo-main-color-mix2) 100%);
+}
+.elbzotech-mailchimp-global-style2 button[type="submit"]:hover::after{
+    width: 100%;
+    left: 0;
+    right: auto;
+    transition: .3s;
+}
+.elbzotech-mailchimp-global-style2 button[type="submit"] i{
+    font-size: 22px;
+    margin-right: 6px;
+    position: relative;
+    top: 3px;
+}
+.elbzotech-mailchimp-global-style2 input[type="submit"]:hover,
+.elbzotech-mailchimp-global-style2 input[type="submit"]:focus
+{
+    color: #fff;
+    background: var(--bzo-main-color);
+    box-shadow: 0px 4px 5px rgb(0 0 0 / 14%);
+}
+.elbzotech-mailchimp-global-style2 .item-social
+{
+    padding: 0px 10px;
+    margin-top: 22px;
+    color: #293042;
+    font-size: 26px;
+}
+.elbzotech-mailchimp-global-style2 .item-social:hover{
+    color: var(--bzo-main-color);
+    cursor: pointer;
+}
+.elbzotech-mailchimp-global-style2 .dont-show {
+    margin-top: 10px;
+}
+.elbzotech-mailchimp-global-style2 .dont-show label{
+    margin-left: 5px;
+}
+
+/*--------------*/
+
+/*End Mailchimp elementor*/
+@media(max-width: 1200px) {
+    
+}
+
+@media(max-width: 880px) {
+    .elbzotech-mailchimp-global-style2 .content-popup-mailchimp .title{
+        font-size: 30px;
+        line-height: 36px;
+    }
+}
+
+@media(max-width: 767px) {
+    .elbzotech-mailchimp-global-style2 .info-mailchimp .desc{
+        font-size: 14px;
+        line-height: 24px;
+    }
+    .elbzotech-mailchimp-global-style2 .adv-thumb-link {
+        display:none
+    }
+
+    .elbzotech-mailchimp-global-style2 .info-mailchimp {
+        width: 100%;
+        padding: 30px
+    }
+    .elbzotech-mailchimp-global-style2 .elbzotech-close-popup{
+        top: 5px;
+        right: 5px;
+    }
+    .elbzotech-mailchimp-global-style2 .content-popup-mailchimp .title{
+        font-size: 26px;
+        line-height: 32px;
+    }
+}
+
+/*Mailchimp style 3 - Footer home 2*/
+.elbzotech-mailchimp-global-style3 .mc4wp-form-fields{
+    position: relative;
+    padding-right: 90px;
+}
+.elbzotech-mailchimp-global-style3 .mc4wp-form-fields input[type="email"]{
+    padding: 0 20px;
+    border: none;
+    border-radius: 10px;
+    background: #fff;
+    width: 100%;
+    height: 52px;
+}
+.elbzotech-mailchimp-global-style3 .mc4wp-form-fields input[type="email"]::-webkit-input-placeholde,
+.elbzotech-mailchimp-global-style3 .mc4wp-form-fields input[type="email"]::-moz-placeholder,
+.elbzotech-mailchimp-global-style3 .mc4wp-form-fields input[type="email"]:-ms-input-placeholder,
+.elbzotech-mailchimp-global-style3 .mc4wp-form-fields input[type="email"]:-moz-placeholder{
+    color: #727272;
+}
+.elbzotech-mailchimp-global-style3 .mc4wp-form-fields button[type="submit"]{
+    border: none;
+    display: inline-block;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 52px;
+    padding: 0px 40px;
+    text-transform: uppercase;
+    color: #fff;
+    border-radius: 10px;
+    font-family: inherit;
+    background-color: var(--bzo-main-color);
+    position: absolute;
+    top: 0;
+    right: 0;
+    letter-spacing: 1px;
+}
+.elbzotech-mailchimp-global-style3 .mc4wp-form-fields button[type="submit"]:hover{
+    transition: all .2s ease-in-out;
+    opacity: 0.8;
+}
+@media(max-width: 767px){
+    .elbzotech-mailchimp-global-style3 .mc4wp-form-fields button[type="submit"]{
+        padding: 0 30px;
+    }
+}
+
+/*Mailchimp style 4 - Footer home 3*/
+.elbzotech-mailchimp-global-style4 .mc4wp-form-fields{
+    display: flex;
+}
+.elbzotech-mailchimp-global-style4 .mc4wp-form-fields input[type="email"]{
+    padding: 0 20px;
+    border: none;
+    border-radius: 5px 0 0 5px;
+    background: #fff;
+    width: 100%;
+    height: 48px;
+}
+.elbzotech-mailchimp-global-style4 .mc4wp-form-fields input[type="email"]::-webkit-input-placeholde,
+.elbzotech-mailchimp-global-style4 .mc4wp-form-fields input[type="email"]::-moz-placeholder,
+.elbzotech-mailchimp-global-style4 .mc4wp-form-fields input[type="email"]:-ms-input-placeholder,
+.elbzotech-mailchimp-global-style4 .mc4wp-form-fields input[type="email"]:-moz-placeholder{
+    color: #727272;
+}
+.elbzotech-mailchimp-global-style4 .mc4wp-form-fields button[type="submit"]{
+    border: none;
+    display: inline-block;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 48px;
+    padding: 0px 30px;
+    text-transform: uppercase;
+    color: #fff;
+    border-radius: 0 5px 5px 0;
+    font-family: inherit;
+    background-color: var(--bzo-main-color2);
+    letter-spacing: 1px;
+}
+.elbzotech-mailchimp-global-style4 .mc4wp-form-fields button[type="submit"]:hover{
+    transition: all .2s ease-in-out;
+    opacity: 0.8;
+}
+@media(max-width: 880px){
+    .elbzotech-mailchimp-global-style4 .mc4wp-form-fields button[type="submit"]{
+        padding: 0 20px;
+    }
+}
+
+
+.elbzotech-mailchimp-global-style5 form{
+    background-color: #fff;
+    border-radius: 5px;
+    position: relative;
+}
+.elbzotech-mailchimp-global-style5 .mc4wp-form-fields input[type="email"]{
+    padding: 0 20px;
+    border: none;
+    border-radius: 5px;
+    background: #fff;
+    width: 100%;
+    height: 50px;
+}
+.elbzotech-mailchimp-global-style5 .mc4wp-form-fields button[type="submit"]{
+    border: none;
+    display: inline-block;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 42px;
+    padding: 0px 13px;
+    text-transform: capitalize;
+    color: #fff;
+    border-radius: 5px;
+    font-family: inherit;
+    background-color: var(--bzo-main-color);
+    letter-spacing: 1px;
+    position: absolute;
+    top: 4px;
+    right: 4px;
+}
+.elbzotech-mailchimp-global-style5 .mc4wp-form-fields button[type="submit"]:hover{
+    background-color: var(--bzo-main-color2);
+}
+/* Mailchimp style 6 */
+
+.elbzotech-mailchimp-global-style6 .mc4wp-form .mc4wp-form-fields input {
+    height: 37px;
+    line-height: 37px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #D6D6D6;
+    width: 100%;
+    margin-bottom: 26px;
+}
+.elbzotech-mailchimp-global-style6 .mc4wp-form .mc4wp-form-fields input::placeholder{
+    color: #B7B7B7;
+}
+.elbzotech-mailchimp-global-style6 .mc4wp-form .mc4wp-form-fields button {
+    display: inline-block;
+    background: var(--bzo-main-color);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+    border: none;
+    border-radius: 66px;
+    padding: 12px 25px;
+    transition: .4s;
+    font-family: var(--bzo-body_typo-font-family);
+}
+.elbzotech-mailchimp-global-style6 .mc4wp-form .mc4wp-form-fields button:hover {
+    box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+}
+/* End mailchimp style 6 */

@@ -1,0 +1,115 @@
+.append-content-summary {
+    display: none;
+}
+
+.single.single-product .summary.entry-summary.product-detail-info  {
+    display: flex;
+    flex-direction: column;
+}
+
+.single.single-product .summary.entry-summary.product-detail-info .bzotech-price-single.price .product-price.price del span.woocommerce-Price-amount.amount {
+    color: #727272;
+}
+
+.single.single-product .summary.entry-summary.product-detail-info .bzotech-price-single.price .product-price.price ins span.woocommerce-Price-amount.amount {
+    color: #2792D7;
+}
+
+.single.single-product .summary.entry-summary.product-detail-info .bzotech-price-single.price .product-price.price span.woocommerce-Price-amount.amount {
+    color: #2792D7;
+}
+
+.single.single-product .summary.entry-summary.product-detail-info h2 {
+    order: 1;
+}
+
+.single.single-product .summary.entry-summary.product-detail-info .bzotech-price-single.price {
+    order: 2;
+}
+
+.single.single-product .summary.entry-summary.product-detail-info .points-value {
+    order: 3;
+}
+
+.single.single-product .summary.entry-summary.product-detail-info .product_meta.item-product-meta-info.flex-wrapper.flex_wrap-wrap.align_items-center {
+    order: 4;
+}
+
+.single.single-product .summary.entry-summary.product-detail-info .woocommerce-product-details__short-description {
+    order: 5;
+}
+
+.single.single-product .summary.entry-summary.product-detail-info .bzotech-form-cart-single {
+    order: 6;
+}
+
+.single.single-product .summary.entry-summary.product-detail-info .yith-add-to-wishlist-button-block.yith-add-to-wishlist-button-block--single.yith-add-to-wishlist-button-block--initialized {
+    display: none;
+}
+
+.single.single-product .detail-product-tabs {
+    display: none;
+}
+
+.single.single-product .wishlist_compare_single_product.clearfix {
+    display: none;
+} 
+
+.single.single-product .single-related-product .product-price.price ins span.woocommerce-Price-amount.amount  {
+    color: #2792D7;
+}
+
+.single.single-product .single-related-product .product-price.price del span.woocommerce-Price-amount.amount  {
+    color:  #727272;
+}
+
+.single.single-product .single-related-product .product-price.price span.woocommerce-Price-amount.amount  {
+    color: #2792D7;
+}
+
+.single.single-product small.woocommerce-price-suffix {
+    display: none;
+}
+
+.single-related-product .elbzotech-wrapper-slider-product.elbzotech-wrapper-slider.display-swiper-navi-yes span.vat-message {
+    display: none;
+}
+
+.single.single-product .vat-message {
+    color: #2792D7;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: 0.035px;
+}
+
+.summary.entry-summary.product-detail-info .points-value {
+    position: relative;
+    padding-left: 60px;
+}
+
+.summary.entry-summary.product-detail-info .points-value::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('/wp-content/uploads/2025/06/lava-rewards-single-1.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.single.single-product .product-detail-info p {
+    color: #000;
+}
+
+.single.single-product div.product_meta.item-product-meta-info.flex-wrapper.flex_wrap-wrap.align_items-center .sku_wrapper {
+    display: flex;
+}
+
+.single.single-product span.posted_in a {
+    margin-left: 5px;
+}

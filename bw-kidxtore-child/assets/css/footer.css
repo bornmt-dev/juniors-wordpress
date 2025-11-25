@@ -1,0 +1,56 @@
+.copyright-section a {
+    color: #fff;
+}
+
+.copyright-section:nth-child(2) .elbzotech-text-editor-global a:first-child {
+    margin-right: 3px;
+} 
+
+.elbzotech-mailchimp-global-default .mc4wp-form-fields button[type="submit"] {
+    color: #fff!important;
+}
+
+.elbzotech-mailchimp-global-default .mc4wp-form-fields button[type="submit"]:hover {
+    color: #fff!important;
+}
+
+#footer .gform-theme--framework .gform_validation_errors {
+    margin-top: 20px;
+	  border-radius: 15px;
+    background: #ED1B2F;
+}
+
+#footer .gform-theme--framework .gform_validation_errors  * {
+    color: #fff;
+}
+#footer  .gform-theme--framework .gform_validation_errors .gform-icon {
+    border: 1px solid #fff;
+}
+
+
+#footer  .gfield_validation_message  {
+    display: none !important;
+}
+@media screen and (min-width: 414px) and (max-width: 430px) {
+    .footer-socials {
+        padding: 0 65px!important;
+    }
+
+    .newsletter-section .mc4wp-form-fields {
+        display: flex;
+        gap: 15px;
+        flex-direction: column!important;
+    }
+
+}
+
+@media screen and (min-width: 375px) and (max-width: 413px) {
+    .footer-socials {
+        padding: 0 45px!important;
+    }
+    .newsletter-section .mc4wp-form-fields {
+        display: flex;
+        gap: 15px;
+        flex-direction: column!important;
+    }
+}

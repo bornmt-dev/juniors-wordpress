@@ -1,0 +1,263 @@
+/*Begin Custom Button*/
+/*woocommerce button*/
+.woocommerce #respond input#submit.disabled, .woocommerce #respond input#submit:disabled, .woocommerce #respond input#submit:disabled[disabled], .woocommerce a.button.disabled, .woocommerce a.button:disabled, .woocommerce a.button:disabled[disabled], .woocommerce button.button.disabled, .woocommerce button.button:disabled, .woocommerce button.button:disabled[disabled], .woocommerce input.button.disabled, .woocommerce input.button:disabled, .woocommerce input.button:disabled[disabled]{
+    border: 1px solid #111;
+    color: #111;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 11px 25px;
+    font-size: 16px;
+    line-height: 24px;
+    border-radius: 5px;
+    display: inline-block;
+    cursor: pointer;
+    z-index: 1;
+    position: relative;
+    font-family: var(--bzo-body_typo-font-family);
+    overflow: hidden;
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+    opacity: 0.6;
+}
+
+.woocommerce #respond input#submit.disabled:hover, .woocommerce #respond input#submit:disabled:hover, .woocommerce #respond input#submit:disabled[disabled]:hover, .woocommerce a.button.disabled:hover, .woocommerce a.button:disabled:hover, .woocommerce a.button:disabled[disabled]:hover, .woocommerce button.button.disabled:hover, .woocommerce button.button:disabled:hover, .woocommerce button.button:disabled[disabled]:hover, .woocommerce input.button.disabled:hover, .woocommerce input.button:disabled:hover, .woocommerce input.button:disabled[disabled]:hover{
+    color: #111;
+    border-color: #111;
+    background: #fff;
+}
+:where(body:not(.woocommerce-block-theme-has-button-styles)) .woocommerce button.button.alt,
+.button,
+.wishlist_table .product-add-to-cart a,
+.woocommerce #respond input#submit, .woocommerce a.button,
+.woocommerce a.button.alt, .woocommerce button.button, 
+.woocommerce input.button{
+    border: 1px solid #111;
+    color: #111;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 11px 25px;
+    font-size: 16px;
+    line-height: 24px;
+    border-radius: 5px;
+    display: inline-block;
+    cursor: pointer;
+    z-index: 1;
+    position: relative;
+    font-family: var(--bzo-body_typo-font-family);
+    overflow: hidden;
+    transition: .2s;
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+}
+
+.woocommerce-cart-form .button{
+/*    padding: 0 25px !important;*/
+}
+:where(body:not(.woocommerce-block-theme-has-button-styles)) .woocommerce button.button.alt:hover,
+.button:hover,
+.wishlist_table .product-add-to-cart a:hover,
+.woocommerce #respond input#submit:hover, .woocommerce a.button:hover,
+.woocommerce a.button.alt:hover, .woocommerce button.button:hover, 
+.woocommerce input.button:hover{
+    color: #fff;
+    border-color: var(--bzo-main-color);
+    background: var(--bzo-main-color);
+    transition: .2s;
+}
+
+/* btn default */
+
+/*added by lara */
+@media (max-width: 768px) {.woocommerce div.product form.cart button.single_add_to_cart_button,
+.elbzotech-bt-default {
+    background: transparent;
+}
+    }
+
+.woocommerce div.product form.cart button.single_add_to_cart_button,
+.elbzotech-bt-default{
+    border: none;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 12px 25px;
+    font-size: 16px;
+    line-height: 24px;
+    border-radius: 40px;
+    display: inline-block;
+    cursor: pointer;
+    z-index: 1;
+    position: relative;
+    font-family: var(--bzo-body_typo-font-family);
+    overflow: hidden;
+    transition: .3s;
+    background: linear-gradient(180deg, var(--bzo-main-color) 0%, var(--bzo-main-color-mix) 100%);
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 1px;
+}
+.woocommerce div.product form.cart button.single_add_to_cart_button::after,
+.elbzotech-bt-default::after{
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 100%;
+    border-radius: 0px;
+    top: 0;
+    left: auto;
+    right: 0;
+    z-index: -1;
+    transition: .3s;
+    background: linear-gradient(180deg, var(--bzo-main-color-mix) 0%, var(--bzo-main-color-mix2) 100%);
+}
+.woocommerce div.product form.cart button.single_add_to_cart_button:hover::after,
+.elbzotech-bt-default:hover::after{
+    width: 100%;
+    left: 0;
+    right: auto;
+    transition: .3s;
+}
+.woocommerce div.product form.cart button.single_add_to_cart_button:hover,
+.elbzotech-bt-default:hover,
+.elbzotech-bt-default:focus
+{
+    color: #fff;
+    transition: .3s;
+    
+}
+input.elbzotech-bt-default:hover,
+.wpcf7-submit:hover{
+    background: linear-gradient(180deg, var(--bzo-main-color-mix) 0%, var(--bzo-main-color-mix2) 100%);
+    transition: .3s;
+}
+@media(max-width: 767px){
+/*    .woocommerce div.product form.cart button.single_add_to_cart_button,*/
+    .elbzotech-bt-default{
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+}
+
+/*==== btn style 2 - home 2 ====*/
+.elbzotech-bt-style2{
+    border: 1px solid transparent;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 11px 25px;
+    font-size: 16px;
+    line-height: 24px;
+    border-radius: 40px;
+    display: inline-block;
+    cursor: pointer;
+    z-index: 1;
+    position: relative;
+    font-family: var(--bzo-body_typo-font-family);
+    overflow: hidden;
+    transition: .3s;
+    background: var(--bzo-main-color);
+    position: relative;
+    overflow: hidden;
+}
+@keyframes pulse-btn {
+  0% { box-shadow: 0 0 5px 0 var(--bzo-main-color-mix); }
+}
+.elbzotech-bt-style2:focus,
+.elbzotech-bt-style2:hover{
+    border: 1px dashed var(--bzo-main-color) !important;
+    color: var(--bzo-main-color);
+    background-color: #fff;
+        animation: pulse-btn 0.4s;
+    box-shadow: 0 0 0 12px transparent;
+
+}
+/*==== btn style 3 - home 3 ====*/
+.elbzotech-bt-style3{
+    border: 1px solid var(--bzo-main-color);
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 12px 30px;
+    font-size: 16px;
+    line-height: 24px;
+    border-radius: 10px;
+    display: inline-block;
+    cursor: pointer;
+    z-index: 1;
+    position: relative;
+    font-family: var(--bzo-body_typo-font-family);
+    overflow: hidden;
+    transition: .3s;
+    background: var(--bzo-main-color);
+    position: relative;
+    overflow: hidden;
+}
+.elbzotech-bt-style3:focus,
+.elbzotech-bt-style3:hover{    
+    color: var(--bzo-main-color);
+    background-color: #fff;    
+
+}
+@media(max-width: 767px){
+    .elbzotech-bt-style3{
+        padding: 6px 20px;
+        font-size: 14px;
+    }
+}
+/*End Button elementor*/
+/*-- btn quick view detail --*/
+
+.detail-quickview{
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--bzo-title_typo-color);
+    text-transform: uppercase;
+    margin-top: 25px;
+}
+.detail-quickview span {
+    border-bottom: 1px solid var(--bzo-title_typo-color);
+}
+.detail-quickview i {
+    margin-left: 5px;
+}
+.detail-quickview:hover {
+    color: var(--bzo-main-color);    
+}
+.detail-quickview:hover span {
+    border-color: var(--bzo-main-color);
+}
+/*-- end btn quick view detail --*/
+
+/*--- effect hover btn --*/
+.wishlist_compare_single_product a,
+.item-list-default .product-extra-link-defaut2 .list-compare-wishlist a,    
+.item-grid-product- .item-product .product-extra-link a{
+    position: relative;
+    overflow: hidden;
+}
+.wishlist_compare_single_product a::after,
+.item-list-default .product-extra-link-defaut2 .list-compare-wishlist a::after,    
+.item-grid-product- .item-product .product-extra-link a::after{
+    position: absolute;
+    content: "";
+    width: 0;
+    height: 100%;
+    border-radius: 0px;
+    top: 0;
+    right: 0;
+    left: auto;
+    z-index: -1;
+    transition: all .3s ease;
+    background: var(--bzo-main-color);
+}
+.wishlist_compare_single_product a:hover::after,
+.item-list-default .product-extra-link-defaut2 .list-compare-wishlist a:hover::after,
+.item-grid-product- .item-product .product-extra-link a:hover::after{
+    width: 100%;
+    right: auto;
+    left: 0;
+    transition: all .3s ease;
+}
