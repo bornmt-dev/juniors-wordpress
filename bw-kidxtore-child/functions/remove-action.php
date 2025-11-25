@@ -268,6 +268,14 @@ add_filter( 'style_loader_tag', function( $html, $handle ) {
 
 add_action('wp_head', function () {
     if ( !is_front_page() && !is_shop() ) { 
+
+    if ( ! defined( 'JR_MAP_API_KEY' ) ) {
+        error_log( 'Brevo API Key is not defined.' );
+        return; 
+    }
+    
+    $map_api_key = JR_MAP_API_KEY;
+
     ?>
     <script>
         window.mapsToInit = [];
@@ -280,7 +288,7 @@ add_action('wp_head', function () {
         }
     </script>
     <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcWkSA8GhYjSELxlVQAbxCh-Q-obbWWks&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=".$map_api_key."&callback=initMap">
     </script>
     <?php
     }
