@@ -288,7 +288,7 @@ add_action('wp_head', function () {
         }
     </script>
     <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=".$map_api_key."&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=<?php echo $map_api_key; ?>&callback=initMap">
     </script>
     <?php
     }
