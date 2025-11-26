@@ -1163,3 +1163,14 @@ function custom_authenticate_redirect($user, $username, $password) {
     return $user;
 }
 
+
+// Load the child widget class
+require_once get_stylesheet_directory() . '/inc/widget/price-filter.php';
+
+add_action( 'widgets_init', function() {
+ 
+    // Register child widget
+    if ( class_exists( 'bzotech_register_Widget_Price_Filter_child' ) ) {
+        register_widget( 'bzotech_register_Widget_Price_Filter_child' );
+    }
+});
