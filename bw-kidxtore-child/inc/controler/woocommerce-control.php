@@ -1104,6 +1104,7 @@ if(!function_exists('bzotech_woocommerce_thumbnail_loop')){
             $img_url_srcset = wp_get_attachment_image_srcset($bzotech_thumbnail_default['id'],$size);
         }
         if(has_post_thumbnail()){
+             $size = 'medium';
              $img_html = get_the_post_thumbnail(get_the_ID(),$size);
              $img_url = get_the_post_thumbnail_url(get_the_ID(),$size);
              $thumbnail_id = get_post_thumbnail_id(get_the_ID(),$size);
