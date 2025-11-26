@@ -951,61 +951,6 @@ function render_born_wc_stock_thresholds_page() {
     <?php
 }
 
-
-// add_action( 'pre_get_posts', 'filter_products_by_store_stock_preget', 99 );
-function filter_products_by_store_stock_preget( $query ) {
-
-
-    // Skip admin area but allow all frontend queries (including widgets)
-    if ( is_admin() ) {
-        return; 
-    }
- 
-    // Detect single product query by vars
-    if ( isset($query->query_vars['post_type']) && $query->query_vars['post_type'] === 'product' && $query->is_singular ) {
-        return;
-    }
-
-    // Only apply to product queries (shop, archives, widgets, shortcodes)
-    if ( ! isset( $query->query_vars['post_type'] ) || $query->query_vars['post_type'] !== 'product' ) {
-        return;
-    }
-
-    // store IDs to check
-    $store_ids = array( 397, 398, 399, 400, 401, 402 );
-
-    $out_max = (int)get_option('born_wc_stock_thresholds')['out_max'] + 1;
-
-    // build OR block => at least one store must have >= threshold
-    $stock_or = array( 'relation' => 'OR' );
-    foreach ( $store_ids as $id ) {
-        $stock_or[] = array(
-            'key'     => "_stock_at_{$id}",
-            'value'   => $out_max,
-            'compare' => '>=',
-            'type'    => 'NUMERIC',
-        );
-    }
-
-    // merge with existing meta_query
-    $existing = $query->get( 'meta_query' );
-    if ( empty( $existing ) || ! is_array( $existing ) ) {
-        $meta_query = array( 'relation' => 'AND' );
-    } else {
-        $relation = isset( $existing['relation'] ) ? $existing['relation'] : 'AND';
-        $meta_query = array( 'relation' => $relation );
-        foreach ( $existing as $k => $v ) {
-            if ( $k === 'relation' ) continue;
-            $meta_query[] = $v;
-        }
-    }
-
-    $meta_query[] = $stock_or;
-    $query->set( 'meta_query', $meta_query );
-}
-
-
-
 /**
  * Use WooCommerce product short description as Yoast meta description
  * only if the Yoast meta description field is empty.
@@ -1174,3 +1119,16 @@ add_action( 'widgets_init', function() {
         register_widget( 'bzotech_register_Widget_Price_Filter_child' );
     }
 });
+
+add_action( 'pre_get_posts', 'bzotech_hide_out_of_stock_products', 20 );
+function bzotech_hide_out_of_stock_products( $query ) {
+    if ( ! is_admin() && $query->is_main_query() && ( is_shop() || is_product_category() || is_product_tag() ) ) {
+        $meta_query = $query->get('meta_query') ?: array();
+        $meta_query[] = array(
+            'key'     => '_stock_status',
+            'value'   => 'instock',
+            'compare' => '='
+        );
+        $query->set( 'meta_query', $meta_query );
+    }
+}
