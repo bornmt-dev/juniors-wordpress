@@ -1109,8 +1109,35 @@ function custom_authenticate_redirect($user, $username, $password) {
 }
 
 
+
+add_action( 'pre_get_posts', 'bzotech_hide_out_of_stock_or_no_image_products', 20 );
+function bzotech_hide_out_of_stock_or_no_image_products( $query ) {
+    if ( ! is_admin() && $query->is_main_query() && ( is_shop() || is_product_category() || is_product_tag() ) ) {
+
+        $meta_query = $query->get('meta_query') ?: array();
+
+        // Hide out-of-stock products
+        $meta_query[] = array(
+            'key'     => '_stock_status',
+            'value'   => 'instock',
+            'compare' => '='
+        );
+
+        // Hide products without featured image
+        $meta_query[] = array(
+            'key'     => '_thumbnail_id',
+            'compare' => 'EXISTS'
+        );
+
+        $query->set( 'meta_query', $meta_query );
+    }
+}
+
+
+
 // Load the child widget class
 require_once get_stylesheet_directory() . '/inc/widget/price-filter.php';
+require_once get_stylesheet_directory() . '/inc/widget/category-filter.php';
 
 add_action( 'widgets_init', function() {
  
@@ -1118,17 +1145,8 @@ add_action( 'widgets_init', function() {
     if ( class_exists( 'bzotech_register_Widget_Price_Filter_child' ) ) {
         register_widget( 'bzotech_register_Widget_Price_Filter_child' );
     }
-});
 
-add_action( 'pre_get_posts', 'bzotech_hide_out_of_stock_products', 20 );
-function bzotech_hide_out_of_stock_products( $query ) {
-    if ( ! is_admin() && $query->is_main_query() && ( is_shop() || is_product_category() || is_product_tag() ) ) {
-        $meta_query = $query->get('meta_query') ?: array();
-        $meta_query[] = array(
-            'key'     => '_stock_status',
-            'value'   => 'instock',
-            'compare' => '='
-        );
-        $query->set( 'meta_query', $meta_query );
+    if ( class_exists( 'Bzotech_Category_Fillter_Child' ) ) {
+        register_widget( 'Bzotech_Category_Fillter_Child' );
     }
-}
+});
