@@ -66,20 +66,6 @@ add_filter( 'woocommerce_show_admin_notice', function ( $show, $notice ) {
  * */
 add_action( 'woocommerce_single_product_summary','woocommerce_template_single_price',22 );
 
- /**
- * 
- * Custom description product single
- *  
- * @return html
- *
- * */
-add_filter( 'woocommerce_short_description', 'bzotech_custom_short_description', 10 );
-if(!function_exists('bzotech_custom_short_description')){
-    function bzotech_custom_short_description( $des ) {
-        $show_des = bzotech_get_option('show_excerpt','1');
-        if($show_des == '1' && $des) return '<div class="product-desc">'.$des.'</div>';
-    }
-}
 
 /**
  * 
