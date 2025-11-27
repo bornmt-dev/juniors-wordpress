@@ -37,10 +37,12 @@ if(!class_exists('Bzotech_Category_Fillter_Child') && class_exists("woocommerce"
 
         function widget( $args, $instance ) {
 
-            echo apply_filters('bzotech_output_content',$args['before_widget']);
-            if ( ! empty( $instance['title'] ) ) {
-                echo apply_filters('bzotech_output_content',$args['before_title']) . apply_filters( 'widget_title', $instance['title'] ). $args['after_title'];
-            }
+            // echo apply_filters('bzotech_output_content',$args['before_widget']);
+            // if ( ! empty( $instance['title'] ) ) {
+            //     echo apply_filters('bzotech_output_content',$args['before_title']) . apply_filters( 'widget_title', $instance['title'] ). $args['after_title'];
+            // }
+
+            echo '<div id="bzotech_category_fillter_child-2" class="sidebar-widget widget widget_bzotech_category_fillter"><h2 class="widget-title">Categories</h2>';
             
             echo '<input type="hidden" name="load-shop-ajax-nonce" class="load-shop-ajax-nonce" value="' . wp_create_nonce( 'load-shop-ajax-nonce' ) . '" />';
 
