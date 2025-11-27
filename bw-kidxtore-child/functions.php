@@ -1138,6 +1138,10 @@ function bzotech_hide_out_of_stock_or_no_image_products( $query ) {
 // Load the child widget class
 require_once get_stylesheet_directory() . '/inc/widget/price-filter.php';
 require_once get_stylesheet_directory() . '/inc/widget/category-filter.php';
+require_once get_stylesheet_directory() . '/inc/widget/custom-brand-filter.php';
+require_once get_stylesheet_directory() . '/inc/widget/custom-sub-lego-filter.php';
+require_once get_stylesheet_directory() . '/inc/widget/attribute-filter.php';
+ 
 
 add_action( 'widgets_init', function() {
  
@@ -1149,4 +1153,17 @@ add_action( 'widgets_init', function() {
     if ( class_exists( 'Bzotech_Category_Fillter_Child' ) ) {
         register_widget( 'Bzotech_Category_Fillter_Child' );
     }
+
+    if ( class_exists( 'Bzotech_Brand_Filter_Child' ) ) {
+        register_widget( 'Bzotech_Brand_Filter_Child' );
+    }
+
+    if ( class_exists( 'Bzotech_SubLego_Filter_Child' ) ) {
+        register_widget( 'Bzotech_SubLego_Filter_Child' );
+    }
+
+    if ( class_exists( 'Bzotech_Attribute_Filter_Child' ) ) {
+        register_widget( 'Bzotech_Attribute_Filter_Child' );
+    }
+
 });

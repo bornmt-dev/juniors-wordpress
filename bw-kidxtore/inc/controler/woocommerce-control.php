@@ -1139,7 +1139,6 @@ if(!function_exists('bzotech_woocommerce_thumbnail_loop')){
                 foreach ($attachment_ids as $key => $value) {
                     $img_url_gallery = wp_get_attachment_image_url($value, $size);
                     $srcset = wp_get_attachment_image_srcset($value, $size);
-
                     // Validate each gallery image src
                     $response = wp_remote_head($img_url_gallery);
                     if (is_wp_error($response) || wp_remote_retrieve_response_code($response) == 404) {

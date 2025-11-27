@@ -5,9 +5,9 @@
  * Date: 24/12/15
  * Time: 10:20 AM
  */
-if(!class_exists('Bzotech_SubLego_Filter') && class_exists("woocommerce"))
+if(!class_exists('Bzotech_SubLego_Filter_Child') && class_exists("woocommerce"))
 {
-    class Bzotech_SubLego_Filter extends WP_Widget {
+    class Bzotech_SubLego_Filter_Child extends WP_Widget {
 
 
         protected $default=array();
@@ -17,14 +17,17 @@ if(!class_exists('Bzotech_SubLego_Filter') && class_exists("woocommerce"))
             add_action( 'widgets_init', array(__CLASS__,'_add_widget') );
         }
 
-        static function _add_widget()
-        {
-            if(function_exists('bzotech_reg_widget')) bzotech_reg_widget( 'Bzotech_SubLego_Filter' );
+        static function _add_widget() {
+            if (function_exists('bzotech_reg_widget')) {
+                bzotech_reg_widget('Bzotech_SubLego_Filter_Child');
+            } else {
+                register_widget('Bzotech_SubLego_Filter_Child');
+            }
         }
 
         function __construct() {
             // Instantiate the parent object
-            parent::__construct( false, esc_html__('Custom Lego Brands Filter','bw-kidxtore'),
+            parent::__construct( false, esc_html__('Custom Lego Brands Filter Child','bw-kidxtore'),
                 array( 'description' => esc_html__( 'Custom Lego Brands Filter', 'bw-kidxtore' ), ));
 
             $this->default=array(
@@ -144,6 +147,6 @@ if(!class_exists('Bzotech_SubLego_Filter') && class_exists("woocommerce"))
         }
     }
 
-    Bzotech_SubLego_Filter::_init();
+    Bzotech_SubLego_Filter_Child::_init();
 
 }
