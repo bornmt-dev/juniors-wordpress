@@ -9,8 +9,8 @@ if ( !class_exists('WC_Product') ) {
     return;
 }
 
-if(!class_exists('Bzotech_Widget_Product_Slider')) {
-    class Bzotech_Widget_Product_Slider extends WC_Widget
+if(!class_exists('Bzotech_Widget_Product_Slider_Child')) {
+    class Bzotech_Widget_Product_Slider_Child extends WC_Widget
     {
         static function _init()
         {
@@ -19,7 +19,7 @@ if(!class_exists('Bzotech_Widget_Product_Slider')) {
 
         static function _add_widget()
         {
-            if(function_exists('bzotech_reg_widget')) bzotech_reg_widget( 'Bzotech_Widget_Product_Slider' );
+            if(function_exists('bzotech_reg_widget')) bzotech_reg_widget( 'Bzotech_Widget_Product_Slider_Child' );
 
         }
 
@@ -30,8 +30,8 @@ if(!class_exists('Bzotech_Widget_Product_Slider')) {
         {
             $this->widget_cssclass = 'woocommerce widget widget-product-slider poroduct-type';
             $this->widget_description = esc_html__('Display a list of your products on your site.', 'bw-kidxtore');
-            $this->widget_id = 'Bzotech_Widget_Product_Slider';
-            $this->widget_name = esc_html__('BZOTECH Products slider', 'bw-kidxtore');
+            $this->widget_id = 'Bzotech_Widget_Product_Slider_Child';
+            $this->widget_name = esc_html__('BZOTECH Products slider Child', 'bw-kidxtore');
 
             parent::__construct();
         }
@@ -169,113 +169,109 @@ if(!class_exists('Bzotech_Widget_Product_Slider')) {
          */
         public function widget($args, $instance)
         {
-            echo wp_kses_post($args['before_widget']);
-            if ( ! empty( $instance['title'] ) ) {
-                // echo wp_kses_post($args['before_title']) . apply_filters( 'widget_title', $instance['title'] ). $args['after_title'];
-                echo '<h2 class="widget-title">'.apply_filters( 'widget_title', $instance['title'] ).'</h2>';
-            }
-            $number_post  = (isset( $instance['number_post']) and  $instance['number_post'] !== 0)  ? $instance['number_post'] : 8;
-            $product_type = isset( $instance['product_type'] ) ? $instance['product_type'] : $this->settings['product_type']['std'];
-            $order_by = isset( $instance['order_by'] ) ? $instance['order_by'] : $this->settings['order_by']['std'];
-            $order = isset( $instance['order'] ) ? $instance['order'] : $this->settings['order']['std'];
-            $number_row = (isset( $instance['number_row'] )and  $instance['number_row'] !== 0) ? $instance['number_row'] : 4;
-            $image_size = isset( $instance['image_size'] ) ? $instance['image_size'] : $this->settings['image_size']['std'];
-            $terms_cart = get_terms('product_cat');
-            $product_category = array();
-            $i=0;
-            if(!empty($terms_cart) and is_array($terms_cart)){
-                foreach ($terms_cart as $key=>$value){
-                    if(isset($instance['bzotech_cart_'.$value->slug]) and $instance['bzotech_cart_'.$value->slug]==1){
-                        $product_category[$i] =  $value->slug;
-                        $i = $i+1;
-                    }
+            // Get selected category slugs
+            $selected_categories = array();
+            foreach ($instance as $key => $value) {
+                if (strpos($key, 'bzotech_cart_') === 0 && $value) {
+                    $slug = str_replace('bzotech_cart_', '', $key);
+                    $selected_categories[] = $slug;
                 }
-            }
-            $args_product=array(
-                'post_type'         => 'product',
-                'posts_per_page'    => (int)$number_post,
-                'orderby'           => $order_by,
-                'order' => $order,
-                'post_status'    => 'publish',
-            );
-            if($product_type == 'trending'){
-                $args_product['meta_query'][] = array(
-                    'key'     => 'trending_product',
-                    'value'   => '1',
-                    'compare' => '=',
-                );
-            }
-            if($product_type == 'toprate'){
-                $args_product['meta_key'] = '_wc_average_rating';
-                $args_product['orderby'] = 'meta_value_num';
-                $args_product['meta_query'] = WC()->query->get_meta_query();
-                $args_product['tax_query'][] = WC()->query->get_tax_query();
-            }
-            if($product_type == 'mostview'){
-                $args_product['meta_key'] = 'post_views';
-                $args_product['orderby'] = 'meta_value_num';
-            }
-            if($product_type == 'bestsell'){
-                $args_product['meta_key'] = 'total_sales';
-                $args_product['orderby'] = 'meta_value_num';
-            }
-            if($product_type=='onsale'){
-                $args_product['meta_query']['relation']= 'OR';
-                $args_product['meta_query'][]=array(
-                    'key'   => '_sale_price',
-                    'value' => 0,
-                    'compare' => '>',
-                    'type'          => 'numeric'
-                );
-                $args_product['meta_query'][]=array(
-                    'key'   => '_min_variation_sale_price',
-                    'value' => 0,
-                    'compare' => '>',
-                    'type'          => 'numeric'
-                );
-            }
-            if($product_type == 'featured'){
-                $args_product['tax_query'][] = array(
-                    'taxonomy' => 'product_visibility',
-                    'field'    => 'name',
-                    'terms'    => 'featured',
-                    'operator' => 'IN',
-                );
-            }
-            if (!empty($product_category)) {
-                if ($product_category[0] != '') {
-                    $args_product['tax_query'][] = array(
-                        'taxonomy' => 'product_cat',
-                        'field' => 'slug',
-                        'terms' => $product_category,
-                    );
-                }
-            }
-            if($order_by == 'rating'){
-                $args_product['meta_key'] = '_wc_average_rating';
-                $args_product['meta_query'] = WC()->query->get_meta_query();
-                $args_product['tax_query'] = WC()->query->get_tax_query();
-                $args_product['no_found_rows'] = 1;
-                $args_product['orderby'] = 'meta_value_num';
-                $args_product['order'] =  $order;
-            }
-            if($order_by == 'price'){
-                $args_product['orderby']  = "meta_value_num ID";
-                $args_product['order']    = $order;
-                $args_product['meta_key'] = '_price';
             }
 
-            $query = new WP_Query($args_product);
-            $count_post= $query->post_count;
-            $image_size  = bzotech_get_size_crop($image_size,'300x325');
-            echo bzotech_get_template_widget('product',false,array(
-                'query'=>$query,
-                'count_post'=>$count_post,
-                'image_size'=>$image_size,
-                'number_row'=>$number_row,
-            ));
-            echo wp_kses_post($args['after_widget']);
+            // Default number of posts
+            $number_posts = !empty($instance['number_post']) ? intval($instance['number_post']) : 5;
+
+            // Unique transient key based on widget ID + selected categories
+            $transient_key = 'bzotech_slider_' . md5($this->id . implode(',', $selected_categories) . $number_posts);
+
+            // Try to get cached output
+            $output = get_transient($transient_key);
+
+            if (false === $output) {
+                // WP_Query meta_query to only show in-stock products with featured image
+                $meta_query = array(
+                    'relation' => 'AND',
+                    array(
+                        'key'     => '_stock_status',
+                        'value'   => 'instock',
+                        'compare' => '='
+                    ),
+                    array(
+                        'key'     => '_thumbnail_id',
+                        'compare' => 'EXISTS'
+                    )
+                );
+
+                // WP_Query arguments
+                $query_args = array(
+                    'post_type'      => 'product',
+                    'posts_per_page' => $number_posts,
+                    'orderby'        => 'date',
+                    'order'          => 'DESC',
+                    'meta_query'     => $meta_query
+                );
+
+                // If category selected, filter by category
+                if (!empty($selected_categories)) {
+                    $query_args['tax_query'] = array(
+                        array(
+                            'taxonomy' => 'product_cat',
+                            'field'    => 'slug',
+                            'terms'    => $selected_categories,
+                        ),
+                    );
+                }
+
+                $products = new WP_Query($query_args);
+
+                // Start output buffering
+                ob_start();
+
+                if ($products->have_posts()) : ?>
+                    <div id="bzotech_widget_product_slider-<?php echo esc_attr($this->id); ?>" class="sidebar-widget widget woocommerce widget widget-product-slider poroduct-type">
+                        <h2 class="widget-title"><?php echo !empty($instance['title']) ? esc_html($instance['title']) : 'Products'; ?></h2>
+                        <div class="wg-product-slider">
+                            <?php while ($products->have_posts()) : $products->the_post(); 
+                                global $product; ?>
+                                <div class="swiper-slide">
+                                    <div class="item-product item-product-wg flex-wrapper">
+                                        <div class="product-thumb">
+                                            <a href="<?php the_permalink(); ?>" class="product-thumb-link">
+                                                <?php echo $product->get_image('medium'); ?>
+                                            </a>
+                                        </div>
+                                        <div class="product-info">
+                                            <h3 class="product-title">
+                                                <a class="color-title" href="<?php the_permalink(); ?>">
+                                                    <?php the_title(); ?>
+                                                </a>
+                                            </h3>
+                                            <div class="product-price price">
+                                                <?php echo $product->get_price_html(); ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endwhile; ?>
+                        </div>
+                    </div>
+                    <?php
+                    wp_reset_postdata();
+                else :
+                    echo '<p>' . esc_html__('No products found', 'bw-kidxtore') . '</p>';
+                endif;
+
+                // Save output to transient for 5 minutes
+                $output = ob_get_clean();
+                set_transient($transient_key, $output, 5 * MINUTE_IN_SECONDS);
+            }
+
+            // Output cached content
+            echo $output;
         }
+
+
+
     }
-    Bzotech_Widget_Product_Slider::_init();
+    Bzotech_Widget_Product_Slider_Child::_init();
 }

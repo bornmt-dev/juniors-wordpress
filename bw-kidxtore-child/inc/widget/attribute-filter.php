@@ -141,7 +141,7 @@ if(!class_exists('Bzotech_Attribute_Filter_Child') && class_exists("woocommerce"
                                 if (isset($renames[$term->name])) $term_name = $renames[$term->name];
 
                                 $data_id = 'data-filter_'.$attribute.'='.$term->slug;
-                                echo '<li class="title16 main-color2 font-medium '.esc_attr($term->slug).'-inline '.esc_attr($active).'">
+                                echo '<li class="title16 main-color2 font-medium '.esc_attr($term->slug).'-inline '.esc_attr($active) .'">
                                         <h3><a title="'.$term->name.'" data-attribute="'.esc_attr($attribute).'" data-term="'.esc_attr($term->slug).'" class="main-color2 load-shop-ajax bgcolor-'.esc_attr($term->slug).'" href="'.esc_url(bzotech_get_filter_url('filter_'.$attribute,$term->slug)).'" '.$data_id.'>
                                         <span></span>'.$term_name.'</a></h3>
                                         <span class="count hidden">('.intval($term->count).')</span>

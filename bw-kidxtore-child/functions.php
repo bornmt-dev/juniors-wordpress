@@ -1141,7 +1141,7 @@ require_once get_stylesheet_directory() . '/inc/widget/category-filter.php';
 require_once get_stylesheet_directory() . '/inc/widget/custom-brand-filter.php';
 require_once get_stylesheet_directory() . '/inc/widget/custom-sub-lego-filter.php';
 require_once get_stylesheet_directory() . '/inc/widget/attribute-filter.php';
- 
+require_once get_stylesheet_directory() . '/inc/widget/wg-product.php';
 
 add_action( 'widgets_init', function() {
  
@@ -1166,4 +1166,8 @@ add_action( 'widgets_init', function() {
         register_widget( 'Bzotech_Attribute_Filter_Child' );
     }
 
+    if ( class_exists( 'Bzotech_Widget_Product_Slider_Child' ) ) {
+        register_widget( 'Bzotech_Widget_Product_Slider_Child' );
+    }
+ 
 });
