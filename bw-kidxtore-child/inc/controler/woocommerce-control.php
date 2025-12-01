@@ -43,6 +43,8 @@ remove_action( 'woocommerce_single_product_summary','woocommerce_template_single
 remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_product_data_tabs', 10 );
 remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
 remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20 );
+remove_action( 'woocommerce_single_product_summary', 'bzotech_append_content_summary', 60 );
+
 add_filter( 'woocommerce_show_admin_notice', function ( $show, $notice ) {
     if ( 'template_files' === $notice ) {
         return false;
@@ -67,24 +69,6 @@ add_filter( 'woocommerce_show_admin_notice', function ( $show, $notice ) {
 add_action( 'woocommerce_single_product_summary','woocommerce_template_single_price',22 );
 
 
-/**
- * 
- * Append content summary
- * Hook to woocommerce_single_product_summary
- * 
- * @return void
- *
- * */
-$content_summary_pos = bzotech_get_option('content_summary_pos',60);
-add_action( 'woocommerce_single_product_summary','bzotech_append_content_summary', $content_summary_pos );
-if(!function_exists('bzotech_append_content_summary')){
-    function bzotech_append_content_summary(){  
-        $post_id = bzotech_get_option('append_content_summary');
-        
-        // if(!empty($post_id)) echo '<div class="append-content-summary">'.Bzotech_Template::get_vc_pagecontent($post_id).'</div>';
-        
-    }
-}
 /**
  * 
  * Add content before tab
