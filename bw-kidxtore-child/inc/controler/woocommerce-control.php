@@ -69,7 +69,6 @@ add_filter(
  * Hook to woocommerce_single_product_summary
  * */
 add_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_price', 22 );
-
 /**
  *
  * Add product related
@@ -147,14 +146,14 @@ if ( ! function_exists( 'bzotech_woocommerce_wrap_before' ) ) {
 	}
 }
 
-		/**
-		*
-		* Set wrap after woocommerce page
-		* Hook to woocommerce_after_main_content
-		*
-		* @return html
-		* */
-		add_action( 'woocommerce_after_main_content', 'bzotech_woocommerce_wrap_after', 10 );
+/**
+*
+* Set wrap after woocommerce page
+* Hook to woocommerce_after_main_content
+*
+* @return html
+* */
+add_action( 'woocommerce_after_main_content', 'bzotech_woocommerce_wrap_after', 10 );
 if ( ! function_exists( 'bzotech_woocommerce_wrap_after' ) ) {
 	function bzotech_woocommerce_wrap_after() {
 		$get_style_woo_single = bzotech_get_value_by_id( 'sv_style_woo_single' );
@@ -177,27 +176,27 @@ if ( ! function_exists( 'bzotech_woocommerce_wrap_after' ) ) {
 	}
 }
 
-		/**
-		*
-		* remove title page woo
-		* Hook to woocommerce_show_page_title
-		*
-		* @return boolean
-		* */
-		add_filter( 'woocommerce_show_page_title', 'bzotech_remove_page_title' );
+/**
+*
+* remove title page woo
+* Hook to woocommerce_show_page_title
+*
+* @return boolean
+* */
+add_filter( 'woocommerce_show_page_title', 'bzotech_remove_page_title' );
 if ( ! function_exists( 'bzotech_remove_page_title' ) ) {
 	function bzotech_remove_page_title() {
 		return false;
 	}
 }
 
-		/**
-		*
-		* Add top filter
-		* Hook to woocommerce_before_shop_loop
-		*
-		* @return void
-		* */
+/**
+*
+* Add top filter
+* Hook to woocommerce_before_shop_loop
+*
+* @return void
+* */
 
 if ( ! function_exists( 'bzotech_woocommerce_top_filter' ) ) {
 	function bzotech_woocommerce_top_filter() {
@@ -241,14 +240,14 @@ if ( ! function_exists( 'bzotech_woocommerce_top_filter' ) ) {
 	}
 }
 
-		/**
-		*
-		* Add data wrap loop page shop
-		* Hook to woocommerce_before_shop_loop
-		*
-		* @return void
-		* */
-		add_action( 'woocommerce_before_shop_loop', 'bzotech_shop_wrap_before', 30 );
+/**
+*
+* Add data wrap loop page shop
+* Hook to woocommerce_before_shop_loop
+*
+* @return void
+* */
+add_action( 'woocommerce_before_shop_loop', 'bzotech_shop_wrap_before', 30 );
 if ( ! function_exists( 'bzotech_shop_wrap_before' ) ) {
 	function bzotech_shop_wrap_before() {
 		global $wp_query;
@@ -338,14 +337,14 @@ if ( ! function_exists( 'bzotech_shop_wrap_before' ) ) {
 	}
 }
 
-		/**
-		*
-		* Add pagination
-		* Hook to woocommerce_after_shop_loop
-		*
-		* @return void
-		* */
-		add_action( 'woocommerce_after_shop_loop', 'bzotech_woocommerce_pagination', 10 );
+/**
+*
+* Add pagination
+* Hook to woocommerce_after_shop_loop
+*
+* @return void
+* */
+add_action( 'woocommerce_after_shop_loop', 'bzotech_woocommerce_pagination', 10 );
 if ( ! function_exists( 'bzotech_woocommerce_pagination' ) ) {
 	function bzotech_woocommerce_pagination() {
 		echo '</div>';/*close list-product-wrap*/
@@ -528,14 +527,14 @@ if ( ! function_exists( 'bzotech_woocommerce_pagination' ) ) {
 	}
 }
 
-		/**
-		*
-		* Custom price html
-		* Hook to woocommerce_after_shop_loop
-		*
-		* @return html
-		* */
-		add_filter( 'woocommerce_get_price_html', 'bzotech_change_price_html', 100, 2 );
+/**
+*
+* Custom price html
+* Hook to woocommerce_after_shop_loop
+*
+* @return html
+* */
+add_filter( 'woocommerce_get_price_html', 'bzotech_change_price_html', 100, 2 );
 if ( ! function_exists( 'bzotech_change_price_html' ) ) {
 	function bzotech_change_price_html( $price, $product ) {
 		global $product;
@@ -547,14 +546,14 @@ if ( ! function_exists( 'bzotech_change_price_html' ) ) {
 	}
 }
 
-		/**
-		*
-		* Set number product
-		* Hook to pre_get_posts
-		*
-		* @return int
-		* */
-		add_action( 'pre_get_posts', 'bzotech_woo_change_number' );
+/**
+*
+* Set number product
+* Hook to pre_get_posts
+*
+* @return int
+* */
+add_action( 'pre_get_posts', 'bzotech_woo_change_number' );
 if ( ! function_exists( 'bzotech_woo_change_number' ) ) {
 	function bzotech_woo_change_number( $query ) {
 		if ( $query->is_main_query() && $query->get( 'wc_query' ) == 'product_query' ) {
@@ -567,14 +566,14 @@ if ( ! function_exists( 'bzotech_woo_change_number' ) ) {
 	}
 }
 
-		/**
-		*
-		* Custom rating html
-		* Hook to woocommerce_product_get_rating_html
-		*
-		* @return html
-		* */
-		add_filter( 'woocommerce_product_get_rating_html', 'bzotech_get_rating_html_default', 10, 2 );
+/**
+*
+* Custom rating html
+* Hook to woocommerce_product_get_rating_html
+*
+* @return html
+* */
+add_filter( 'woocommerce_product_get_rating_html', 'bzotech_get_rating_html_default', 10, 2 );
 if ( ! function_exists( 'bzotech_get_rating_html_default' ) ) {
 	function bzotech_get_rating_html_default( $html, $rating ) {
 		if ( ! isset( $count ) ) {
@@ -602,27 +601,27 @@ if ( ! function_exists( 'bzotech_get_rating_html_default' ) ) {
 	}
 }
 
-		/**
-		*
-		* Custom size avatar
-		* Hook to woocommerce_review_gravatar_size
-		*
-		* @return html
-		* */
-		add_filter( 'woocommerce_review_gravatar_size', 'bzotech_review_gravatar_size' );
+/**
+*
+* Custom size avatar
+* Hook to woocommerce_review_gravatar_size
+*
+* @return html
+* */
+add_filter( 'woocommerce_review_gravatar_size', 'bzotech_review_gravatar_size' );
 if ( ! function_exists( 'bzotech_review_gravatar_size' ) ) {
 	function bzotech_review_gravatar_size() {
 		return 120;
 	}
 }
 
-		/**
-		*
-		* Get time countdown product
-		*
-		* @return html
-		* */
-		add_action( 'woocommerce_single_product_summary', 'bzotech_timer_countdown_product', 23 );
+/**
+*
+* Get time countdown product
+*
+* @return html
+* */
+add_action( 'woocommerce_single_product_summary', 'bzotech_timer_countdown_product', 23 );
 if ( ! function_exists( 'bzotech_timer_countdown_product' ) ) {
 	function bzotech_timer_countdown_product( $class = '' ) {
 		$data_date        = '';
@@ -639,13 +638,12 @@ if ( ! function_exists( 'bzotech_timer_countdown_product' ) ) {
 	}
 }
 
-		/**
-		*
-		* Get time countdown product
-		*
-		* @return html
-		* */
-
+/**
+*
+* Get time countdown product
+*
+* @return html
+* */
 if ( ! function_exists( 'bzotech_timer_countdown_product_return' ) ) {
 	function bzotech_timer_countdown_product_return() {
 
@@ -661,26 +659,27 @@ if ( ! function_exists( 'bzotech_timer_countdown_product_return' ) ) {
 	}
 }
 
-		/**
-		*
-		* Get tabs content summary
-		*
-		* @return void
-		* */
-		add_action( 'woocommerce_single_product_summary', 'bzotech_tab_product_accordion_summary', 80 );
+/**
+*
+* Get tabs content summary
+*
+* @TODO: Remove this, Juniors doesn't use tabs
+* @return void
+* */
+add_action( 'woocommerce_single_product_summary', 'bzotech_tab_product_accordion_summary', 80 );
 if ( ! function_exists( 'bzotech_tab_product_accordion_summary' ) ) {
 	function bzotech_tab_product_accordion_summary() {
 		bzotech_get_template_woocommerce( 'single-product/tabs-content-summary', '', false, true );
 	}
 }
 
-		/**
-		*
-		* Hook to gcosw_button_mua_ngay
-		*
-		* @return html
-		* */
-		add_action( 'bzotech_button_add_to_cart_ajax', 'bzotech_button_add_to_cart_ajax', 10 );
+/**
+*
+* Hook to gcosw_button_mua_ngay
+*
+* @return html
+* */
+add_action( 'bzotech_button_add_to_cart_ajax', 'bzotech_button_add_to_cart_ajax', 10 );
 if ( ! function_exists( 'bzotech_button_add_to_cart_ajax' ) ) {
 	function bzotech_button_add_to_cart_ajax() {
 		$woocommerce_cart_redirect_after_add = get_option( 'woocommerce_cart_redirect_after_add' );
@@ -697,55 +696,56 @@ if ( ! function_exists( 'bzotech_add_to_cart_text_custom' ) ) {
 		return esc_html__( 'Buy Now', 'bw-kidxtore' );
 	}
 }
-		/**
-		*
-		* Remover yith woocompare
-		*
-		* @return bool
-		* */
-		add_filter( 'yith_woocompare_remove_compare_link_by_cat', 'bzotech_remove_compare_link', 30, 2 );
+/**
+*
+* Remover yith woocompare
+*
+* @return bool
+* */
+add_filter( 'yith_woocompare_remove_compare_link_by_cat', 'bzotech_remove_compare_link', 30, 2 );
 if ( ! function_exists( 'bzotech_remove_compare_link' ) ) {
 	function bzotech_remove_compare_link() {
 		return true;
 	}
 }
 
-		/**
-		*
-		* Custom before add_to_cart_form
-		* Hook to woocommerce_before_add_to_cart_form
-		*
-		* @return html
-		* */
-		add_action( 'woocommerce_before_add_to_cart_form', 'bzotech_woocommerce_before_add_to_cart_form', 10 );
+/**
+*
+* Custom before add_to_cart_form
+* Hook to woocommerce_before_add_to_cart_form
+*
+* @return html
+* */
+add_action( 'woocommerce_before_add_to_cart_form', 'bzotech_woocommerce_before_add_to_cart_form', 10 );
 if ( ! function_exists( 'bzotech_woocommerce_before_add_to_cart_form' ) ) {
 	function bzotech_woocommerce_before_add_to_cart_form() {
 		echo '<div class="bzotech-form-cart-single">';
 	}
 }
 
-		/**
-		*
-		* Custom after add_to_cart_form
-		* Hook to woocommerce_after_add_to_cart_form
-		*
-		* @return html
-		* */
-		add_action( 'woocommerce_after_add_to_cart_form', 'bzotech_woocommerce_after_add_to_cart_form', 40 );
+/**
+*
+* Custom after add_to_cart_form
+* Hook to woocommerce_after_add_to_cart_form
+*
+* @return html
+* */
+add_action( 'woocommerce_after_add_to_cart_form', 'bzotech_woocommerce_after_add_to_cart_form', 40 );
 if ( ! function_exists( 'bzotech_woocommerce_after_add_to_cart_form' ) ) {
 	function bzotech_woocommerce_after_add_to_cart_form() {
 		echo '</div>';
 	}
 }
 
-		/**
-		*
-		* Add wishlist compare link
-		* Hook to woocommerce_after_add_to_cart_form
-		*
-		* @return html
-		* */
-		add_action( 'woocommerce_after_add_to_cart_button', 'bzotech_wishlist_compare_link_single_product', 35 );
+/**
+*
+* Add wishlist compare link
+* Hook to woocommerce_after_add_to_cart_form
+* @TODO: Maybe remove this.
+*
+* @return html
+* */
+add_action( 'woocommerce_after_add_to_cart_button', 'bzotech_wishlist_compare_link_single_product', 35 );
 if ( ! function_exists( 'bzotech_wishlist_compare_link_single_product' ) ) {
 	function bzotech_wishlist_compare_link_single_product() {
 		$check_share = bzotech_get_option( 'post_single_share', array() );
@@ -767,14 +767,14 @@ if ( ! function_exists( 'bzotech_wishlist_compare_link_single_product' ) ) {
 	}
 }
 
-		/**
-		*
-		* Get finter search by brand
-		* Hook to pre_get_posts
-		*
-		* @return void
-		* */
-		add_action( 'pre_get_posts', 'bzotech_brand_product_search_finter' );
+/**
+*
+* Get finter search by brand
+* Hook to pre_get_posts
+*
+* @return void
+* */
+add_action( 'pre_get_posts', 'bzotech_brand_product_search_finter' );
 if ( ! function_exists( 'bzotech_brand_product_search_finter' ) ) {
 	function bzotech_brand_product_search_finter( $query ) {
 		if ( $query->is_main_query() && is_post_type_archive( 'product' ) && ! is_admin() ) {
@@ -793,26 +793,27 @@ if ( ! function_exists( 'bzotech_brand_product_search_finter' ) ) {
 		}
 	}
 }
-		add_filter( 'woocommerce_product_additional_information_heading', 'bzotech_remover_additional_information_heading' );
+add_filter( 'woocommerce_product_additional_information_heading', 'bzotech_remover_additional_information_heading' );
 if ( ! function_exists( 'bzotech_remover_additional_information_heading' ) ) {
 	function bzotech_remover_additional_information_heading() {
 		return false;
 	}
 }
-		/**
-		*
-		*
-		********************* Add Hook Inner Page  *********************
-		* */
 
-		/**
-		*
-		* Custom before cart
-		* Hook to woocommerce_before_cart
-		*
-		* @return html
-		* */
-		add_action( 'woocommerce_before_cart', 'bzotech_before_cart' );
+/**
+*
+*
+********************* Add Hook Inner Page  *********************
+* */
+
+/**
+*
+* Custom before cart
+* Hook to woocommerce_before_cart
+*
+* @return html
+* */
+add_action( 'woocommerce_before_cart', 'bzotech_before_cart' );
 if ( ! function_exists( 'bzotech_before_cart' ) ) {
 	function bzotech_before_cart() {
 		$cart_style = bzotech_get_option( 'cart_page_style' );
@@ -829,14 +830,14 @@ if ( ! function_exists( 'bzotech_before_cart' ) ) {
 	}
 }
 
-		/**
-		*
-		* Custom after cart
-		* Hook to woocommerce_after_cart
-		*
-		* @return html
-		* */
-				add_action( 'woocommerce_after_cart', 'bzotech_after_cart' );
+/**
+*
+* Custom after cart
+* Hook to woocommerce_after_cart
+*
+* @return html
+* */
+add_action( 'woocommerce_after_cart', 'bzotech_after_cart' );
 if ( ! function_exists( 'bzotech_after_cart' ) ) {
 	function bzotech_after_cart() {
 		$cart_style = bzotech_get_option( 'cart_page_style' );
@@ -853,13 +854,13 @@ if ( ! function_exists( 'bzotech_after_cart' ) ) {
 	}
 }
 
-		/**
-		*
-		* Custom after cart form
-		* Hook to bzotech_after_cart_form
-		*
-		* @return html
-		* */
+/**
+*
+* Custom after cart form
+* Hook to bzotech_after_cart_form
+*
+* @return html
+* */
 
 if ( ! function_exists( 'bzotech_after_cart_form' ) ) {
 	function bzotech_after_cart_form() {
@@ -870,14 +871,14 @@ if ( ! function_exists( 'bzotech_after_cart_form' ) ) {
 	}
 }
 
-		/**
-		*
-		* Custom before page checkout
-		* Hook to bzotech_checkout_before_customer_details
-		*
-		* @return html
-		* */
-		add_action( 'woocommerce_checkout_before_customer_details', 'bzotech_checkout_before_customer_details' );
+/**
+*
+* Custom before page checkout
+* Hook to bzotech_checkout_before_customer_details
+*
+* @return html
+* */
+add_action( 'woocommerce_checkout_before_customer_details', 'bzotech_checkout_before_customer_details' );
 if ( ! function_exists( 'bzotech_checkout_before_customer_details' ) ) {
 	function bzotech_checkout_before_customer_details() {
 		$checkout_style = bzotech_get_option( 'checkout_page_style' );
@@ -895,14 +896,14 @@ if ( ! function_exists( 'bzotech_checkout_before_customer_details' ) ) {
 	}
 }
 
-		/**
-		*
-		* Custom after page checkout
-		* Hook to bzotech_checkout_after_customer_details
-		*
-		* @return html
-		* */
-		add_action( 'woocommerce_checkout_after_customer_details', 'bzotech_checkout_after_customer_details' );
+/**
+*
+* Custom after page checkout
+* Hook to bzotech_checkout_after_customer_details
+*
+* @return html
+* */
+add_action( 'woocommerce_checkout_after_customer_details', 'bzotech_checkout_after_customer_details' );
 if ( ! function_exists( 'bzotech_checkout_after_customer_details' ) ) {
 	function bzotech_checkout_after_customer_details() {
 		$checkout_style = bzotech_get_option( 'checkout_page_style' );
@@ -916,14 +917,14 @@ if ( ! function_exists( 'bzotech_checkout_after_customer_details' ) ) {
 	}
 }
 
-		/**
-		*
-		* Custom after page checkout
-		* Hook to woocommerce_checkout_after_order_review
-		*
-		* @return html
-		* */
-		add_action( 'woocommerce_checkout_after_order_review', 'bzotech_checkout_after_order_review' );
+/**
+*
+* Custom after page checkout
+* Hook to woocommerce_checkout_after_order_review
+*
+* @return html
+* */
+add_action( 'woocommerce_checkout_after_order_review', 'bzotech_checkout_after_order_review' );
 if ( ! function_exists( 'bzotech_checkout_after_order_review' ) ) {
 	function bzotech_checkout_after_order_review() {
 		$checkout_style = bzotech_get_option( 'checkout_page_style' );
@@ -966,35 +967,19 @@ if ( ! function_exists( 'bzotech_order_review_after' ) ) {
 	}
 }
 
-		/**
-		*
-		*
-		********************* WooCommerce function  *********************
-		* */
+/**
+*
+*
+********************* WooCommerce function  *********************
+* */
 
-		/**
-		*
-		* Get thumbnail product in loop
-		*
-		* @return html
-		* */
+/**
+*
+* Get thumbnail product in loop
+*
+* @return html
+* */
 if ( ! function_exists( 'bzotech_woocommerce_thumbnail_loop' ) ) {
-	/*
-	function bzotech_woocommerce_thumbnail_loop($size,$animation = '',$echo = true) {
-	$img_hover_html = ''; global $product;
-	if($animation == 'rotate-thumb' || $animation == 'zoomout-thumb' || $animation == 'translate-thumb') {
-	$attachment_ids = $product->get_gallery_image_ids();
-	if(!empty($attachment_ids[0]))
-	$img_hover_html = wp_get_attachment_image($attachment_ids[0],$size,false,array( 'class' => 'image-hover' ));
-	else $img_hover_html = get_the_post_thumbnail(get_the_ID(),$size,array( 'class' => 'image-hover' ));
-	}
-	$html = '<a href="'.esc_url(get_the_permalink()).'" class="product-thumb-link '.esc_attr($animation).'">
-	'.get_the_post_thumbnail(get_the_ID(),$size).'
-	'.$img_hover_html.'
-	</a>';
-	if($echo) echo apply_filters( 'woocommerce_product_get_image',$html);
-	else return apply_filters( 'woocommerce_product_get_image',$html);
-	}*/
 	function bzotech_woocommerce_thumbnail_loop( $size, $animation = '', $echo = true ) {
 		$img_html                  = $img_url = $img_url_srcset = '';
 		$bzotech_thumbnail_default = bzotech_get_option( 'bzotech_thumbnail_default' );
@@ -1047,12 +1032,12 @@ if ( ! function_exists( 'bzotech_woocommerce_thumbnail_loop' ) ) {
 	}
 }
 
-		/**
-		*
-		* Get link Quick View
-		*
-		* @return html
-		* */
+/**
+*
+* Get link Quick View
+*
+* @return html
+* */
 if ( ! function_exists( 'bzotech_product_quickview' ) ) {
 	function bzotech_product_quickview( $class = '', $icon = '', $echo = true ) {
 		if ( empty( $icon ) ) {
@@ -1069,12 +1054,12 @@ if ( ! function_exists( 'bzotech_product_quickview' ) ) {
 	}
 }
 
-		/**
-		*
-		* Get product label
-		*
-		* @return html
-		* */
+/**
+*
+* Get product label
+*
+* @return html
+* */
 if ( ! function_exists( 'bzotech_product_label' ) ) {
 	function bzotech_product_label( $echo = true ) {
 		global $product, $post;
@@ -1114,12 +1099,12 @@ if ( ! function_exists( 'bzotech_product_label' ) ) {
 	}
 }
 
-		/**
-		*
-		* Get price
-		*
-		* @return html
-		* */
+/**
+*
+* Get price
+*
+* @return html
+* */
 if ( ! function_exists( 'bzotech_get_price_html' ) ) {
 	function bzotech_get_price_html( $echo = true ) {
 		global $product;
@@ -1146,12 +1131,12 @@ if ( ! function_exists( 'bzotech_get_bonus_html' ) ) {
 }
 
 
-		/**
-		*
-		* Get rating
-		*
-		* @return html
-		* */
+/**
+*
+* Get rating
+*
+* @return html
+* */
 if ( ! function_exists( 'bzotech_get_rating_html' ) ) {
 	function bzotech_get_rating_html( $echo = true, $count = true, $style = '', $star = '' ) {
 		if ( get_option( 'woocommerce_enable_review_rating' ) === 'no' ) {
@@ -1196,12 +1181,12 @@ if ( ! function_exists( 'bzotech_get_rating_html' ) ) {
 	}
 }
 
-		/**
-		*
-		* Get button add to cart link by style
-		*
-		* @return html
-		* */
+/**
+*
+* Get button add to cart link by style
+*
+* @return html
+* */
 if ( ! function_exists( 'bzotech_addtocart_link' ) ) {
 	function bzotech_addtocart_link( $data = array(), $echo = true ) {
 		global $product;
@@ -1287,12 +1272,12 @@ if ( ! function_exists( 'bzotech_addtocart_link' ) ) {
 	}
 }
 
-		/**
-		*
-		* Get catalog ordering
-		*
-		* @return html
-		* */
+/**
+*
+* Get catalog ordering
+*
+* @return html
+* */
 if ( ! function_exists( 'bzotech_catalog_ordering' ) ) {
 	function bzotech_catalog_ordering( $query, $set_orderby = '', $list_item = false, $add_class = '' ) {
 
@@ -1371,15 +1356,15 @@ if ( ! function_exists( 'bzotech_catalog_ordering' ) ) {
 
 		/********************************** Shop ajax */
 
-		/**
-		*
-		* Ajax shop
-		* Hook to wp_ajax_ , wp_ajax_nopriv_
-		*
-		* @return html
-		* */
-		add_action( 'wp_ajax_load_shop', 'bzotech_load_shop' );
-		add_action( 'wp_ajax_nopriv_load_shop', 'bzotech_load_shop' );
+/**
+*
+* Ajax shop
+* Hook to wp_ajax_ , wp_ajax_nopriv_
+*
+* @return html
+* */
+add_action( 'wp_ajax_load_shop', 'bzotech_load_shop' );
+add_action( 'wp_ajax_nopriv_load_shop', 'bzotech_load_shop' );
 if ( ! function_exists( 'bzotech_load_shop' ) ) {
 	function bzotech_load_shop() {
 		$data_filter = sanitize_text_field( $_POST['filter_data'] );
@@ -1572,15 +1557,15 @@ if ( ! function_exists( 'bzotech_load_shop' ) ) {
 	}
 }
 
-		/**
-		*
-		* Ajax load more
-		* Hook to wp_ajax_ , wp_ajax_nopriv_
-		*
-		* @return html
-		* */
-		add_action( 'wp_ajax_load_more_product', 'bzotech_load_more_product' );
-		add_action( 'wp_ajax_nopriv_load_more_product', 'bzotech_load_more_product' );
+/**
+*
+* Ajax load more
+* Hook to wp_ajax_ , wp_ajax_nopriv_
+*
+* @return html
+* */
+add_action( 'wp_ajax_load_more_product', 'bzotech_load_more_product' );
+add_action( 'wp_ajax_nopriv_load_more_product', 'bzotech_load_more_product' );
 if ( ! function_exists( 'bzotech_load_more_product' ) ) {
 	function bzotech_load_more_product() {
 		$ajax_security = bzotech_get_option( 'ajax_security' );
@@ -1617,15 +1602,15 @@ if ( ! function_exists( 'bzotech_load_more_product' ) ) {
 	}
 }
 
-		/**
-		*
-		* Ajax filter
-		* Hook to wp_ajax_ , wp_ajax_nopriv_
-		*
-		* @return html
-		* */
-		add_action( 'wp_ajax_load_product_filter', 'bzotech_load_product_filter' );
-		add_action( 'wp_ajax_nopriv_load_product_filter', 'bzotech_load_product_filter' );
+/**
+*
+* Ajax filter
+* Hook to wp_ajax_ , wp_ajax_nopriv_
+*
+* @return html
+* */
+add_action( 'wp_ajax_load_product_filter', 'bzotech_load_product_filter' );
+add_action( 'wp_ajax_nopriv_load_product_filter', 'bzotech_load_product_filter' );
 if ( ! function_exists( 'bzotech_load_product_filter' ) ) {
 	function bzotech_load_product_filter() {
 		$ajax_security = bzotech_get_option( 'ajax_security' );
@@ -1737,12 +1722,12 @@ if ( ! function_exists( 'bzotech_load_product_filter' ) ) {
 
 
 
-		/**
-		*
-		* Get data option product detail
-		*
-		* @return array
-		* */
+/**
+*
+* Get data option product detail
+*
+* @return array
+* */
 if ( ! function_exists( 'bzotech_show_single_product_data' ) ) {
 	function bzotech_show_single_product_data() {
 		$show_latest               = bzotech_get_option( 'show_latest' );
@@ -1768,12 +1753,12 @@ if ( ! function_exists( 'bzotech_show_single_product_data' ) ) {
 }
 
 
-		/**
-		*
-		* Add to cart style sticky in product detail
-		*
-		* @return html
-		* */
+/**
+*
+* Add to cart style sticky in product detail
+*
+* @return html
+* */
 if ( ! function_exists( 'bzotech_product_sticky_addcart' ) ) {
 	function bzotech_product_sticky_addcart() {
 		global $product;
@@ -1829,12 +1814,12 @@ if ( ! function_exists( 'bzotech_product_sticky_addcart' ) ) {
 }
 
 
-		/**
-		*
-		* Get image by color in product loop
-		*
-		* @return html
-		* */
+/**
+*
+* Get image by color in product loop
+*
+* @return html
+* */
 if ( ! function_exists( 'bzotech_product_attribute_image_by_color' ) ) {
 	function bzotech_product_attribute_image_by_color( $class = '', $size = 'full', $animation = '', $echo = true ) {
 		$shop_attribute_color = bzotech_get_option( 'shop_attribute_color', '0' );
@@ -1909,6 +1894,7 @@ function bzotech_flashsale_countdown_and_stock_prod() {
 		}
 	}
 }
+
 /**
  *
  * Get Woocommerce variation price based on product ID
