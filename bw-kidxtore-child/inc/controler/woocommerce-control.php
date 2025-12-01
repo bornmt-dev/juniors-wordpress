@@ -45,6 +45,7 @@ remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_d
 remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20 );
 remove_action( 'woocommerce_single_product_summary', 'bzotech_append_content_summary', 60 );
 remove_action( 'woocommerce_after_single_product_summary', 'bzotech_product_tabs_after', 15 );
+remove_action( 'woocommerce_after_single_product_summary', 'bzotech_product_tabs', 10 ); 
 
 add_filter( 'woocommerce_show_admin_notice', function ( $show, $notice ) {
     if ( 'template_files' === $notice ) {
@@ -90,21 +91,6 @@ if(!function_exists('bzotech_product_tabs_before')){
 
 /**
  * 
- * Set tab woocommerce
- * Hook to woocommerce_after_single_product_summary
- * 
- * @return void
- *
- * */
-add_action( 'woocommerce_after_single_product_summary', 'bzotech_product_tabs', 10 );
-if(!function_exists('bzotech_product_tabs')){
-    function bzotech_product_tabs(){            
-        bzotech_get_template_woocommerce('single-product/tabs','',false,true);
-    }
-}
-
-/**
- * 
  * Add product upsell
  * Hook to woocommerce_after_single_product_summary
  * 
@@ -114,7 +100,7 @@ if(!function_exists('bzotech_product_tabs')){
 add_action( 'woocommerce_after_single_product_summary', 'bzotech_single_upsell_product', 15 );
 if(!function_exists('bzotech_single_upsell_product')){
     function bzotech_single_upsell_product($style=''){
-        bzotech_get_template_woocommerce('single-product/upsell',$style,false,true);
+        //bzotech_get_template_woocommerce('single-product/upsell',$style,false,true);
     }
 }
 
