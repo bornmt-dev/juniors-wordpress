@@ -42,6 +42,7 @@ remove_action( 'woocommerce_after_single_product_summary', 'bzotech_product_tabs
 remove_action( 'woocommerce_after_single_product_summary', 'bzotech_product_tabs', 10 );
 remove_action( 'woocommerce_after_single_product_summary', 'bzotech_single_upsell_product', 15 );
 remove_action( 'woocommerce_after_single_product_summary', 'bzotech_single_lastest_product', 25 );
+remove_filter( 'woocommerce_product_tabs', 'bzotech_custom_product_tab', 98 );
 
 add_filter(
 	'woocommerce_show_admin_notice',
@@ -100,39 +101,6 @@ add_action( 'woocommerce_after_single_product_summary', 'bzotech_single_relate_p
 if ( ! function_exists( 'bzotech_single_relate_product' ) ) {
 	function bzotech_single_relate_product( $style = '' ) {
 		bzotech_get_template_woocommerce( 'single-product/related', '', false, true );
-	}
-}
-
-/**
- *
- * Custom tab, add tab
- * Hook to woocommerce_product_tabs
- *
- * @return void
- * */
-add_filter( 'woocommerce_product_tabs', 'bzotech_custom_product_tab', 98 );
-if ( ! function_exists( 'bzotech_custom_product_tab' ) ) {
-	function bzotech_custom_product_tab( $tabs ) {
-		$data_tabs = get_post_meta( get_the_ID(), 'bzotech_product_tab_data', true );
-		if ( ! empty( $data_tabs ) and is_array( $data_tabs ) ) {
-			foreach ( $data_tabs as $key => $data_tab ) {
-				if ( ! empty( $data_tab['tab_content'] ) && $data_tab['tab_content'] != ' ' ) {
-					$tabs[ 'bzotech_custom_tab_' . $key ] = array(
-						'title'    => ( ! empty( $data_tab['title'] ) ? $data_tab['title'] : $key ),
-						'priority' => ( ! empty( $data_tab['priority'] ) ? (int) $data_tab['priority'] : 50 ),
-						'callback' => 'bzotech_render_tab',
-						'content'  => apply_filters( 'the_content', $data_tab['tab_content'] ), // this allows shortcodes in custom tabs
-					);
-				}
-			}
-		}
-		return $tabs;
-	}
-}
-
-if ( ! function_exists( 'bzotech_render_tab' ) ) {
-	function bzotech_render_tab( $key, $tab ) {
-		echo apply_filters( 'bzotech_product_custom_tab_content', $tab['content'], $tab, $key );
 	}
 }
 
