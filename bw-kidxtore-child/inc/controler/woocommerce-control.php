@@ -91,6 +91,7 @@ if ( ! function_exists( 'bzotech_product_tabs_before' ) ) {
  *
  * Add product related
  * Hook to woocommerce_after_single_product_summary
+ * This is used in Juniors. Do not remove.
  *
  * @return void
  * */
