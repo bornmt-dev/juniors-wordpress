@@ -44,6 +44,7 @@ remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_p
 remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
 remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20 );
 remove_action( 'woocommerce_single_product_summary', 'bzotech_append_content_summary', 60 );
+remove_action( 'woocommerce_after_single_product_summary', 'bzotech_product_tabs_after', 15 );
 
 add_filter( 'woocommerce_show_admin_notice', function ( $show, $notice ) {
     if ( 'template_files' === $notice ) {
@@ -99,23 +100,6 @@ add_action( 'woocommerce_after_single_product_summary', 'bzotech_product_tabs', 
 if(!function_exists('bzotech_product_tabs')){
     function bzotech_product_tabs(){            
         bzotech_get_template_woocommerce('single-product/tabs','',false,true);
-    }
-}
-
-/**
- * 
- * Add content after tab
- * Hook to woocommerce_after_single_product_summary
- * 
- * @return void
- *
- * */
-add_action( 'woocommerce_after_single_product_summary', 'bzotech_product_tabs_after', 15 );
-if(!function_exists('bzotech_product_tabs_after')){
-    function bzotech_product_tabs_after(){            
-        $page_id = bzotech_get_value_by_id('after_append_tab');
-        $class = 'bzotech-'.str_replace ('.php','',get_page_template_slug($page_id));
-        if(!empty($page_id)) echo '<div class="content-append-after-tab '.$class.'">'.Bzotech_Template::get_vc_pagecontent($page_id).'</div>';
     }
 }
 
