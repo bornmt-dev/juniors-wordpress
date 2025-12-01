@@ -41,6 +41,7 @@ remove_action( 'woocommerce_single_product_summary', 'bzotech_append_content_sum
 remove_action( 'woocommerce_after_single_product_summary', 'bzotech_product_tabs_after', 15 );
 remove_action( 'woocommerce_after_single_product_summary', 'bzotech_product_tabs', 10 );
 remove_action( 'woocommerce_after_single_product_summary', 'bzotech_single_upsell_product', 15 );
+remove_action( 'woocommerce_after_single_product_summary', 'bzotech_single_lastest_product', 25 );
 
 add_filter(
 	'woocommerce_show_admin_notice',
@@ -99,20 +100,6 @@ add_action( 'woocommerce_after_single_product_summary', 'bzotech_single_relate_p
 if ( ! function_exists( 'bzotech_single_relate_product' ) ) {
 	function bzotech_single_relate_product( $style = '' ) {
 		bzotech_get_template_woocommerce( 'single-product/related', '', false, true );
-	}
-}
-
-/**
- *
- * Add product latest
- * Hook to woocommerce_after_single_product_summary
- *
- * @return void
- * */
-add_action( 'woocommerce_after_single_product_summary', 'bzotech_single_lastest_product', 25 );
-if ( ! function_exists( 'bzotech_single_lastest_product' ) ) {
-	function bzotech_single_lastest_product() {
-		bzotech_get_template_woocommerce( 'single-product/latest', '', false, true );
 	}
 }
 
