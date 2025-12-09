@@ -38,8 +38,6 @@ jQuery(document).ready(function($) {
     // Append sorted items back to the list
     $('ul.list-filter.attribute-type-default.filter_product-age-range').empty().append(sortedItems);
 
-   
-
     function initMobileSlick() {
         if ($(window).width() <= 570) {
             var $tabList = $('.flex-box-header-tab-list-item-e');
@@ -126,7 +124,6 @@ jQuery(document).ready(function($) {
         }
     });
 
-
     let maxTries = 50;
     let tryCount = 0;
 
@@ -147,8 +144,6 @@ jQuery(document).ready(function($) {
         }
     }, 200);
 
-
-
     $(document).on('change', '#gift-receipt', function() {
         var isChecked = $(this).is(':checked') ? 'yes' : 'no';
 
@@ -158,13 +153,10 @@ jQuery(document).ready(function($) {
         });
     });
 
-
     var searchText = "No Points Available for this user"; 
 
-   
     var textElement = $("body").find(":contains('" + searchText + "')");
 
-    
     if (textElement.length > 0) {
         
         var link = $('<a>', {
@@ -180,10 +172,6 @@ jQuery(document).ready(function($) {
         });
     }
     
-});
-
-
-jQuery(document).ready(function($) {
     $('#registerform').on('submit', function(e) {
         console.log(" Trigger: registerform");
         e.preventDefault();
@@ -215,4 +203,24 @@ jQuery(document).ready(function($) {
             }
         });
     });
+
+    $(document).on('click', '.la.la-close.elbzotech-close-search-form', function () {
+        $(".elbzotech-search-form-wrap-global.active").removeClass("active");
+    });
+
+    $(document).on('click', function(event) {
+        if ( 
+            (
+                $(event.target).attr('class') == "search-icon-popup"  || 
+                $(event.target).attr('class') == "icon icon-search11" || 
+                $(event.target).attr('class') == "search-icon-popup-clickable"
+            ) 
+            ||  $(event.target).closest('.content-form-popup').length > 0 
+            ) {
+        }
+        else {
+            $(".elbzotech-search-form-wrap-global.active").removeClass("active");
+        }
+    });  
+
 });

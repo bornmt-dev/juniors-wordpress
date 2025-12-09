@@ -794,6 +794,11 @@ margin-left: 10px;
     .item-grid-product-style2 .product-thumb .product-label{
         display: none;
     }
+    
+    .elbzotech-search-global-icon-popup .content-form-popup .elbzotech-submit-form svg { 
+        height: 40px;
+        width: 40px;
+    }
 }
 /*end item grid product style2*/
 
