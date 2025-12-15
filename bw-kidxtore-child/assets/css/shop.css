@@ -268,6 +268,10 @@
 }
 
 
+.post-type-archive-product .sidebar-widget.widget.widget_bzotech_attribute_filter ul li.active a::after {
+    background: linear-gradient(180deg, #2792D7 0%, #2792D7) !important;
+}
+
 @media screen and (max-width: 480px) {
 
     .main-top-filter__right, .open-hide-filters.open-hide-filters-desktop {
@@ -276,12 +280,10 @@
 
 }
 
-
 /* centers pagination*/
 @media (max-width: 768px) {
   .pagi-nav {
     text-align: center !important;
-
   }
 }
 
