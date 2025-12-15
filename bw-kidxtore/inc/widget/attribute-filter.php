@@ -187,40 +187,75 @@ if(!class_exists('Bzotech_Attribute_Filter') && class_exists("woocommerce")){
                             <?php
                             break;
                         default :
-                            echo    '<ul class="list-filter  attribute-type-default filter_'.$attribute.'">';
-                            if(is_array($terms)){
-                                foreach ($terms as $term) {
-                                    if(is_object($term)){
-                                        if(in_array($term->slug, $term_current)) $active = 'active';
-                                        else $active = '';
+ 
+                            $params = [];
+                            if (!empty($_SERVER['QUERY_STRING'])) {
+                                parse_str($_SERVER['QUERY_STRING'], $params);
+                            }
 
-                                        if ($term->name == "0TO18MONTHS") {
-                                            $term_name = "0 - 18 Months";
-                                        }elseif ($term->name == "TWOTOFIVE") {
-                                            $term_name = "2 - 5 Years";
-                                        }elseif ($term->name == "SIXTOEIGHT") {
-                                            $term_name = "6 - 8 Years";
-                                        }elseif ($term->name == "NINETOELEVEN") {
-                                            $term_name = "9 - 11 Years";
-                                        }elseif ($term->name == "TWELVETOSEVENTEEN") {
-                                            $term_name = "12 - 17 Years";
-                                        }elseif ($term->name == "OVER18") {
-                                            $term_name = "18+ Years ";
-                                        }else{
-                                            $term_name = $term->name;
+                            // Ensure query_type is set if attribute filter exists
+                            if (!empty($params['filter_' . $attribute])) {
+                                $params['query_type_' . $attribute] = 'or';
+                            }
+
+                            // Convert current filter string to array
+                            $current_values = [];
+                            if (!empty($params['filter_' . $attribute])) {
+                                $current_values = explode(',', $params['filter_' . $attribute]);
+                            }
+
+                            echo '<ul class="list-filter attribute-type-default filter_' . esc_attr($attribute) . '">';
+                            if (is_array($terms)) {
+                                foreach ($terms as $term) {
+                                    if (is_object($term)) {
+
+                                        // Check if this term is active
+                                        $slug_value = strtolower(str_replace(' ', '-', $term->name));
+                                        $active = in_array($slug_value, $current_values) ? 'active' : '';
+
+                                        // Map term name to friendly display name
+                                        switch ($term->name) {
+                                            case "0TO18MONTHS": $term_name = "0 - 18 Months"; break;
+                                            case "TWOTOFIVE": $term_name = "2 - 5 Years"; break;
+                                            case "SIXTOEIGHT": $term_name = "6 - 8 Years"; break;
+                                            case "NINETOELEVEN": $term_name = "9 - 11 Years"; break;
+                                            case "TWELVETOSEVENTEEN": $term_name = "12 - 17 Years"; break;
+                                            case "OVER18": $term_name = "18+ Years"; break;
+                                            default: $term_name = $term->name; break;
                                         }
 
-                                        $data_id = 'data-filter_'.$attribute.'='.$term->slug;
-                                        echo    '<li class="title16 main-color2 font-medium '.esc_attr($term->slug).'-inline '.esc_attr($active).'">
-                                                    <h3><a title = "'.$term->name.'" data-attribute="'.esc_attr($attribute).'" data-term="'.esc_attr($term->slug).'" class="main-color2 load-shop-ajax bgcolor-'.esc_attr($term->slug).'" href="'.esc_url(bzotech_get_filter_url('filter_'.$attribute,$term->slug)).'" '.$data_id.'>
-                                                    <span></span>'.$term_name.'
-                                                    </a></h3>
-                                                    <span class="count hidden">('.$term->count.')</span>
-                                                </li>';
+                                        // Toggle the clicked value
+                                        $new_values = $current_values;
+                                        if (in_array($slug_value, $new_values)) {
+                                            // Remove it
+                                            $new_values = array_diff($new_values, [$slug_value]);
+                                        } else {
+                                            // Add it
+                                            $new_values[] = $slug_value;
+                                        }
+
+                                        // Update the params for URL
+                                        $params['filter_' . $attribute] = implode(',', $new_values);
+
+                                        // Rebuild href
+                                        $href = strtok($_SERVER["REQUEST_URI"], '?'); // base URL path
+                                        if (!empty($params)) {
+                                            $href .= '?' . http_build_query($params);
+                                        }
+
+                                        $data_id = 'data-filter_' . $attribute . '=' . esc_attr($term->slug);
+
+                                        echo '<li class="title16 main-color2 font-medium ' . esc_attr($term->slug) . '-inline ' . esc_attr($active) . '">
+                                                <h3><a title="' . esc_attr($term->name) . '" data-attribute="' . esc_attr($attribute) . '" data-term="' . esc_attr($term->slug) . '" class="main-color2 load-shop-ajax bgcolor-' . esc_attr($term->slug) . '" href="' . esc_url($href) . '" ' . $data_id . '>
+                                                    <span></span>' . esc_html($term_name) . '
+                                                </a></h3>
+                                                <span class="count hidden">(' . intval($term->count) . ')</span>
+                                            </li>';
                                     }
                                 }
                             }
-                            echo    '</ul>';
+                            echo '</ul>';
+
                             break;
                     }
                 }
