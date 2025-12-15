@@ -272,6 +272,10 @@
     background: linear-gradient(180deg, #2792D7 0%, #2792D7) !important;
 }
 
+.woocommerce-checkout .custom-lava-rewards-fields br {
+    display: none !important;
+}
+
 @media screen and (max-width: 480px) {
 
     .main-top-filter__right, .open-hide-filters.open-hide-filters-desktop {
