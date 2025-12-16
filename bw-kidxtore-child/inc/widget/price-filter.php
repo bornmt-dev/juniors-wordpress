@@ -38,7 +38,8 @@ if (class_exists('WC_Widget')) {
             $min_price = isset($_GET['min_price']) ? esc_attr($_GET['min_price']) : floor($prices->min_price);
             $max_price = isset($_GET['max_price']) ? esc_attr($_GET['max_price']) : ceil($prices->max_price);
 
-            echo '<input type="hidden" name="load-product-filter-ajax-nonce" class="load-product-filter-ajax-nonce" value="' . wp_create_nonce('load-product-filter-ajax-nonce') . '" />';
+            
+            echo '<h2 class="widget-title">Price</h2><input type="hidden" name="load-product-filter-ajax-nonce" class="load-product-filter-ajax-nonce" value="' . wp_create_nonce('load-product-filter-ajax-nonce') . '" />';
             echo '<form method="get" action="' . esc_url($form_action) . '">
                     <div class="price_slider_wrapper">
                         <div class="price_slider"></div>
