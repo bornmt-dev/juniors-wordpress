@@ -151,6 +151,9 @@
     background: #2792D7;
 }
 
+.woocommerce-checkout .gift-addons br {
+    display: none;
+}
 
 #place_order:disabled,
 #place_order[disabled] {

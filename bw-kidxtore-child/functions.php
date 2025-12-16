@@ -374,30 +374,20 @@ function custom_reorder_billing_fields( $fields ) {
 }
 
 //ADD-ONS
-
 add_action('woocommerce_review_order_before_payment', 'show_gift_addons_in_order_review');
 function show_gift_addons_in_order_review() {
     ?>
     <div class="gift-addons" style="margin-bottom: 20px;">
-
-        <div class="loyale-redeem-points-form">
-            <?php 
+        <div class="loyale-redeem-points-form"><?php 
             echo do_shortcode('[loyale-order-total-points]'); 
             echo do_shortcode('[loyale-redeem-points-form title="" subtitle=""]'); 
-            ?>
-        </div>
-
+        ?></div>
         <div class="gift-addons-title" style="font-weight: bold; margin-bottom: 10px;">
             Make it extra special 🎁
         </div>
         <div class="gift-addons-options">
-            <?php 
-            $gift_wrap_enabled = get_option('wc_juniours_enable_gift_wrap');
+        <?php  $gift_wrap_enabled = get_option('wc_juniours_enable_gift_wrap');
             if ($gift_wrap_enabled === 'yes') { ?>
-            <!-- <label style="display: block; margin-bottom: 5px;">
-                <input type="checkbox" name="addon_gift_wrapping" <?php checked( WC()->session->get('addon_gift_wrapping'), 'yes' ); ?> />
-                Gift Wrapping (+€2)
-            </label> -->
             <?php } ?>
             <label style="display: block; margin-bottom: 5px;">
                 <input type="checkbox" name="addon_greeting_card" <?php checked( WC()->session->get('addon_greeting_card'), 'yes' ); ?> />
@@ -407,8 +397,6 @@ function show_gift_addons_in_order_review() {
                 Need Batteries? Click <a style="text-decoration: underline; color: #2792D7;" href="/shop/?product_cat=battery">here!</a>
             </label>
         </div>
-
-        
     </div>
     <?php
 }
