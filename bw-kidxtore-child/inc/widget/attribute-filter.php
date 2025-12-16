@@ -51,156 +51,148 @@ if(!class_exists('Bzotech_Attribute_Filter_Child') && class_exists("woocommerce"
             // Get current filter value
             $term_current = isset($_GET['filter_' . $attribute]) ? explode(',', sanitize_text_field($_GET['filter_' . $attribute])) : [];
 
-            // Transient key includes selected filter to avoid stale data
-            $transient_key = 'bzotech_attribute_filter_widget_' . $attribute . '_' . md5(implode(',', $term_current));
-            $output = get_transient($transient_key);
+           
+            ob_start();
 
-            if ( false === $output ) {
-                ob_start();
+            // echo $args['before_widget'];
+            // if ( $title ) echo $args['before_title'] . apply_filters('widget_title', $title) . $args['after_title'];
+            echo '<div id="bzotech_attribute_filter-3" class="sidebar-widget widget widget_bzotech_attribute_filter"><h2 class="widget-title">'.$title.'</h2>';
 
-                // echo $args['before_widget'];
-                // if ( $title ) echo $args['before_title'] . apply_filters('widget_title', $title) . $args['after_title'];
-                echo '<div id="bzotech_attribute_filter-3" class="sidebar-widget widget widget_bzotech_attribute_filter"><h2 class="widget-title">'.$title.'</h2>';
+            // Get terms and product counts in one call
+            $terms = get_terms([
+                'taxonomy'   => $taxonomy,
+                'hide_empty' => true, // fetch all terms
+                'orderby'    => 'name',
+                'order'      => 'ASC',
+            ]);
 
-                // Get terms and product counts in one call
-                $terms = get_terms([
-                    'taxonomy'   => $taxonomy,
-                    'hide_empty' => true, // fetch all terms
-                    'orderby'    => 'name',
-                    'order'      => 'ASC',
-                ]);
+            if ( ! empty($terms) && ! is_wp_error($terms) ) {
 
-                if ( ! empty($terms) && ! is_wp_error($terms) ) {
+                // Get term meta in batch
+                $term_ids = wp_list_pluck($terms, 'term_id');
+                $term_images = array_map(function($id){ return get_term_meta($id,'image',true); }, $term_ids);
+                $term_colors = array_map(function($id){ return get_term_meta($id,'color',true); }, $term_ids);
+                $term_labels = array_map(function($id){ return get_term_meta($id,'label',true); }, $term_ids);
 
-                    // Get term meta in batch
-                    $term_ids = wp_list_pluck($terms, 'term_id');
-                    $term_images = array_map(function($id){ return get_term_meta($id,'image',true); }, $term_ids);
-                    $term_colors = array_map(function($id){ return get_term_meta($id,'color',true); }, $term_ids);
-                    $term_labels = array_map(function($id){ return get_term_meta($id,'label',true); }, $term_ids);
+                // Get attribute object once
+                $attr = Bzotech_Woocommerce_Attributes::bzotech_get_tax_attribute($taxonomy);
 
-                    // Get attribute object once
-                    $attr = Bzotech_Woocommerce_Attributes::bzotech_get_tax_attribute($taxonomy);
+                echo '<input type="hidden" name="load-shop-ajax-nonce" class="load-shop-ajax-nonce" value="' . wp_create_nonce('load-shop-ajax-nonce') . '" />';
 
-                    echo '<input type="hidden" name="load-shop-ajax-nonce" class="load-shop-ajax-nonce" value="' . wp_create_nonce('load-shop-ajax-nonce') . '" />';
+                switch ($attr->attribute_type) {
 
-                    switch ($attr->attribute_type) {
+                    case 'image':
+                    case 'color':
+                    case 'label':
+                        echo '<div class="tawcvs-swatches attribute-type-' . esc_attr($attr->attribute_type) . '">';
+                        foreach ($terms as $term) {
+                            $selected = in_array($term->slug, $term_current) ? 'selected' : '';
 
-                        case 'image':
-                        case 'color':
-                        case 'label':
-                            echo '<div class="tawcvs-swatches attribute-type-' . esc_attr($attr->attribute_type) . '">';
-                            foreach ($terms as $term) {
-                                $selected = in_array($term->slug, $term_current) ? 'selected' : '';
+                            $data_id = 'filter_' . $attribute . '=' . $term->slug;
+                            $url = esc_url(bzotech_get_filter_url('filter_' . $attr->attribute_name, $term->slug));
 
-                                $data_id = 'filter_' . $attribute . '=' . $term->slug;
-                                $url = esc_url(bzotech_get_filter_url('filter_' . $attr->attribute_name, $term->slug));
-
-                                if ($attr->attribute_type === 'image') {
-                                    $image = isset($term_images[$term->term_id]) ? wp_get_attachment_image_url($term_images[$term->term_id], 'thumbnail') : WC()->plugin_url() . '/assets/images/placeholder.png';
-                                    echo sprintf('<a data-attribute="%s" data-term="%s" class="load-shop-ajax swatch swatch-image swatch-%s %s" title="%s" data-value="%s" href="%s"><img src="%s" alt="%s"><span class="hide">%s</span></a>',
-                                        esc_attr($attribute), esc_attr($term->slug), esc_attr($term->slug), $selected,
-                                        esc_attr($term->name), esc_attr($term->slug), $url, esc_attr($image), esc_attr($term->name), $data_id
-                                    );
-                                } elseif ($attr->attribute_type === 'color') {
-                                    $color = $term_colors[$term->term_id] ?? '';
-                                    $class_white_color = in_array(strtolower($color), ['#fff','#ffffff']) ? 'class_white_bg_color' : '';
-                                    if ($color) {
-                                        echo sprintf('<a data-attribute="%s" data-term="%s" class="load-shop-ajax swatch swatch-color %s swatch-%s %s" title="%s" href="%s" %s><span class="span-trong" %s></span></a>',
-                                            esc_attr($attribute), esc_attr($term->slug), esc_attr($class_white_color),
-                                            esc_attr($term->slug), $selected, esc_attr($term->name), $url, esc_attr($data_id),
-                                            bzotech_add_html_attr('background-color:'.$color)
-                                        );
-                                    }
-                                } elseif ($attr->attribute_type === 'label') {
-                                    $label = $term_labels[$term->term_id] ?: $term->name;
-                                    echo sprintf('<a data-attribute="%s" data-term="%s" class="load-shop-ajax swatch swatch-label swatch-%s %s" title="%s" data-value="%s" href="%s" %s><span class="label-attr">%s</span><span class="count">(%d)</span></a>',
-                                        esc_attr($attribute), esc_attr($term->slug), esc_attr($term->slug), $selected,
-                                        esc_attr($term->name), esc_attr($term->slug), $url, esc_attr($data_id),
-                                        esc_html($label), intval($term->count)
+                            if ($attr->attribute_type === 'image') {
+                                $image = isset($term_images[$term->term_id]) ? wp_get_attachment_image_url($term_images[$term->term_id], 'thumbnail') : WC()->plugin_url() . '/assets/images/placeholder.png';
+                                echo sprintf('<a data-attribute="%s" data-term="%s" class="load-shop-ajax swatch swatch-image swatch-%s %s" title="%s" data-value="%s" href="%s"><img src="%s" alt="%s"><span class="hide">%s</span></a>',
+                                    esc_attr($attribute), esc_attr($term->slug), esc_attr($term->slug), $selected,
+                                    esc_attr($term->name), esc_attr($term->slug), $url, esc_attr($image), esc_attr($term->name), $data_id
+                                );
+                            } elseif ($attr->attribute_type === 'color') {
+                                $color = $term_colors[$term->term_id] ?? '';
+                                $class_white_color = in_array(strtolower($color), ['#fff','#ffffff']) ? 'class_white_bg_color' : '';
+                                if ($color) {
+                                    echo sprintf('<a data-attribute="%s" data-term="%s" class="load-shop-ajax swatch swatch-color %s swatch-%s %s" title="%s" href="%s" %s><span class="span-trong" %s></span></a>',
+                                        esc_attr($attribute), esc_attr($term->slug), esc_attr($class_white_color),
+                                        esc_attr($term->slug), $selected, esc_attr($term->name), $url, esc_attr($data_id),
+                                        bzotech_add_html_attr('background-color:'.$color)
                                     );
                                 }
+                            } elseif ($attr->attribute_type === 'label') {
+                                $label = $term_labels[$term->term_id] ?: $term->name;
+                                echo sprintf('<a data-attribute="%s" data-term="%s" class="load-shop-ajax swatch swatch-label swatch-%s %s" title="%s" data-value="%s" href="%s" %s><span class="label-attr">%s</span><span class="count">(%d)</span></a>',
+                                    esc_attr($attribute), esc_attr($term->slug), esc_attr($term->slug), $selected,
+                                    esc_attr($term->name), esc_attr($term->slug), $url, esc_attr($data_id),
+                                    esc_html($label), intval($term->count)
+                                );
                             }
-                            echo '</div>';
-                            break;
+                        }
+                        echo '</div>';
+                        break;
 
-                        default:
+                    default:
 
-                           $params = [];
-                            if (!empty($_SERVER['QUERY_STRING'])) {
-                                parse_str($_SERVER['QUERY_STRING'], $params);
+                        $params = [];
+                        if (!empty($_SERVER['QUERY_STRING'])) {
+                            parse_str($_SERVER['QUERY_STRING'], $params);
+                        }
+
+                        // Ensure query_type is set if attribute filter exists
+                        if (!empty($params['filter_' . $attribute])) {
+                            $params['query_type_' . $attribute] = 'or';
+                        }
+
+                        // Convert current filter string to array
+                        $current_values = [];
+                        if (!empty($params['filter_' . $attribute])) {
+                            $current_values = explode(',', $params['filter_' . $attribute]);
+                        }
+
+                        echo '<ul class="list-filter attribute-type-default filter_'.$attribute.'">';
+                        foreach ($terms as $term) {
+
+                            $term_name = $term->name;
+
+                            // Check if this term is active
+                            $slug_value = strtolower(str_replace(' ', '-', $term_name));
+                            $active = in_array($slug_value, $current_values) ? 'active' : '';
+
+                            // Special renaming
+                            $renames = [
+                                "0TO18MONTHS" => "0 - 18 Months",
+                                "TWOTOFIVE" => "2 - 5 Years",
+                                "SIXTOEIGHT" => "6 - 8 Years",
+                                "NINETOELEVEN" => "9 - 11 Years",
+                                "TWELVETOSEVENTEEN" => "12 - 17 Years",
+                                "OVER18" => "18+ Years"
+                            ];
+                            if (isset($renames[$term->name])) $term_name = $renames[$term->name];
+
+                            // Toggle the clicked value
+                            $new_values = $current_values;
+                            if (in_array($slug_value, $new_values)) {
+                                // Remove it
+                                $new_values = array_diff($new_values, [$slug_value]);
+                            } else {
+                                // Add it
+                                $new_values[] = $slug_value;
                             }
 
-                            // Ensure query_type is set if attribute filter exists
-                            if (!empty($params['filter_' . $attribute])) {
-                                $params['query_type_' . $attribute] = 'or';
+                            // Update the params for URL
+                            $params['filter_' . $attribute] = implode(',', $new_values);
+
+                            // Rebuild href
+                            $href = strtok($_SERVER["REQUEST_URI"], '?'); // base URL path
+                            if (!empty($params)) {
+                                $href .= '?' . http_build_query($params);
                             }
 
-                            // Convert current filter string to array
-                            $current_values = [];
-                            if (!empty($params['filter_' . $attribute])) {
-                                $current_values = explode(',', $params['filter_' . $attribute]);
-                            }
+                            $data_id = 'data-filter_' . $attribute . '=' . esc_attr($term->slug);
 
-                            echo '<ul class="list-filter attribute-type-default filter_'.$attribute.'">';
-                            foreach ($terms as $term) {
-
-                                $term_name = $term->name;
-
-                                // Check if this term is active
-                                $slug_value = strtolower(str_replace(' ', '-', $term_name));
-                                $active = in_array($slug_value, $current_values) ? 'active' : '';
-
-                                // Special renaming
-                                $renames = [
-                                    "0TO18MONTHS" => "0 - 18 Months",
-                                    "TWOTOFIVE" => "2 - 5 Years",
-                                    "SIXTOEIGHT" => "6 - 8 Years",
-                                    "NINETOELEVEN" => "9 - 11 Years",
-                                    "TWELVETOSEVENTEEN" => "12 - 17 Years",
-                                    "OVER18" => "18+ Years"
-                                ];
-                                if (isset($renames[$term->name])) $term_name = $renames[$term->name];
-
-                               // Toggle the clicked value
-                                $new_values = $current_values;
-                                if (in_array($slug_value, $new_values)) {
-                                    // Remove it
-                                    $new_values = array_diff($new_values, [$slug_value]);
-                                } else {
-                                    // Add it
-                                    $new_values[] = $slug_value;
-                                }
-
-                                // Update the params for URL
-                                $params['filter_' . $attribute] = implode(',', $new_values);
-
-                                // Rebuild href
-                                $href = strtok($_SERVER["REQUEST_URI"], '?'); // base URL path
-                                if (!empty($params)) {
-                                    $href .= '?' . http_build_query($params);
-                                }
-
-                                $data_id = 'data-filter_' . $attribute . '=' . esc_attr($term->slug);
-
-                                echo '<li class="title16 main-color2 font-medium ' . esc_attr($term->slug) . '-inline ' . esc_attr($active) . '">
-                                        <h3><a title="' . esc_attr($term->name) . '" data-attribute="' . esc_attr($attribute) . '" data-term="' . esc_attr($term->slug) . '" class="main-color2 load-shop-ajax bgcolor-' . esc_attr($term->slug) . '" href="' . esc_url($href) . '" ' . $data_id . '>
-                                            <span></span>' . esc_html($term_name) . '
-                                        </a></h3>
-                                        <span class="count hidden">(' . intval($term->count) . ')</span>
-                                </li>';
-                            }
-                            echo '</ul>';
-                            break;
-                    }
+                            echo '<li class="title16 main-color2 font-medium ' . esc_attr($term->slug) . '-inline ' . esc_attr($active) . '">
+                                    <h3><a title="' . esc_attr($term->name) . '" data-attribute="' . esc_attr($attribute) . '" data-term="' . esc_attr($term->slug) . '" class="main-color2 load-shop-ajax bgcolor-' . esc_attr($term->slug) . '" href="' . esc_url($href) . '" ' . $data_id . '>
+                                        <span></span>' . esc_html($term_name) . '
+                                    </a></h3>
+                            </li>';
+                        }
+                        echo '</ul>';
+                        break;
                 }
-
-                echo $args['after_widget'];
-
-                $output = ob_get_clean();
-                set_transient($transient_key, $output, 5 * MINUTE_IN_SECONDS);
             }
 
-            echo $output;
+            echo $args['after_widget'];
+ 
+
+            echo ob_get_clean();
         }
 
 
