@@ -50,7 +50,7 @@ defined( 'ABSPATH' ) || exit;
 		$date_of_birth = $user_id ? get_user_meta($user_id, 'date_of_birth', true) : '';
 		$child_gender = $user_id ? get_user_meta($user_id, 'child_gender', true) : '';
 		?>
-		<label class="form-row form-row-wide " for="billing_lava_reward_no"><label for="billing_lava_reward_no" ><?php esc_html_e('LAVA Rewards No', 'woocommerce'); ?></label><input type="text" class="input-text" name="billing_lava_reward_no" id="billing_lava_reward_no" value="<?php echo esc_attr($lava_reward_no); ?>" />
+		<label class="form-row form-row-wide " for="billing_lava_reward_no"><label for="billing_lava_reward_no" ><?php esc_html_e('LAVA Rewards No', 'woocommerce'); ?></label><input type="number" class="input-text" name="billing_lava_reward_no" id="billing_lava_reward_no" value="<?php echo esc_attr($lava_reward_no); ?>" />
 		</label><label class="form-row form-row-wide" for="date_of_birth"><label for="date_of_birth"><?php esc_html_e(' Date of birth of your child', 'woocommerce'); ?></label><input type="date" class="input-text" name="date_of_birth" id="date_of_birth" value="<?php echo esc_attr($date_of_birth); ?>" />
 		</label><label class="form-row form-row-wide" for="child_gender"><label for="child_gender"><?php esc_html_e('Gender of the Child', 'woocommerce'); ?></label><select name="child_gender" id="child_gender" class="select">
 				<option value=""><?php esc_html_e('Select Gender', 'woocommerce'); ?></option>
@@ -58,9 +58,7 @@ defined( 'ABSPATH' ) || exit;
 				<option value="female" <?php selected($child_gender, 'female'); ?>><?php esc_html_e('Female', 'woocommerce'); ?></option>
 			</select></label><p class="disclaimer">Disclaimer: To earn Lava Rewards points, please ensure you're logged into the Junior’s website using your Lava Rewards email and password when placing your order. Points will be added to your account after your invoice is processed - approximately two weeks following delivery. If you believe any points are missing, feel free to contact Lava Rewards support at <a target="_blank" href="mailto:info@lavarewards.com.mt" >info@lavarewards.com.mt</a> for assistance.</p>
 	</div>
-
 	<?php do_action( 'woocommerce_after_checkout_billing_form', $checkout ); ?>
-	
 </div>
 
 <?php if ( ! is_user_logged_in() && $checkout->is_registration_enabled() ) : ?>

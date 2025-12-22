@@ -13,7 +13,7 @@ function born_display_custom_account_fields() {
 		<p class="subheading"><?php esc_html_e('This information will be used to provide rewards and surprises exclusively for customers who receive marketing communications from us.', 'woocommerce'); ?></p>
 		<label class="form-row form-row-wide " for="lava_reward_no">
 			<label for="lava_reward_no" ><?php esc_html_e('LAVA Reward No', 'woocommerce'); ?></label>
-			<input type="text" class="input-text" name="lava_reward_no" id="lava_reward_no" value="<?php echo esc_attr($lava_reward_no); ?>" />
+			<input type="number" class="input-text" name="lava_reward_no" id="lava_reward_no" value="<?php echo esc_attr($lava_reward_no); ?>" />
 		</label>
         
 		<label class="form-row form-row-wide" for="date_of_birth">
