@@ -36,16 +36,24 @@ function display_brands_page($atts) {
         $output = '<div class="brands-grid">';
         foreach ($terms as $term) {
             $thumbnail_id = get_term_meta($term->term_id, 'thumbnail_id', true);
+            $lego_name = esc_html(str_replace('LEGO', 'LEGO®', $term->name));
+            $brand_link = add_query_arg('product_brand', $term->slug, get_permalink(woocommerce_get_page_id('shop')));
+            $output .= '<div class="brand-item">';
+
             if ($thumbnail_id) {
+                $backgound_color = " transparent ";
                 $image_url = wp_get_attachment_url($thumbnail_id);
-                $brand_link = add_query_arg('product_brand', $term->slug, get_permalink(woocommerce_get_page_id('shop')));
-                $output .= '<div class="brand-item">';
-                $output .= '<a href="' . esc_url($brand_link) . '" class="brands-link">';
-                $output .= '<img src="' . esc_url($image_url) . '" alt="' . esc_attr($term->name) . '" />';
-                $output .= '</a>';
-                $output .= '<h3>' . esc_html($term->name) . '</h3>';
-                $output .= '</div>';
             }
+            else {
+                $image_url = "/wp-content/uploads/2025/07/placeholder.webp";
+                $backgound_color = " #fff ";
+            }
+
+            $output .= '<a href="' . esc_url($brand_link) . '" class="brands-link" style="background-color: '.$backgound_color.'">';
+            $output .= '<img src="' . esc_url($image_url) . '" alt="' . $lego_name . '" />';
+            $output .= '</a>';
+            $output .= '<h3>' . $lego_name . '</h3>';
+            $output .= '</div>';
         }
         $output .= '</div>';
         return $output;
