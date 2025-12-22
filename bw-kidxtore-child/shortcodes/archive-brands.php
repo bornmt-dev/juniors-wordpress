@@ -52,7 +52,7 @@ function display_brands_page($atts) {
             $output .= '<a href="' . esc_url($brand_link) . '" class="brands-link" style="background-color: '.$backgound_color.'">';
             $output .= '<img src="' . esc_url($image_url) . '" alt="' . $lego_name . '" />';
             $output .= '</a>';
-            $output .= '<h3>' . $lego_name . '</h3>';
+            $output .= '<h2>' . $lego_name . '</h2>';
             $output .= '</div>';
         }
         $output .= '</div>';
