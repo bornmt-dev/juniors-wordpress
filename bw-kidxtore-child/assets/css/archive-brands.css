@@ -69,7 +69,8 @@ a.brands-link-noimage  {
     height: 30px;
 }
 
-.brand-item h3 {
+.brand-item h3,
+.brand-item h2 {
     margin-top: 20px;
     color: #111;
     text-align: center;
@@ -80,6 +81,12 @@ a.brands-link-noimage  {
     line-height: 28px;
     letter-spacing: 0.035px;
 }
+
+.brands-grid .brands-link {
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.09);
+}
+
+ 
 
 .brand-item-noimage h3 {
     margin-top: 20px;
