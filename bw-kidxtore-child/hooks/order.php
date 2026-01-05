@@ -374,18 +374,27 @@ add_action('woocommerce_review_order_before_order_total', function () {
 // ===============================================
 add_filter('woocommerce_get_order_item_totals', function ($total_rows, $order, $tax_display) {
 
-    if ($shipping_method === 'Online') {
-        if ($shipping_total > 0) {
-            $fee_text = wc_price($shipping_total);
-        } else {
-            $fee_text = __('Free', 'woocommerce');
-        }
+    // Get shipping items from the order
+    $shipping_items = $order->get_items('shipping');
 
-        $total_rows['shipping']['value'] = esc_html($shipping_method) . ' (' . $fee_text . ')';
+    foreach ($shipping_items as $item_id => $shipping_item) {
+        $shipping_method = $shipping_item->get_name(); // Shipping method name
+        $shipping_total  = $shipping_item->get_total(); // Shipping cost
+
+        if ($shipping_method === 'Online') {
+            if ($shipping_total > 0) {
+                $fee_text = wc_price($shipping_total);
+            } else {
+                $fee_text = __('Free', 'woocommerce');
+            }
+
+            $total_rows['shipping']['value'] = esc_html($shipping_method) . ' (' . $fee_text . ')';
+        }
     }
-    
+
     return $total_rows;
 }, 10, 3);
+
 
 
  
