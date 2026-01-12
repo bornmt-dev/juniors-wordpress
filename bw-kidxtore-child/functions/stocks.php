@@ -41,6 +41,10 @@ function getStockPerLocationByID($product_id) {
                 $is_main = false;
             }
           
+            if ( $term->name === 'JUNIORS PAMA' ) {
+                continue;
+            }
+
             $data[] = [
                 "location" =>  ucwords(strtolower(str_ireplace('Juniors ', '', $term_name))),
                 "stocks" => $stocks,

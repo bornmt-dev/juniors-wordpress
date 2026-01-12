@@ -158,13 +158,9 @@ $calculator_text          = '';
 	</td>
 </tr>
 
-
 <?php if (is_checkout()) { ?>
 <tr class="woocommerce-shipping-location">
     <td colspan="2">
-        <!-- <label for="custom_shipping_location" style="display:block; font-weight:600; margin-bottom:5px;">
-            <?php esc_html_e( 'Select Location', 'your-text-domain' ); ?>
-        </label> -->
         <p>Collection point</p>
         <select name="custom_shipping_location" id="custom_shipping_location" class="custom-shipping-location" style="width:100%;">
             <option value=""><?php esc_html_e( 'Select location to collect order', 'your-text-domain' ); ?></option>
@@ -175,80 +171,19 @@ $calculator_text          = '';
             ]);
             if ( ! is_wp_error( $terms ) ) {
                 foreach ( $terms as $term ) {
+					if ( $term->name === 'JUNIORS PAMA' ) {
+						continue;
+					}
                     $term_name = ucwords( strtolower( str_ireplace( 'Juniors ', '', $term->name ) ) );
                     echo "<option value='{$term->term_id}'>{$term_name}</option>";
                 }
             }
             ?>
         </select>
-
         <div id="location-stock-response"></div>
-
-			<style>
-				#location-stock-response {
-					display: flex;
-					flex-direction: column;
-				}
-				#location-stock-response > div > span {
-					width: 100%;
-					font-size: 14px;
-					font-weight: 400;
-					display: block;
-					text-align: left;
-					color: #9a0404;
-					margin-top:10px;
-					margin-bottom:5px;
-				}
-				#location-stock-response > div > div {
-					display: flex;
-					background: #f1f1f1;
-					padding: 8px;
-					border-radius: 8px;
-					justify-content: space-between;
-				}
-
-				#location-stock-response > div > div > div{ 
-					display: flex;
-				}
-
-				#location-stock-response > div > div  img  {
-					width: 50px;
-					height: 50px;
-					border-radius: 8px;
-					object-fit:cover;
-					object-position: center;
-					margin-right: 15px;
-				}
-
-				#location-stock-response > div > div  h5  {
-					font-weight: 500;
-					margin-top: 0;
-					margin-bottom: 0;
-					margin-right: 10px;
-					font-size: 14px;
-					text-align: left;
-					margin-top: 5px;
-				}
-
-				#location-stock-response > div > div > span  {
-					padding: 8px 10px;
-					line-height: 1;
-					height: fit-content;
-					background: #ff00005c;
-					border-radius: 8px;
-					font-size: 12px;
-					color: #9a0404;
-					font-weight: 500;
-					min-width: 94px;
-					white-space: nowrap;
-				}
-
-			</style>
-
     </td>
 </tr>
 <?php } ?>
-
 
 <?php if ( is_cart() && wc_coupons_enabled() ) : ?>
 <tr class="woocommerce-cart-coupon-row">
