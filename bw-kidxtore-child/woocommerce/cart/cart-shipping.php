@@ -161,20 +161,9 @@ $calculator_text          = '';
 <?php if ( is_checkout() ) : ?>
 <tr class="woocommerce-shipping-location">
     <td colspan="2">
-
         <select name="custom_shipping_location" id="custom_shipping_location" class="custom-shipping-location" style="width:100%;">
             <option value=""><?php esc_html_e( 'Select location to collect order', 'your-text-domain' ); ?></option> 
-            
 			<?php 
-			// $location_id = WC()->session->get('location_id');
-			// if ($location_id) {
-			// 	$term = get_term($location_id, 'location'); // Replace 'your_taxonomy_slug' with the actual taxonomy
-			// 	if (!is_wp_error($term) && $term) {
-			// 		$taxonomy_name = ucwords( strtolower( str_ireplace( 'Juniors ', '', $term->name ) ) );
-			// 		echo "<option selected value='{$location_id}'>Selected: {$taxonomy_name}</option>";
-			// 	}
-			// }
-
             $terms = get_terms([
                 'taxonomy'   => 'location',
                 'hide_empty' => false,
@@ -190,7 +179,6 @@ $calculator_text          = '';
             }
             ?>
         </select>
-
         <div id="location-stock-response"></div>
     </td>
 </tr>

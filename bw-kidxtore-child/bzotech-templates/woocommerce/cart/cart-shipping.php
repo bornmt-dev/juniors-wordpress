@@ -158,13 +158,9 @@ $calculator_text          = '';
 	</td>
 </tr>
 
-
 <?php if (is_checkout()) { ?>
 <tr class="woocommerce-shipping-location">
     <td colspan="2">
-        <!-- <label for="custom_shipping_location" style="display:block; font-weight:600; margin-bottom:5px;">
-            <?php esc_html_e( 'Select Location', 'your-text-domain' ); ?>
-        </label> -->
         <p>Collection point</p>
         <select name="custom_shipping_location" id="custom_shipping_location" class="custom-shipping-location" style="width:100%;">
             <option value=""><?php esc_html_e( 'Select location to collect order', 'your-text-domain' ); ?></option>
@@ -184,12 +180,10 @@ $calculator_text          = '';
             }
             ?>
         </select>
-
         <div id="location-stock-response"></div>
     </td>
 </tr>
 <?php } ?>
-
 
 <?php if ( is_cart() && wc_coupons_enabled() ) : ?>
 <tr class="woocommerce-cart-coupon-row">
