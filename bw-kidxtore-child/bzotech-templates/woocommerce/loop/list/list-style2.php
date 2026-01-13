@@ -31,9 +31,6 @@ global $product;
 				<?php do_action( 'woocommerce_after_shop_loop_item_title' );?>
 				<?php  bzotech_get_rating_html(true,false)?>
 				<?php  bzotech_get_price_html(); ?>
-				
-                <?php echo bzotech_substr(apply_filters( 'woocommerce_short_description', $post->post_excerpt ),0,300); ?>
-
                 </div>
             </div>
             <div class="product-extra-link addcart-link-wrap">
